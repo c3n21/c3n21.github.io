@@ -1,0 +1,61 @@
+{
+    "$ref": "#/definitions/CVInformation",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "CVInformation": {
+            "additionalProperties": false,
+            "properties": {
+                "About": {
+                    "description": "description about myself",
+                    "type": "string"
+                },
+                "Contacts": {
+                    "description": "where you can find and contact me",
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "logo": {
+                                "type": "string"
+                            },
+                            "profile_url": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["logo", "profile_url"],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "Education": {
+                    "items": {
+                        "additionalProperties": false,
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "Projects": {
+                    "items": {
+                        "additionalProperties": false,
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "Skills & Knowledge": {
+                    "description": "general skills and knowledge",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "About",
+                "Skills & Knowledge",
+                "Projects",
+                "Education",
+                "Contacts"
+            ],
+            "type": "object"
+        }
+    }
+}

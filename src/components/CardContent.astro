@@ -1,0 +1,17 @@
+---
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+    class?: string
+}
+
+const { class: className = '', ...props } = Astro.props
+
+// Base card content classes
+const baseClasses = 'p-6 pt-0'
+
+// Combine classes
+const cardContentClasses = `${baseClasses} ${className}`.trim()
+---
+
+<div class={cardContentClasses} class:list={['whitespace-pre-line']} {...props}>
+    <slot />
+</div>

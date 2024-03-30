@@ -1,0 +1,80 @@
+---
+import '@/styles/global.css'
+import Anchor from './astro/Anchor.astro'
+import cv from '@/cv.json'
+
+const now = new Date()
+const start = new Date('1/06/2021')
+const isAnniversaryPassed = now.getMonth() > start.getMonth()
+const years = isAnniversaryPassed
+    ? now.getFullYear() - start.getFullYear()
+    : now.getFullYear() - start.getFullYear() - 1
+---
+
+<section
+    id="home"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20"
+>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="animate-fade-in">
+            <h1
+                class="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight"
+            >
+                Hi, I'm{' '}
+                <span
+                    class="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text"
+                >
+                    Zhifan
+                </span>
+            </h1>
+
+            <p
+                class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed"
+            >
+                {cv.basics.label}
+            </p>
+
+            <div
+                class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+                <Anchor
+                    size="lg"
+                    href="#contact"
+                    class="text-lg px-8 py-3 hover:scale-103"
+                >
+                    Get In Touch
+                </Anchor>
+
+                <Anchor
+                    variant="outline"
+                    size="lg"
+                    href="#projects"
+                    class="text-lg px-8 py-3 hover:scale-103"
+                >
+                    View My Work
+                </Anchor>
+            </div>
+        </div>
+
+        <div class="mt-16 animate-fade-in">
+            <div
+                class="flex justify-center space-x-8 text-sm text-muted-foreground"
+            >
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-foreground">
+                        {years}+
+                    </div>
+                    <div>Years Experience</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-foreground">50+</div>
+                    <div>Projects Completed</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-foreground">100%</div>
+                    <div>Client Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

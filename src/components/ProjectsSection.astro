@@ -1,0 +1,185 @@
+---
+import Card from '@/components/Card.astro'
+import CardContent from '@/components/CardContent.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import Badge from '@/components/Badge.astro'
+import Button from '@/components/Button.astro'
+import Folder from '@lucide/astro/icons/folder'
+import cv from '@/cv.json' assert { type: 'json' }
+const projects = cv.projects
+
+/**
+ * @description workaround for 'endDate' because TS infers never for undefined fields
+ */
+interface Project extends Omit<(typeof projects)[number], 'endDate'> {
+    technologies: string[]
+    endDate?: string
+}
+
+const contributorRegexp = /Contributor/i
+
+/**
+ * For me open source contributions are much more important
+ */
+const [featuredProjects, otherProjects] = projects.reduce(
+    (acc, project) => {
+        const [featured, other] = acc
+        const technologies  = cv.skills.reduce((acc, skill) => {
+            const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
+            if (skillRegexp.test(project.name) || skillRegexp.test(project.summary) ) {
+                acc.push(skill.name)
+            }
+            
+            return acc
+        }, [] as string[])
+
+        if (
+            contributorRegexp.test(project.name) ||
+            contributorRegexp.test(project.summary)
+        ) {
+            featured.push({...project, technologies})
+        } else {
+            other.push({...project, technologies})
+        }
+        return acc
+    },
+    [[], []] as [Project[], Project[]]
+)
+---
+
+<section id="projects" class="py-20 bg-background">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-fade-in">
+            <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                Featured Projects
+            </h2>
+            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+                A showcase of my recent work and personal projects
+            </p>
+        </div>
+
+        <!-- Featured Projects -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {
+                featuredProjects.map((project) => (
+                    <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
+                        <div class="relative overflow-hidden">
+                            <!-- <img -->
+                            <!--     src={project.image} -->
+                            <!--     alt={project.title} -->
+                            <!--     class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" -->
+                            <!-- /> -->
+                            <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
+                        </div>
+
+                        <CardHeader>
+                            <div class="flex items-center gap-2 mb-2">
+                                <Folder class="text-primary" size={20} />
+                                <Badge variant="secondary">Featured</Badge>
+                            </div>
+                            <CardTitle class="text-xl group-hover:text-primary transition-colors">
+                                {project.name}
+                            </CardTitle>
+                        </CardHeader>
+
+                        <CardContent class="space-y-4">
+                            <p class="text-muted-foreground">
+                                {project.summary}
+                            </p>
+
+                            <div class="flex flex-wrap gap-2">
+                                {project.technologies.map((tech) => (
+                                    <Badge variant="outline" class="text-xs">
+                                        {tech}
+                                    </Badge>
+                                ))}
+                            </div>
+
+                            <div class="flex gap-3 pt-2">
+                                <Button size="sm" class="flex-1">
+                                    Live Demo
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    class="flex-1"
+                                >
+                                    View Code
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))
+            }
+        </div>
+
+        <!-- Other Projects -->
+        <div class="animate-fade-in">
+            <h3 class="text-2xl font-bold text-foreground mb-8 text-center">
+                Other Projects
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {
+                    otherProjects.map((project) => (
+                        <Card class="group hover-scale transition-all duration-300">
+                            <CardHeader>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <Folder class="text-primary" size={18} />
+                                </div>
+                                <CardTitle class="text-lg group-hover:text-primary transition-colors">
+                                    {project.name}
+                                </CardTitle>
+                            </CardHeader>
+
+                            <CardContent class="space-y-4">
+                                <p class="text-muted-foreground text-sm">
+                                    {project.summary}
+                                </p>
+
+                                <div class="flex flex-wrap gap-1">
+                                    {project.technologies
+                                        .slice(0, 3)
+                                        .map((tech) => (
+                                            <Badge
+                                                variant="outline"
+                                                class="text-xs"
+                                            >
+                                                {tech}
+                                            </Badge>
+                                        ))}
+                                    {project.technologies.length > 3 && (
+                                        <Badge
+                                            variant="outline"
+                                            class="text-xs"
+                                        >
+                                            +{project.technologies.length - 3}
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                <div class="flex gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        class="flex-1 text-xs"
+                                    >
+                                        Demo
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        class="flex-1 text-xs"
+                                    >
+                                        Code
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</section>
