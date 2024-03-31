@@ -1,9 +1,30 @@
 ---
 const items = ['About','Skills & Knowledge','Contact me'];
 ---
-<header >
+<header>
 	<h1>Zhifan</h1>
 	<menu>
 		{items.map(item => <li><a>{item}</a></li>)}
 	</menu>
+	<!-- Placeholder -->
+	<div>
+
+	</div>
 </header>
+
+<style>
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	menu {
+		display: flex;
+	}
+
+	li {
+		list-style: none;
+		padding: 1rem;
+	}
+</style>
