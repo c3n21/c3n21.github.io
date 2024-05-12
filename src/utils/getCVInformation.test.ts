@@ -8,7 +8,7 @@ test('getCVInformation', () => {
     const cvInformation = getCVInformation()
     expect(cvInformation).toStrictEqual({})
     for (let i = 0; i < 10; i++) {
-        expect(getCVInformation()).toStrictEqual(cvInformation)
+        expect(getCVInformation()).toBe(cvInformation)
     }
     expect(json_parse_spy).toHaveBeenCalledTimes(1)
 })
