@@ -17,7 +17,7 @@ export type CVInformation = {
      */
     'Skills & Knowledge': string[]
     Projects: Project[]
-    Educations: Education[]
+    Education: Education[]
     /**
      * @description where you can find and contact me
      */

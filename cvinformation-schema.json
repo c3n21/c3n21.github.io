@@ -29,7 +29,7 @@
           },
           "type": "array"
         },
-        "Educations": {
+        "Education": {
           "items": {
             "additionalProperties": false,
             "type": "object"
@@ -55,7 +55,7 @@
         "About",
         "Skills & Knowledge",
         "Projects",
-        "Educations",
+        "Education",
         "Contacts"
       ],
       "type": "object"
