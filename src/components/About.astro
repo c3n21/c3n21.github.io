@@ -1,14 +1,14 @@
 ---
-
+const json = JSON.parse(import.meta.env.CV_JSON)
 ---
 <div>
 	<img 
-	src="/public/myphoto.jpg"
+	src="/myphoto.jpg"
 	/>
 	<p>
-		Computer Science student at University of Milan and currently working as frontend developer.
-		I love the open source community and I'm always looking for new challenges.
-		NeoVim adept and Linux enthusiast (currently on NixOS).
+		{
+		json.about
+		}
 	</p>
 </div>
 
@@ -20,6 +20,7 @@
 		width: 10rem;
 		clip-path: circle(50% at 50% 50%);
 	}
+
 
 	div {
 		display: flex;
