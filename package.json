@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-dotenv": "sh scripts/generate-dotenv.sh"
+    "generate-dotenv": "sh scripts/generate-dotenv.sh",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
@@ -22,6 +23,7 @@
     "eslint-plugin-astro": "^0.33.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "prettier": "3.2.5",
-    "prettier-plugin-astro": "^0.13.0"
+    "prettier-plugin-astro": "^0.13.0",
+    "vitest": "^1.6.0"
   }
 }
