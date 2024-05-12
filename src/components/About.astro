@@ -1,5 +1,7 @@
 ---
-const json = JSON.parse(import.meta.env.CV_JSON)
+import { getCVInformation } from "../utils/getCVInformation"
+
+const cvInformation = getCVInformation()
 ---
 <div>
 	<img 
@@ -7,7 +9,7 @@ const json = JSON.parse(import.meta.env.CV_JSON)
 	/>
 	<p>
 		{
-		json.about
+		cvInformation.About
 		}
 	</p>
 </div>
