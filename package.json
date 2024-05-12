@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "generate-dotenv": "sh scripts/generate-dotenv.sh",
-    "test": "vitest"
+    "test": "vitest",
+    "generate-cvinformation-json-schema": "ts-json-schema-generator --path 'src/types/CVInformation.ts' --type 'CVInformation' > cvinformation-schema.json"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
@@ -24,6 +25,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "prettier": "3.2.5",
     "prettier-plugin-astro": "^0.13.0",
+    "ts-json-schema-generator": "^2.1.1",
     "vitest": "^1.6.0"
   }
 }
