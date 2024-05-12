@@ -1,4 +1,13 @@
-type Education = {}
+type Period = {
+    start: Date
+    end?: Date
+}
+
+type Education = {
+    major: string
+    location: string
+    period: Period
+}
 
 type Contact = {
     logo: string
