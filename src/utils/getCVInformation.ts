@@ -1,7 +1,9 @@
-import type { CVInformation } from '../types/CVInformation'
+import { cvInformation, type CVInformation } from '../schemas/CVInformation'
 
-let cvInformation: CVInformation | null = null
+let _cvInformation: CVInformation | null = null
 
 export function getCVInformation(): CVInformation {
-    return (cvInformation ??= JSON.parse(import.meta.env.CV_JSON))
+    return (_cvInformation ??= cvInformation.parse(
+        JSON.parse(import.meta.env.CV_JSON)
+    ))
 }
