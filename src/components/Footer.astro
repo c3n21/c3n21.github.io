@@ -1,14 +1,39 @@
 ---
-import { getCVInformation } from "../utils/getCVInformation"
+import { getCVInformation } from '../utils/getCVInformation'
 const cvInformation = getCVInformation()
 ---
+
 <footer>
-{cvInformation.Contacts.map(({logo, profile_url}) => {
-	return <div>
-		<img src={logo}>
-		<a href={profile_url}>
-			test
-		</a>
-	</div>
-	})}
+    <ol>
+        {
+            cvInformation.Contacts.map(({ logo, profile_url }) => {
+                return (
+                    <li>
+                        <a href={profile_url}>
+                            <img src={logo} />
+                        </a>
+                    </li>
+                )
+            })
+        }
+    </ol>
 </footer>
+
+<style>
+    img {
+        height: 2em;
+        width: 2em;
+    }
+
+    ol,
+    li {
+        list-style-type: none;
+    }
+
+    footer {
+        display: flex;
+        position: fixed;
+        position: -webkit-sticky;
+        bottom: 0;
+    }
+</style>
