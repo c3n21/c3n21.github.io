@@ -1,5 +1,7 @@
 ---
-const items = ['About','Skills & Knowledge','Contact me'];
+import { getCVInformation } from "../utils/getCVInformation"
+
+const items = Object.keys(getCVInformation()) as (keyof ReturnType<typeof getCVInformation>)[] 
 ---
 <header>
 	<h1>Zhifan</h1>
