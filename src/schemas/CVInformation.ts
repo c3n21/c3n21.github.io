@@ -1,15 +1,5 @@
 import { z } from 'astro:content'
-
-const stringDateOrDate = z
-    .string()
-    .datetime()
-    .or(z.date())
-    .transform((date) => (typeof date === 'string' ? new Date(date) : date))
-
-const period = z.object({
-    start: stringDateOrDate,
-    end: stringDateOrDate.optional(),
-})
+import { period } from './Period'
 
 const education = z.object({
     major: z.string(),

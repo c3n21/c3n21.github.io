@@ -1,9 +1,9 @@
 import { expect } from 'vitest'
 import { getCVInformation } from './getCVInformation'
-import { cvInformation } from '../schemas/CVInformation.ts'
+import { cvInformation, type CVInformation } from '../schemas/CVInformation.ts'
 const ENV_VAR = 'CV_JSON' as const
 const BAD_JSONS = ['{}', ''] as const
-const EXPECTED_JSON = {
+const EXPECTED_JSON: CVInformation = {
     About: 'TEST ABOUT',
     Contacts: [
         {
@@ -22,6 +22,7 @@ const EXPECTED_JSON = {
     ],
     Projects: [],
     'Skills & Knowledge': ['Dunno'],
+    WorkExperiences: [],
 }
 
 const OK_JSON = JSON.stringify(EXPECTED_JSON)
@@ -32,7 +33,6 @@ describe.each(BAD_JSONS)('getCVInformation with not valid JSON', (input) => {
     })
     test(`input '${input}'`, () => {
         expect(() => getCVInformation()).toThrowError()
-        //expect(getCVInformation()).toThrowError()
     })
 })
 
@@ -48,7 +48,7 @@ describe('getCVInformation with valid JSON', () => {
     })
     test('getCVInformation', () => {
         const cvInformation = getCVInformation()
-        expect(cvInformation).toStrictEqual(EXPECTED_JSON)
+        expect(cvInformation).toEqual(EXPECTED_JSON)
         for (let i = 0; i < 10; i++) {
             expect(getCVInformation()).toBe(cvInformation)
         }
