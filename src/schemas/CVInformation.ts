@@ -12,18 +12,25 @@ const contact = z.object({
     profile_url: z.string(),
 })
 
-const project = z.object({})
-
 const technology = z.object({
     name: z.string(),
     domain: z.string(),
+    version: z.string().optional(),
+    description: z.string().optional(),
+})
+
+const project = z.object({
+    period,
+    technologies: z.array(technology),
+    name: z.string(),
+    description: z.string(),
 })
 
 const workExperience = z.object({
     company: z.string(),
     description: z.string(),
     period,
-    technologies: z.array(technology),
+    projects: z.array(project),
 })
 
 export const cvInformation = z.object({
