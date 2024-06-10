@@ -11,10 +11,10 @@ const cvInformation = getCVInformation()
             cvInformation.Education.map(({ major, period, location }) => {
                 return (
                     <li>
-                        <div>
+                        <p>
                             {major} - {location} -
                             {period.start.toLocaleDateString()}
-                        </div>
+                        </p>
                     </li>
                 )
             })

@@ -25,12 +25,17 @@ const { title } = Astro.props
     </head>
     <body>
         <Header />
-        <slot />
+        <div class="content">
+            <slot />
+        </div>
         <Footer />
     </body>
 </html>
 
 <style>
+    div.content {
+        display: grid;
+    }
     body {
         font-family:
             system-ui,
@@ -44,9 +49,10 @@ const { title } = Astro.props
             'Open Sans',
             'Helvetica Neue',
             sans-serif;
-        margin: 0 25%;
+        margin: 0 30%;
         background-color: rgb(30, 32, 33);
         h1,
+        h2,
         p,
         a {
             color: white;
