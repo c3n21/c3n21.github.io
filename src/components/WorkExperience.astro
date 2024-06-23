@@ -1,0 +1,32 @@
+---
+import { getCVInformation } from '../utils/getCVInformation'
+
+const cvInformation = getCVInformation()
+---
+
+<section>
+    <h2>Work experiences</h2>
+    <ol>
+        {
+            cvInformation.WorkExperiences.map((workExperience) => {
+                return (
+                    <li>
+                        <h3>{workExperience.company}</h3>
+                        <p>{workExperience.period.toString()}</p>
+                        <h4>Projects</h4>
+                        <ol>
+                            {workExperience.projects.map((project) => {
+                                return (
+                                    <li>
+                                        <p>{project.name}</p>
+                                        <p>{project.period.toString()}</p>
+                                    </li>
+                                )
+                            })}
+                        </ol>
+                    </li>
+                )
+            }).reverse()
+        }
+    </ol>
+</section>
