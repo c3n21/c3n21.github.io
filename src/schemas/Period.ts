@@ -9,7 +9,9 @@ const schema = z.object({
 
 export class Period extends zodToClass(schema) {
     override toString() {
-        return this.start.toLocaleDateString()
+        return this.end
+            ? `${this.start.toLocaleDateString()} - ${this.end.toLocaleDateString()}`
+            : `${this.start.toLocaleDateString()} - Present`
     }
 }
 
