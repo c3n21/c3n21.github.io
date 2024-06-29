@@ -11,18 +11,16 @@ const EXPECTED_JSON: CVInformation = {
             profile_url: 'TEST_PROFILE_URL',
         },
     ],
-    Education: [
+    Experiences: [
         {
-            location: 'TEST_URL',
-            major: 'TEST_MAJOR',
+            name: 'TEST_URL',
+            description: 'TEST_MAJOR',
             period: {
                 start: new Date('2019-01-08T23:00:00.000Z'),
             },
+            projects: [],
         },
     ],
-    Projects: [],
-    'Skills & Knowledge': ['Dunno'],
-    WorkExperiences: [],
 }
 
 const OK_JSON = JSON.stringify(EXPECTED_JSON)
