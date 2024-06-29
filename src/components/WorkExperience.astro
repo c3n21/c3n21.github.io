@@ -15,14 +15,28 @@ const cvInformation = getCVInformation()
                         <p>{workExperience.period.toString()}</p>
                         <h4>Projects</h4>
                         <ol>
-                            {workExperience.projects.map((project) => {
-                                return (
-                                    <li>
-                                        <p>{project.name}</p>
-                                        <p>{project.period.toString()}</p>
-                                    </li>
-                                )
-                            })}
+                            {workExperience.projects
+                                .map((project) => {
+                                    return (
+                                        <li>
+                                            <p>{project.name}</p>
+                                            <p>{project.description}</p>
+                                            <p>{project.period.toString()}</p>
+                                        </li>
+                                    )
+                                })
+                                .reverse()}
+                            {workExperience.projects
+                                .map((project) => {
+                                    return (
+                                        <li>
+                                            <p>{project.name}</p>
+                                            <p>{project.description}</p>
+                                            <p>{project.period.toString()}</p>
+                                        </li>
+                                    )
+                                })
+                                .reverse()}
                         </ol>
                     </li>
                 )
