@@ -2,11 +2,17 @@
 import Layout from '../layouts/Layout.astro'
 import About from '../components/About.astro'
 import Experiences from '../components/Experience.astro'
+const items = [About, Experiences]
 ---
 
 <Layout title="Welcome to Astro.">
-    <div>
-        <About />
-        <Experiences />
+    <div class="grid grid-cols-1 divide-y">
+        {
+            items.map((Item) => (
+                <div class="p-8">
+                    <Item />
+                </div>
+            ))
+        }
     </div>
 </Layout>

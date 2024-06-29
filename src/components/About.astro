@@ -1,32 +1,26 @@
 ---
-import { getCVInformation } from "../utils/getCVInformation"
+import { getCVInformation } from '../utils/getCVInformation'
 
 const cvInformation = getCVInformation()
 ---
-<div>
-	<img 
-	src="/myphoto.jpg"
-	/>
-	<p>
-		{
-		cvInformation.About
-		}
-	</p>
+
+<div class="grid grid-cols-2">
+    <img
+        class="h-60 w-60 rounded-lg shadow-xl dark:shadow-gray-800"
+        src="/myphoto.jpg"
+    />
+    <div class="flex flex-col">
+        <h1>About me</h1>
+        <p>
+            {cvInformation.About}
+        </p>
+    </div>
 </div>
 
 <style>
-	img { 
-		/**
-* Circular image
-		*/
-		width: 10rem;
-		clip-path: circle(50% at 50% 50%);
-	}
-
-
-	div {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
