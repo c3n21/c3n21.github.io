@@ -1,0 +1,274 @@
+---
+
+---
+
+<!doctype html>
+<!--
+	Prologue by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <title>Prologue by HTML5 UP</title>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, user-scalable=no"
+        />
+    </head>
+    <body class="is-preload">
+        <!-- Header -->
+        <div id="header">
+            <div class="top">
+                <!-- Logo -->
+                <div id="logo">
+                    <span class="image avatar48"
+                        ><img src="images/avatar.jpg" alt="" /></span
+                    >
+                    <h1 id="title">Jane Doe</h1>
+                    <p>Hyperspace Engineer</p>
+                </div>
+
+                <!-- Nav -->
+                <nav id="nav">
+                    <ul>
+                        <li>
+                            <a href="#top" id="top-link"
+                                ><span class="icon solid fa-home">Intro</span
+                                ></a
+                            >
+                        </li>
+                        <li>
+                            <a href="#portfolio" id="portfolio-link"
+                                ><span class="icon solid fa-th">Portfolio</span
+                                ></a
+                            >
+                        </li>
+                        <li>
+                            <a href="#about" id="about-link"
+                                ><span class="icon solid fa-user">About Me</span
+                                ></a
+                            >
+                        </li>
+                        <li>
+                            <a href="#contact" id="contact-link"
+                                ><span class="icon solid fa-envelope"
+                                    >Contact</span
+                                ></a
+                            >
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="bottom">
+                <!-- Social Icons -->
+                <ul class="icons">
+                    <li>
+                        <a href="#" class="icon brands fa-twitter"
+                            ><span class="label">Twitter</span></a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="icon brands fa-facebook-f"
+                            ><span class="label">Facebook</span></a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="icon brands fa-github"
+                            ><span class="label">Github</span></a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="icon brands fa-dribbble"
+                            ><span class="label">Dribbble</span></a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="icon solid fa-envelope"
+                            ><span class="label">Email</span></a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <slot />
+
+        <!-- Footer -->
+        <div id="footer">
+            <!-- Copyright -->
+            <ul class="copyright">
+                <li>&copy; Untitled. All rights reserved.</li><li>
+                    Design: <a href="http://html5up.net">HTML5 UP</a>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
+
+<style>
+    #header {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: rgba(0, 0, 0, 0.1) -0.25em 0px 0.25em 0px inset;
+        color: rgb(255, 255, 255);
+        height: 100%;
+        left: 0px;
+        overflow-y: auto;
+        position: fixed;
+        text-align: right;
+        top: 0px;
+        width: 375px;
+        background: url('images/overlay.png') rgb(34, 38, 41);
+        .top {
+            flex-grow: 1;
+        }
+    }
+
+    #logo {
+        position: relative;
+        min-height: 48px;
+        cursor: default;
+        margin: 1.75em 1.5em 1.5em;
+        .image {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        .avatar48 {
+            width: 48px;
+            height: 48px;
+            background: rgb(255, 0, 0);
+        }
+    }
+
+    .image {
+        display: inline-block;
+        border-width: 0px;
+        border-style: initial;
+        border-color: initial;
+        border-image: initial;
+        .avatar48 img {
+            width: 48px;
+            height: 48px;
+        }
+        img {
+            display: block;
+        }
+    }
+
+    #logo {
+        h1 {
+            position: relative;
+            color: rgb(255, 255, 255);
+            font-weight: 600;
+            font-size: 1em;
+            line-height: 1em;
+        }
+        p {
+            position: relative;
+            display: block;
+            font-size: 0.6em;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.25em;
+            margin: 0.5em 0px 0px;
+        }
+    }
+
+    nav {
+        display: block;
+    }
+
+    #nav ul {
+        padding-left: 0px;
+        margin-bottom: 0px;
+        list-style: none;
+        li {
+            padding-left: 0px;
+        }
+    }
+
+    #header .bottom {
+        flex-shrink: 0;
+        padding: 1.5em 0px 0.75em;
+    }
+
+    #header .bottom > :last-child {
+        margin-bottom: 0px;
+    }
+
+    #header .icons {
+        font-size: 0.8em;
+        text-align: center;
+    }
+
+    ul.icons {
+        cursor: default;
+        padding-left: 0px;
+        list-style: none;
+    }
+
+    ul.icons li {
+        display: inline-block;
+        padding-left: 0px;
+    }
+
+    #header .bottom > :last-child {
+        margin-bottom: 0px;
+    }
+
+    #header .icons {
+        font-size: 0.8em;
+        text-align: center;
+    }
+
+    ul.icons {
+        cursor: default;
+        padding-left: 0px;
+        list-style: none;
+    }
+
+    #nav ul li a span {
+        position: relative;
+        display: block;
+        font-size: 0.8em;
+    }
+
+    .icon {
+        text-decoration: none;
+    }
+
+    .icon.solid::before {
+        font-weight: 900;
+    }
+
+    #nav ul li a span::before {
+        position: absolute;
+        left: 0px;
+        text-align: center;
+        width: 1.25em;
+        line-height: 1.75em;
+    }
+
+    #nav ul li a.active span::before {
+        color: rgb(226, 118, 137);
+    }
+
+    .icon::before {
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        text-rendering: auto;
+        font-family: 'Font Awesome 5 Free';
+        text-transform: none !important;
+        font-variant: normal;
+    }
+
+    .fa-home::before {
+        content: '';
+    }
+</style>

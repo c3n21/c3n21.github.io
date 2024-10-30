@@ -1,0 +1,296 @@
+---
+import NewLayout from '../layouts/NewLayout.astro'
+---
+
+<NewLayout>
+    <!-- Main -->
+    <div id="main">
+        <!-- Intro -->
+        <section id="top" class="one dark cover">
+            <div class="container">
+                <header>
+                    <h2 class="alt">
+                        Hi! I'm <strong>Prologue</strong>, a <a
+                            href="http://html5up.net/license">free</a
+                        > responsive<br />
+                        site template designed by <a href="http://html5up.net"
+                            >HTML5 UP</a
+                        >.
+                    </h2>
+                    <p>
+                        Ligula scelerisque justo sem accumsan diam quis<br />
+                        vitae natoque dictum sollicitudin elementum.
+                    </p>
+                </header>
+
+                <footer>
+                    <a href="#portfolio" class="button scrolly">Magna Aliquam</a
+                    >
+                </footer>
+            </div>
+        </section>
+
+        <!-- Portfolio -->
+        <section id="portfolio" class="two">
+            <div class="container">
+                <header>
+                    <h2>Portfolio</h2>
+                </header>
+
+                <p>
+                    Vitae natoque dictum etiam semper magnis enim feugiat
+                    convallis convallis egestas rhoncus ridiculus in quis risus
+                    amet curabitur tempor orci penatibus. Tellus erat mauris
+                    ipsum fermentum etiam vivamus eget. Nunc nibh morbi quis
+                    fusce hendrerit lacus ridiculus.
+                </p>
+
+                <div class="row">
+                    <div class="col-4 col-12-mobile">
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic02.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Ipsum Feugiat</h3>
+                            </header>
+                        </article>
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic03.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Rhoncus Semper</h3>
+                            </header>
+                        </article>
+                    </div>
+                    <div class="col-4 col-12-mobile">
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic04.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Magna Nullam</h3>
+                            </header>
+                        </article>
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic05.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Natoque Vitae</h3>
+                            </header>
+                        </article>
+                    </div>
+                    <div class="col-4 col-12-mobile">
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic06.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Dolor Penatibus</h3>
+                            </header>
+                        </article>
+                        <article class="item">
+                            <a href="#" class="image fit"
+                                ><img src="images/pic07.jpg" alt="" /></a
+                            >
+                            <header>
+                                <h3>Orci Convallis</h3>
+                            </header>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me -->
+        <section id="about" class="three">
+            <div class="container">
+                <header>
+                    <h2>About Me</h2>
+                </header>
+
+                <a href="#" class="image featured"
+                    ><img src="images/pic08.jpg" alt="" /></a
+                >
+
+                <p>
+                    Tincidunt eu elit diam magnis pretium accumsan etiam id
+                    urna. Ridiculus ultricies curae quis et rhoncus velit.
+                    Lobortis elementum aliquet nec vitae laoreet eget cubilia
+                    quam non etiam odio tincidunt montes. Elementum sem
+                    parturient nulla quam placerat viverra mauris non cum elit
+                    tempus ullamcorper dolor. Libero rutrum ut lacinia donec
+                    curae mus vel quisque sociis nec ornare iaculis.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="four">
+            <div class="container">
+                <header>
+                    <h2>Contact</h2>
+                </header>
+
+                <p>
+                    Elementum sem parturient nulla quam placerat viverra mauris
+                    non cum elit tempus ullamcorper dolor. Libero rutrum ut
+                    lacinia donec curae mus. Eleifend id porttitor ac ultricies
+                    lobortis sem nunc orci ridiculus faucibus a consectetur.
+                    Porttitor curae mauris urna mi dolor.
+                </p>
+
+                <form method="post" action="#">
+                    <div class="row">
+                        <div class="col-6 col-12-mobile">
+                            <input type="text" name="name" placeholder="Name" />
+                        </div>
+                        <div class="col-6 col-12-mobile">
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="Email"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <textarea name="message" placeholder="Message"
+                            ></textarea>
+                        </div>
+                        <div class="col-12">
+                            <input type="submit" value="Send Message" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</NewLayout>
+
+<style>
+    @media screen and (min-width: 961px) and (max-width: 1880px) {
+        #main {
+            margin-left: 300px;
+        }
+    }
+
+    #main > section.one {
+        background-color: rgb(129, 145, 142);
+        background-image: url(../../images/banner.jpg);
+    }
+
+    #main > section.cover {
+        background-size: cover;
+        padding: 10em 0px;
+        background-position: center center;
+    }
+
+    #main > section.dark {
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    #main > section {
+        box-shadow:
+            rgba(0, 0, 0, 0.05) 0px 1px 0px 0px inset,
+            rgba(0, 0, 0, 0.024) 0px 0.1em 0.1em 0px inset;
+        text-align: center;
+        background-image: url(images/overlay.png);
+        margin: 0px;
+        overflow: hidden;
+        padding: 4em 0px;
+    }
+
+    section {
+        display: block;
+
+        vertical-align: baseline;
+        margin: 0px;
+        padding: 0px;
+        border-width: 0px;
+        border-style: initial;
+        border-color: initial;
+        border-image: initial;
+        font: inherit;
+    }
+
+    section > :last-child,
+    section > .container,
+    section:last-child,
+    article > :last-child,
+    article > .container,
+    article:last-child {
+        margin-bottom: 0px;
+    }
+
+    @media screen and (min-width: 961px) and (max-width: 1880px) {
+        .container {
+            width: 1200px;
+        }
+    }
+
+    .container {
+        max-width: 100%;
+        width: 1400px;
+        margin: 0px auto;
+    }
+
+    div {
+        display: block;
+        unicode-bidi: isolate;
+    }
+
+    header {
+        margin: 0px 0px 2em;
+    }
+
+    section {
+        display: block;
+    }
+
+    h2 {
+        font-size: 2em;
+        letter-spacing: -1px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 300;
+        line-height: 1.5em;
+    }
+
+    header > p {
+        margin: 1em 0px 0px;
+    }
+
+    #main > section.two {
+        background-color: rgb(245, 250, 250);
+    }
+
+    #main > section {
+        box-shadow:
+            rgba(0, 0, 0, 0.05) 0px 1px 0px 0px inset,
+            rgba(0, 0, 0, 0.024) 0px 0.1em 0.1em 0px inset;
+        text-align: center;
+        background-image: url(images/overlay.png);
+        margin: 0px;
+        overflow: hidden;
+        padding: 4em 0px;
+    }
+
+    @media screen and (min-width: 961px) and (max-width: 1880px) {
+        .container {
+            width: 1200px;
+        }
+    }
+
+    .container {
+        max-width: 100%;
+        width: 1400px;
+        margin: 0px auto;
+    }
+</style>

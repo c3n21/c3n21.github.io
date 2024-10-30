@@ -1,0 +1,50 @@
+---
+import { getCVInformation } from '../utils/getCVInformation'
+import Card from './Card.astro'
+const cv = getCVInformation()
+const skillsMap = cv.Experiences.reduce((accumulator, { projects }) => {
+    for (const project of projects) {
+        for (const technology of project.technologies) {
+            const currentCount = accumulator.get(technology.name)
+
+            if (undefined !== currentCount) {
+                accumulator.set(technology.name, currentCount + 1)
+            } else {
+                accumulator.set(technology.name, 1)
+            }
+        }
+    }
+
+    return accumulator
+}, new Map<string, number>())
+
+const skills = []
+
+for (const [skill, count] of skillsMap) {
+    skills.push({ skill, count })
+}
+
+skills.sort((a, b) => b.count - a.count)
+
+const total = skills.reduce((acc, { count }) => acc + count, 0)
+---
+
+<section class="object-contain">
+    <h2>Skills</h2>
+    <ol class="grid grid-cols-2 gap-4">
+        {
+            skills.map((skill) => (
+                <li class="pb-10">
+                    <div class="h-1 w-full bg-neutral-200 dark:bg-neutral-600 ">
+                        <Card title={skill.skill} body={'test'} />
+                        <p>{skill.skill}</p>
+                        <div
+                            class="h-1 bg-green-500"
+                            style={`width: ${Math.trunc((skill.count / total) * 100)}%`}
+                        />
+                    </div>
+                </li>
+            ))
+        }
+    </ol>
+</section>
