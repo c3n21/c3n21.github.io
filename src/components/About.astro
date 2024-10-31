@@ -4,7 +4,7 @@ import { getCVInformation } from '../utils/getCVInformation'
 const cvInformation = getCVInformation()
 ---
 
-<div class="grid grid-cols-2">
+<div class="grid grid-cols-2 grid-flow-row-dense items-center justify-center">
     <img
         class="h-60 w-60 rounded-lg shadow-xl dark:shadow-gray-800"
         src="/myphoto.jpg"
@@ -16,11 +16,3 @@ const cvInformation = getCVInformation()
         </p>
     </div>
 </div>
-
-<style>
-    div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-</style>

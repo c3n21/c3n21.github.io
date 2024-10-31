@@ -1,5 +1,6 @@
 ---
-
+import { Image } from 'astro:assets'
+import me from '../assets/images/me.jpg'
 ---
 
 <!doctype html>
@@ -23,9 +24,9 @@
             <div class="top">
                 <!-- Logo -->
                 <div id="logo">
-                    <span class="image avatar48"
-                        ><img src="images/avatar.jpg" alt="" /></span
-                    >
+                    <span class="image avatar48">
+                        <Image src={me} alt="" />
+                    </span>
                     <h1 id="title">Jane Doe</h1>
                     <p>Hyperspace Engineer</p>
                 </div>
@@ -192,44 +193,30 @@
         }
     }
 
-    #header .bottom {
-        flex-shrink: 0;
-        padding: 1.5em 0px 0.75em;
+    #header {
+        .bottom {
+            flex-shrink: 0;
+            padding: 1.5em 0px 0.75em;
+        }
+        .bottom > :last-child {
+            margin-bottom: 0px;
+        }
+        .icons {
+            font-size: 0.8em;
+            text-align: center;
+        }
     }
 
-    #header .bottom > :last-child {
-        margin-bottom: 0px;
-    }
-
-    #header .icons {
-        font-size: 0.8em;
-        text-align: center;
-    }
-
-    ul.icons {
-        cursor: default;
-        padding-left: 0px;
-        list-style: none;
-    }
-
-    ul.icons li {
-        display: inline-block;
-        padding-left: 0px;
-    }
-
-    #header .bottom > :last-child {
-        margin-bottom: 0px;
-    }
-
-    #header .icons {
-        font-size: 0.8em;
-        text-align: center;
-    }
-
-    ul.icons {
-        cursor: default;
-        padding-left: 0px;
-        list-style: none;
+    ul {
+        .icons {
+            cursor: default;
+            padding-left: 0px;
+            list-style: none;
+            li {
+                display: inline-block;
+                padding-left: 0px;
+            }
+        }
     }
 
     #nav ul li a span {

@@ -1,6 +1,7 @@
 ---
 import { getCVInformation } from '../utils/getCVInformation'
 import Card from './Card.astro'
+import CardContent from './CardContent.astro'
 const cv = getCVInformation()
 const skillsMap = cv.Experiences.reduce((accumulator, { projects }) => {
     for (const project of projects) {
@@ -29,22 +30,18 @@ skills.sort((a, b) => b.count - a.count)
 const total = skills.reduce((acc, { count }) => acc + count, 0)
 ---
 
-<section class="object-contain">
-    <h2>Skills</h2>
-    <ol class="grid grid-cols-2 gap-4">
-        {
-            skills.map((skill) => (
-                <li class="pb-10">
-                    <div class="h-1 w-full bg-neutral-200 dark:bg-neutral-600 ">
-                        <Card title={skill.skill} body={'test'} />
-                        <p>{skill.skill}</p>
-                        <div
-                            class="h-1 bg-green-500"
-                            style={`width: ${Math.trunc((skill.count / total) * 100)}%`}
-                        />
-                    </div>
-                </li>
-            ))
-        }
-    </ol>
-</section>
+{
+    skills.map((skill) => (
+        <li class="h-full">
+            <Card>
+                <div class="h-1 w-full bg-neutral-200 dark:bg-neutral-600 ">
+                    <h3>{skill.skill}</h3>
+                    <div
+                        class="h-1 bg-green-500"
+                        style={`width: ${Math.trunc((skill.count / total) * 100)}%`}
+                    />
+                </div>
+            </Card>
+        </li>
+    ))
+}

@@ -2,15 +2,31 @@
 import Layout from '../layouts/Layout.astro'
 import About from '../components/About.astro'
 import Experiences from '../components/Experience.astro'
-const items = [About, Experiences]
+import Skills from '../components/Skills.astro'
+const items = [
+    {
+        Component: Experiences,
+        text: 'Education and work experiences',
+    },
+    {
+        Component: Skills,
+        text: 'Skills',
+    },
+]
 ---
 
 <Layout title="Welcome to Astro.">
-    <div class="grid grid-cols-1 divide-y">
+    <div class="flex flex-col items-center justify-center divide-y">
+        <About />
         {
-            items.map((Item) => (
+            items.map(({ Component, text }) => (
                 <div class="p-8">
-                    <Item />
+                    <section>
+                        <h2>{text}</h2>
+                        <ol class="grid grid-cols-2 gap-4 grid-flow-row auto-rows-max container">
+                            <Component />
+                        </ol>
+                    </section>
                 </div>
             ))
         }

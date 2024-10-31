@@ -1,24 +1,22 @@
 ---
 import { getCVInformation } from '../utils/getCVInformation'
 import Card from './Card.astro'
+import CardContent from './CardContent.astro'
 
 const cvInformation = getCVInformation()
 ---
 
-<section>
-    <h2 class="text-2xl">Education and work experiences</h2>
-    <ol class="grid grid-cols-2 gap-4">
-        {
-            cvInformation.Experiences.map((education) => {
-                return (
-                    <li>
-                        <Card
-                            title={`${education.name} (${education.period?.toString()})`}
-                            body={education.description}
-                        />
-                    </li>
-                )
-            }).reverse()
-        }
-    </ol>
-</section>
+{
+    cvInformation.Experiences.map((education) => {
+        return (
+            <li class="h-full">
+                <Card>
+                    <CardContent
+                        title={`${education.name} (${education.period?.toString()})`}
+                        body={education.description}
+                    />
+                </Card>
+            </li>
+        )
+    }).reverse()
+}
