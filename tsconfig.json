@@ -1,6 +1,18 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-   "compilerOptions": {
-    "types": ["vitest/globals"]
-  }
+    "compilerOptions": {
+        // see this issue https://github.com/withastro/language-tools/issues/642#issuecomment-2612193894
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "plugins": [
+            {
+                "name": "@astrojs/ts-plugin"
+            }
+        ],
+        "types": ["vitest/globals"]
+    },
+    "exclude": ["dist"],
+    "extends": "astro/tsconfigs/strictest",
+    "include": [".astro/types.d.ts", "**/*"]
 }
