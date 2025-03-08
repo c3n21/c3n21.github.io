@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets'
+import me from '@/assets/images/me.jpg'
+import github from '@/assets/icons/github-icon.svg'
+import linkedin from '@/assets/icons/linkedin-icon.svg'
+
+type Logo = {
+    Component: typeof github
+    props: {
+        href: string
+    }
+}
+
+const logos: Logo[] = [
+    {
+        Component: github,
+        props: {
+            href: 'https://github.com/c3n21',
+        },
+    },
+    {
+        Component: linkedin,
+        props: {
+            href: 'https://www.linkedin.com/in/zhifanchen00/',
+        },
+    },
+]
+---
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+    <div>
+        <h1>Hi, I'm {import.meta.env.NAME}</h1>
+        <h2>Computer Science enthusiast</h2>
+        <p>
+            a developer passionate about software, from frontend with React to
+            backend and infrastructure with Terraform and Nix. I'm a computer
+            science student and an open-source enthusiast, contributing to
+            NeoVim and NixOS. I love coding in multiple languages and constantly
+            refining my workflow to build better, more efficient systems.
+        </p>
+        <Image
+            src={me}
+            format="webp"
+            widths={[48, 64, 96, 128, me.width]}
+            sizes="(max-width: 480px) 48px, (max-width: 768px) 64px, (max-width: 1024px) 96px, (max-width: 1600px) 128px, 160px"
+            class="w-80 h-80 rounded-full"
+            alt="User avatar"
+        />
+        <div class="flex flex-row">
+            {
+                logos.map(({ Component, props }) => (
+                    <a {...props}>
+                        <Component class="w-6 h-6" />
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</section>

@@ -1,34 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro'
-import About from '../components/About.astro'
-import Experiences from '../components/Experience.astro'
-import Skills from '../components/Skills.astro'
-const items = [
-    {
-        Component: Experiences,
-        text: 'Education and work experiences',
-    },
-    {
-        Component: Skills,
-        text: 'Skills',
-    },
-]
+import Layout from '@/layouts/Layout.astro'
+import About from '@/components/About.astro'
+import Experiences from '@/components/Experiences.astro'
+import Introduction from '@/components/Introduction.astro'
+import Projects from '@/components/Projects.astro'
 ---
 
-<Layout title="Welcome to Astro.">
-    <div class="flex flex-col items-center justify-center divide-y">
+<Layout title="Welcome to Zhifan.">
+    <>
+        <Introduction />
         <About />
-        {
-            items.map(({ Component, text }) => (
-                <div class="p-8">
-                    <section>
-                        <h2>{text}</h2>
-                        <ol class="grid grid-cols-2 gap-4 grid-flow-row auto-rows-max container">
-                            <Component />
-                        </ol>
-                    </section>
-                </div>
-            ))
-        }
-    </div>
+        <Experiences />
+        <Projects />
+    </>
 </Layout>

@@ -1,18 +1,41 @@
 ---
-import { getCVInformation } from '../utils/getCVInformation'
-
-const cvInformation = getCVInformation()
+import '@/styles/global.css'
 ---
 
-<div class="grid grid-cols-2 grid-flow-row-dense items-center justify-center">
-    <img
-        class="h-60 w-60 rounded-lg shadow-xl dark:shadow-gray-800"
-        src="/myphoto.jpg"
-    />
-    <div class="flex flex-col">
-        <h1>About me</h1>
-        <p>
-            {cvInformation.About}
-        </p>
+<section>
+    <h1>About me</h1>
+    <p>
+        Hi, I'm Zhifan – a developer passionate about software in all its forms.
+        While I primarily work as a frontend developer with React, my interests
+        extend to backend systems and infrastructure, where I enjoy working with
+        Terraform and Nix. I'm also a computer science student who loves open
+        source, contributing to the NeoVim ecosystem and Nix packages whenever I
+        find a functionality or package that could benefit both myself and the
+        community. I code in multiple languages, including Lua (for NeoVim
+        scripting), PHP, Java, and have a strong foundation in functional
+        programming with OCaml, Erlang, and Scala. Beyond work and studies, I'm
+        an avid NeoVim and NixOS enthusiast, constantly refining my workflow and
+        system configurations.
+    </p>
+
+    <div
+        class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"
+    >
+        <div class="mb-8">
+            <div class="text-gray-900 font-bold text-xl mb-2">
+                Can coffee make you a better developer?
+            </div>
+        </div>
+        <div class="flex items-center">
+            <!-- <Image -->
+            <!--     alt="me" -->
+            <!--     class="h-60 w-60 rounded-lg shadow-xl dark:shadow-gray-800" -->
+            <!--     src={me} -->
+            <!-- /> -->
+            <div class="text-sm">
+                <p class="text-gray-900 leading-none">Jonathan Reinink</p>
+                <p class="text-gray-600">Aug 18</p>
+            </div>
+        </div>
     </div>
-</div>
+</section>

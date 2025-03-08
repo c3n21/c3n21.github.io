@@ -1,0 +1,26 @@
+---
+import { getCVInformation } from '../utils/getCVInformation'
+import Card from './Card.astro'
+import CardContent from './CardContent.astro'
+
+const cvInformation = getCVInformation()
+import '@/styles/global.css'
+---
+
+<section>
+    <h1>Experiences</h1>
+    {
+        cvInformation.Experiences.map((education) => {
+            return (
+                <li class="h-full">
+                    <Card>
+                        <CardContent
+                            title={`${education.name} (${education.period?.toString()})`}
+                            body={education.description}
+                        />
+                    </Card>
+                </li>
+            )
+        }).reverse()
+    }
+</section>
