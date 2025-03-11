@@ -3,6 +3,8 @@ import { z } from 'astro:schema'
 
 import '@/styles/global.css'
 import { experience } from '@/schemas/CVInformation'
+import ListItem from '@/components/ListItem.astro'
+import UnorderedList from '@/components/UnorderedList.astro'
 
 const experiencesSchema = z.array(experience)
 
@@ -152,29 +154,31 @@ const experiences = experiencesSchema.parse([
 
 <section>
     <h1>Experiences</h1>
-    {
-        experiences
-            .map((education) => {
-                return (
-                    <li class="">
-                        <div class="grid grid-cols-2">
-                            <h2>{education.period?.toString()}</h2>
-                            <div>
-                                <h2>{education.name}</h2>
-                                {education.projects.map((project) => {
-                                    return (
-                                        <>
-                                            <h3>{project.name}</h3>
-                                            <p>{project.description}</p>
-                                        </>
-                                    )
-                                })}
-                                <p>{education.description}</p>
+    <UnorderedList>
+        {
+            experiences
+                .map((education) => {
+                    return (
+                        <ListItem>
+                            <div class="grid grid-cols-2">
+                                <h2>{education.period?.toString()}</h2>
+                                <div>
+                                    <h2>{education.name}</h2>
+                                    {education.projects.map((project) => {
+                                        return (
+                                            <>
+                                                <h3>{project.name}</h3>
+                                                <p>{project.description}</p>
+                                            </>
+                                        )
+                                    })}
+                                    <p>{education.description}</p>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                )
-            })
-            .reverse()
-    }
+                        </ListItem>
+                    )
+                })
+                .reverse()
+        }
+    </UnorderedList>
 </section>
