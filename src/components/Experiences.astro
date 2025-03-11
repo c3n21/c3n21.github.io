@@ -1,26 +1,180 @@
 ---
-import { getCVInformation } from '../utils/getCVInformation'
-import Card from './Card.astro'
-import CardContent from './CardContent.astro'
+import { z } from 'astro:schema'
 
-const cvInformation = getCVInformation()
 import '@/styles/global.css'
+import { experience } from '@/schemas/CVInformation'
+
+const experiencesSchema = z.array(experience)
+
+const experiences = experiencesSchema.parse([
+    {
+        name: 'Università degli Studi di Milano',
+        description: 'Computer Science degree',
+        period: { start: '2019-01-08T23:00:00.000Z' },
+        projects: [],
+    },
+    {
+        name: 'ITIS Nullo Baldini',
+        description: 'IT Specialization High School',
+        period: {
+            end: '2019-01-07T23:00:00.000Z',
+            start: '2014-01-08T23:00:00.000Z',
+        },
+        projects: [],
+    },
+    {
+        name: 'TiNoleggio',
+        description: 'Company specialized in car rental in Italy and Europe',
+        period: {
+            start: '2019-10-01T00:00:00.000Z',
+            end: '2020-03-01T00:00:00.000Z',
+        },
+        projects: [
+            {
+                name: 'Vehicles booking engine',
+                description:
+                    'Development of new partners integration and bugfix of proprietary vehicles booking engine written in PHP using Symfony 4 framework',
+                period: {
+                    start: '2019-10-01T00:00:00.000Z',
+                    end: '2020-03-01T00:00:00.000Z',
+                },
+                technologies: [
+                    { domain: 'Frontend', name: 'JavaScript' },
+                    {
+                        domain: 'Frontend',
+                        name: 'React',
+                        version: '16',
+                    },
+                    { domain: 'Tooling', name: 'Docker' },
+                    { domain: 'Tooling', name: 'Linux' },
+                    { domain: 'Tooling', name: 'Linux' },
+                    {
+                        domain: 'Backend',
+                        name: 'Symfony',
+                        version: '4',
+                    },
+                ],
+            },
+            {
+                name: 'Coupon creator webapp',
+                description: 'For internal use',
+                period: {
+                    start: '2019-10-01T00:00:00.000Z',
+                    end: '2020-03-01T00:00:00.000Z',
+                },
+                technologies: [
+                    { domain: 'Frontend', name: 'JavaScript' },
+                    {
+                        domain: 'Frontend',
+                        name: 'React',
+                        version: '16',
+                    },
+                    { domain: 'Tooling', name: 'Docker' },
+                    { domain: 'Tooling', name: 'Linux' },
+                    { domain: 'Tooling', name: 'Linux' },
+                    {
+                        domain: 'Backend',
+                        name: 'Symfony',
+                        version: '4',
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        name: 'HRM',
+        description:
+            "Bootcamp with a Magento professional which covered its major features: module / theme development, REST and GraphQL API integration, testing with PHPUnit (Unit Testing, Integration Testing and e2e testing using Magento's Functional Testing Framework based on Selenium), Symfony Console Application which integrates with Magento 2",
+        projects: [
+            {
+                period: {
+                    start: '2022-06-15T00:00:00.000Z',
+                    end: '2022-09-01T00:00:00.000Z',
+                },
+                technologies: [
+                    {
+                        domain: 'Tooling',
+                        name: 'DDEV',
+                        description:
+                            'A wrapper for Docker and Docker Compose to ease the setup for every PHP based CMS',
+                    },
+                    { domain: 'Tooling', name: 'phpcsfixer' },
+                    { domain: 'Tooling', name: 'phpstan' },
+                    { domain: 'Tooling', name: 'git' },
+                    { domain: 'Tooling', name: 'WSL' },
+                    { domain: 'Backend', name: 'Symfony' },
+                ],
+                name: 'Training on Magento 2 Open Source',
+                description:
+                    "Bootcamp with a Magento professional which covered its major features: module / theme development, REST and GraphQL API integration, testing with PHPUnit (Unit Testing, Integration Testing and e2e testing using Magento's Functional Testing Framework based on Selenium), Symfony Console Application which integrates with Magento 2",
+            },
+            {
+                period: { start: '2022-09-01T00:00:00.000Z' },
+                technologies: [
+                    {
+                        domain: 'Frontend',
+                        name: 'React',
+                        version: '17',
+                        description:
+                            'The project was based on create-react-app',
+                    },
+                    {
+                        domain: 'Frontend',
+                        name: 'Zustand',
+                        version: '4',
+                        description: 'Replacement for Redux Toolkit',
+                    },
+                    {
+                        domain: 'Frontend',
+                        name: 'Redux Toolkit',
+                        description: 'The default global state manager',
+                    },
+                    {
+                        domain: 'Frontend',
+                        name: 'WebComponents',
+                        description:
+                            'Integration of Vue WebComponents into React',
+                    },
+                    { domain: 'Tooling', name: 'git' },
+                    { domain: 'Tooling', name: 'prettier' },
+                    { domain: 'Tooling', name: 'eslint' },
+                    { domain: 'Tooling', name: 'WSL' },
+                ],
+                name: 'React development ABB',
+                description:
+                    'Rewrite and maintenance of a custom e-commerce in React based on a custom implementation of Microfrontend and Micro services backend',
+            },
+        ],
+        period: { start: '2022-06-05T00:00:00.000Z' },
+    },
+])
 ---
 
 <section>
     <h1>Experiences</h1>
     {
-        cvInformation.Experiences.map((education) => {
-            return (
-                <li class="h-full">
-                    <Card>
-                        <CardContent
-                            title={`${education.name} (${education.period?.toString()})`}
-                            body={education.description}
-                        />
-                    </Card>
-                </li>
-            )
-        }).reverse()
+        experiences
+            .map((education) => {
+                return (
+                    <li class="">
+                        <div class="grid grid-cols-2">
+                            <h2>{education.period?.toString()}</h2>
+                            <div>
+                                <h2>{education.name}</h2>
+                                {education.projects.map((project) => {
+                                    return (
+                                        <>
+                                            <h3>{project.name}</h3>
+                                            <p>{project.description}</p>
+                                        </>
+                                    )
+                                })}
+                                <p>{education.description}</p>
+                            </div>
+                        </div>
+                    </li>
+                )
+            })
+            .reverse()
     }
 </section>

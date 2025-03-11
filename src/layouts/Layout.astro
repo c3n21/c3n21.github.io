@@ -25,11 +25,11 @@ const { title } = Astro.props
         <title>{title}</title>
     </head>
     <body>
-        <div class="grid grid-cols-1 pl-5 pr-5">
-            <Header />
+        <Header />
+        <main class="grid grid-cols-1 pl-5 pr-5 min-h-dvh h-full">
             <slot />
-            <Footer />
-        </div>
+        </main>
+        <Footer />
     </body>
 </html>
 <!-- <style></style> -->

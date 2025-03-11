@@ -23,7 +23,7 @@ const project = z.object({
 /**
  * @description Experience of a person
  */
-const experience = z.object({
+export const experience = z.object({
     name: z.string(),
     description: z.string(),
     period: period.optional(),

@@ -28,11 +28,14 @@
             sans-serif;
         background-color: #1f1f28;
 
-        h1,
+        h1 {
+            color: #957FB8
+        }
+
         h2,
         p,
         a {
-            color: #957fb8;
+            color: #54546D;
         }
     }
 
