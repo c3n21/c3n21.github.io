@@ -5,6 +5,7 @@ import { experience } from '@/schemas/CVInformation'
 import ListItem from '@/components/ListItem.astro'
 import UnorderedList from '@/components/UnorderedList.astro'
 import { Period } from '@/schemas/Period'
+import Card from './Card.astro'
 
 const experiencesSchema = z.array(experience)
 
@@ -161,11 +162,10 @@ const experiences = experiencesSchema
         {
             experiences.map((education) => {
                 return (
-                    <ListItem>
+                    <ListItem class="mt-10 mb-10">
                         <div class="grid grid-cols-2">
                             <h2>{education.period.toString()}</h2>
-                            <div>
-                                <h2>{education.name}</h2>
+                            <Card title={education.name}>
                                 {education.projects.map((project) => {
                                     return (
                                         <>
@@ -175,7 +175,7 @@ const experiences = experiencesSchema
                                     )
                                 })}
                                 <p>{education.description}</p>
-                            </div>
+                            </Card>
                         </div>
                     </ListItem>
                 )

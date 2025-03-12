@@ -1,7 +1,9 @@
 ---
-
+interface Props {
+    class?: string
+}
 ---
 
-<li class="">
+<li class={Astro.props.class}>
     <slot />
 </li>
