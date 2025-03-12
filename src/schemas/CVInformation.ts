@@ -26,7 +26,7 @@ const project = z.object({
 export const experience = z.object({
     name: z.string(),
     description: z.string(),
-    period: period.optional(),
+    period,
     projects: z.array(project),
 })
 
