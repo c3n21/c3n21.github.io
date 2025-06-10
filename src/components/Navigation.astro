@@ -70,23 +70,19 @@ const navItems = [
                 </Button>
             </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {
-            isMenuOpen && (
-                <div class="md:hidden">
-                    <div class="px-2 pt-2 pb-3 space-y-1 border-t border-border">
-                        {navItems.map((item) => (
-                            <button
-                                onClick={() => scrollToSection(item.id)}
-                                class="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )
-        }
+        <div class="md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 border-t border-border">
+                {
+                    navItems.map((item) => (
+                        <button
+                            onClick={() => scrollToSection(item.id)}
+                            class="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {item.label}
+                        </button>
+                    ))
+                }
+            </div>
+        </div>
     </div>
 </nav>

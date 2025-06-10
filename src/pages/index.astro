@@ -1,14 +1,33 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import About from '@/components/About.astro'
-import Experiences from '@/components/Experiences.astro'
-import Introduction from '@/components/Introduction.astro'
-import Projects from '@/components/Projects.astro'
+import '@/styles/global.css'
+import Navigation from '@/components/Navigation.astro'
+import HeroSection from '@/components/HeroSection.astro'
+import ResumeSection from '@/components/ResumeSection.astro'
+import ProjectsSection from '@/components/ProjectsSection.astro'
+import ContactSection from '@/components/ContactSection.astro'
 ---
 
-<Layout title="Zhifan Chen">
-    <Introduction />
-    <About />
-    <Experiences />
-    <Projects />
-</Layout>
+<div class="min-h-screen bg-background">
+    <Navigation />
+    <main>
+        <HeroSection />
+        <ResumeSection />
+        <ProjectsSection />
+        <ContactSection />
+    </main>
+
+    {/* Footer */}
+    <footer class="bg-background border-t border-border py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-muted-foreground">
+                <p class="text-sm">
+                    © 2024 [Your Name]. Built with React, TypeScript, and
+                    Tailwind CSS.
+                </p>
+                <p class="text-xs mt-2">
+                    Designed with ❤️ for an amazing user experience.
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>
