@@ -4,7 +4,7 @@ import CardContent from '@/components/CardContent.astro'
 import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Button from '@/components/Button.astro'
-// import { Mail } from 'lucide-react'
+import Mail from '@lucide/astro/icons/mail'
 
 const contactInfo = [
     {
@@ -43,7 +43,7 @@ const contactInfo = [
                 <Card>
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2">
-                            <!-- <Mail className="text-primary" size={24} /> -->
+                            <Mail className="text-primary" size={24} />
                             Mail Send me a message
                         </CardTitle>
                     </CardHeader>
@@ -137,7 +137,7 @@ const contactInfo = [
                     </CardHeader>
                     <CardContent class="space-y-4">
                         {
-                            contactInfo.map((info, index) => (
+                            contactInfo.map((info) => (
                                 <div class="space-y-1">
                                     <p class="text-sm font-medium text-muted-foreground">
                                         {info.label}
