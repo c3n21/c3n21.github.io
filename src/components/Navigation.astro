@@ -1,19 +1,6 @@
 ---
-// import { useState } from 'react';
 import Button from '@/components/Button.astro'
-// import { Menu, X } from 'lucide-react';
 // import { ThemeToggle } from '@/components/ThemeToggle';
-
-// const [isMenuOpen, setIsMenuOpen] = useState(false)
-const [isMenuOpen, setIsMenuOpen] = [1, (_) => undefined]
-
-const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-        setIsMenuOpen(false)
-    }
-}
 
 const navItems = [
     { id: 'home', label: 'Home' },
@@ -38,12 +25,13 @@ const navItems = [
                 <div class="ml-10 flex items-center space-x-8">
                     {
                         navItems.map((item) => (
-                            <button
+                            <a
                                 onclick="() => scrollToSection(item.id)()"
+                                href={`#${item.id}`}
                                 class="text-muted-foreground hover:text-foreground transition-colors story-link"
                             >
                                 {item.label}
-                            </button>
+                            </a>
                         ))
                     }
                     <!-- <ThemeToggle /> -->
@@ -53,12 +41,7 @@ const navItems = [
             {/* Mobile menu button and theme toggle */}
             <div class="md:hidden flex items-center space-x-2">
                 <!-- <ThemeToggle /> -->
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    class="hover-scale"
-                >
+                <Button variant="ghost" size="icon" class="hover-scale">
                     <!-- { -->
                     <!--     isMenuOpen ? ( -->
                     <!--         <X class="h-6 w-6" /> -->
@@ -74,12 +57,12 @@ const navItems = [
             <div class="px-2 pt-2 pb-3 space-y-1 border-t border-border">
                 {
                     navItems.map((item) => (
-                        <button
-                            onClick={() => scrollToSection(item.id)}
+                        <a
+                            href={`#${item.id}`}
                             class="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
                         >
                             {item.label}
-                        </button>
+                        </a>
                     ))
                 }
             </div>

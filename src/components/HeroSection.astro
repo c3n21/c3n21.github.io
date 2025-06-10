@@ -1,15 +1,5 @@
 ---
-import Button from '@/components/Button.astro'
 
-/**
- * @todo use this
- */
-const scrollToContact = () => {
-    const element = document.getElementById('contact')
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-    }
-}
 ---
 
 <section
@@ -39,26 +29,22 @@ const scrollToContact = () => {
             <div
                 class="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-                <Button
+                <a
                     size="lg"
-                    onClick={scrollToContact}
+                    href="#contact"
                     class="text-lg px-8 py-3 hover-scale"
                 >
                     Get In Touch
-                </Button>
+                </a>
 
-                <Button
+                <a
                     variant="outline"
                     size="lg"
-                    onClick={() => {
-                        const element = document.getElementById('projects')
-                        if (element)
-                            element.scrollIntoView({ behavior: 'smooth' })
-                    }}
+                    href="#projects"
                     class="text-lg px-8 py-3 hover-scale"
                 >
                     View My Work
-                </Button>
+                </a>
             </div>
         </div>
 

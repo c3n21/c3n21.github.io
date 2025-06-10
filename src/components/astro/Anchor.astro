@@ -1,0 +1,17 @@
+---
+import type ComponentBaseProps from '@/components/astro/theme/types/ComponentBaseProps'
+import createElementStyle from './theme/createElementStyle'
+interface Props extends ComponentBaseProps {}
+
+const { class: className, size = 'default', variant = 'default' } = Astro.props
+const style = createElementStyle(
+    {
+        element: 'a',
+        size,
+        variant,
+    },
+    className
+)
+---
+
+<a class:list={style}><slot /></a>
