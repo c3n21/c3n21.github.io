@@ -1,0 +1,238 @@
+---
+import Card from '@/components/Card.astro'
+import CardContent from '@/components/CardContent.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import Button from '@/components/Button.astro'
+// import { Mail } from 'lucide-react'
+
+const contactInfo = [
+    {
+        label: 'Email',
+        value: 'your.email@example.com',
+        link: 'mailto:your.email@example.com',
+    },
+    {
+        label: 'Phone',
+        value: '+1 (555) 123-4567',
+        link: 'tel:+15551234567',
+    },
+    {
+        label: 'Location',
+        value: 'San Francisco, CA',
+        link: '#',
+    },
+]
+---
+
+<section id="contact" class="py-20 bg-muted/20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-fade-in">
+            <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                Get In Touch
+            </h2>
+            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+                I'm always open to discussing new opportunities, interesting
+                projects, or just having a chat about technology.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Contact Form -->
+            <div class="lg:col-span-2 animate-fade-in">
+                <Card>
+                    <CardHeader>
+                        <CardTitle class="flex items-center gap-2">
+                            <!-- <Mail className="text-primary" size={24} /> -->
+                            Mail Send me a message
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        for="name"
+                                        class="block text-sm font-medium text-foreground mb-2"
+                                    >
+                                        Name *
+                                    </label>
+                                    <input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        required
+                                        placeholder="Your full name"
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        for="email"
+                                        class="block text-sm font-medium text-foreground mb-2"
+                                    >
+                                        Email *
+                                    </label>
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        required
+                                        placeholder="your.email@example.com"
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    for="subject"
+                                    class="block text-sm font-medium text-foreground mb-2"
+                                >
+                                    Subject *
+                                </label>
+                                <input
+                                    id="subject"
+                                    name="subject"
+                                    type="text"
+                                    required
+                                    placeholder="What's this about?"
+                                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    for="message"
+                                    class="block text-sm font-medium text-foreground mb-2"
+                                >
+                                    Message *
+                                </label>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    required
+                                    rows="6"
+                                    placeholder="Tell me about your project or just say hello!"
+                                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                                ></textarea>
+                            </div>
+
+                            <Button type="submit" class="w-full hover-scale">
+                                <span class="submit-text">Send Message</span>
+                                <span class="loading-text hidden"
+                                    >Sending...</span
+                                >
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="space-y-6 animate-fade-in">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Contact Information</CardTitle>
+                    </CardHeader>
+                    <CardContent class="space-y-4">
+                        {
+                            contactInfo.map((info, index) => (
+                                <div class="space-y-1">
+                                    <p class="text-sm font-medium text-muted-foreground">
+                                        {info.label}
+                                    </p>
+                                    <a
+                                        href={info.link}
+                                        class="text-foreground hover:text-primary transition-colors story-link"
+                                    >
+                                        {info.value}
+                                    </a>
+                                </div>
+                            ))
+                        }
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Let's Connect</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p class="text-muted-foreground text-sm mb-4">
+                            Follow me on social media for updates on my latest
+                            projects and tech insights.
+                        </p>
+                        <div class="flex flex-col gap-3">
+                            <a
+                                href="#"
+                                class="text-foreground hover:text-primary transition-colors story-link"
+                            >
+                                LinkedIn Profile
+                            </a>
+                            <a
+                                href="#"
+                                class="text-foreground hover:text-primary transition-colors story-link"
+                            >
+                                GitHub Repository
+                            </a>
+                            <a
+                                href="#"
+                                class="text-foreground hover:text-primary transition-colors story-link"
+                            >
+                                Twitter Handle
+                            </a>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('contact-form')
+        const submitButton = form?.querySelector('button[type="submit"]')
+        const submitText = submitButton?.querySelector('.submit-text')
+        const loadingText = submitButton?.querySelector('.loading-text')
+
+        form?.addEventListener('submit', async function (e) {
+            e.preventDefault()
+
+            // Show loading state
+            if (submitButton) {
+                submitButton.disabled = true
+                submitText?.classList.add('hidden')
+                loadingText?.classList.remove('hidden')
+            }
+
+            // Get form data
+            const formData = new FormData(form)
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+            }
+
+            // Simulate form submission
+            setTimeout(() => {
+                // Show success message (you can replace this with a toast notification)
+                alert(
+                    "Message sent! Thank you for your message. I'll get back to you soon."
+                )
+
+                // Reset form
+                form.reset()
+
+                // Reset button state
+                if (submitButton) {
+                    submitButton.disabled = false
+                    submitText?.classList.remove('hidden')
+                    loadingText?.classList.add('hidden')
+                }
+            }, 1000)
+        })
+    })
+</script>
