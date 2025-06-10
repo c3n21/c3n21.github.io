@@ -1,0 +1,17 @@
+---
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+    class?: string
+}
+
+const { class: className = '', ...props } = Astro.props
+
+// Base card header classes
+const baseClasses = 'flex flex-col space-y-1.5 p-6'
+
+// Combine classes
+const cardHeaderClasses = `${baseClasses} ${className}`.trim()
+---
+
+<div class={cardHeaderClasses} {...props}>
+    <slot />
+</div>
