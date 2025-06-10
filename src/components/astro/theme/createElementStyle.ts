@@ -7,6 +7,14 @@ type CreateElementStyleOptions = {
     size: Size
 }
 
+function appendStyle(style: string[], newStyles: Style) {
+    if (Array.isArray(newStyles)) {
+        style.push(...newStyles)
+    } else {
+        style.push(newStyles)
+    }
+}
+
 export default function createElementStyle(
     createElementStyleOptions: CreateElementStyleOptions,
     extraClassName: Style = ''
@@ -14,17 +22,18 @@ export default function createElementStyle(
     const elementConfiguration =
         configuration[createElementStyleOptions.element]
 
-    const style = [
-        elementConfiguration.base,
-        elementConfiguration.size[createElementStyleOptions.size],
-        elementConfiguration.variant[createElementStyleOptions.variant],
-    ]
+    const style: string[] = []
 
-    if (Array.isArray(extraClassName)) {
-        style.push(...extraClassName)
-    } else {
-        style.push(extraClassName)
-    }
+    appendStyle(style, elementConfiguration.base)
+    appendStyle(
+        style,
+        elementConfiguration.size[createElementStyleOptions.size]
+    )
+    appendStyle(
+        style,
+        elementConfiguration.variant[createElementStyleOptions.variant]
+    )
+    appendStyle(style, extraClassName)
 
     return style
 }
