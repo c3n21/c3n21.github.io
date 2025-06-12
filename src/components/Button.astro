@@ -8,13 +8,13 @@ export interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
         | 'ghost'
         | 'link'
     size?: 'default' | 'sm' | 'lg' | 'icon'
-    className?: string
+    class?: string
 }
 
 const {
     variant = 'default',
     size = 'default',
-    className = '',
+    class: className = '',
     ...props
 } = Astro.props
 
