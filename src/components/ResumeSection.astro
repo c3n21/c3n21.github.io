@@ -8,7 +8,17 @@ import Button from '@/components/Button.astro'
 import Briefcase from '@lucide/astro/icons/briefcase'
 import cv from '@/cv.json'
 
-const experiences = cv.work
+const experiences = cv.work.map(({ startDate, endDate, ...work }) => {
+    const validEndDate = endDate
+        ? new Date(endDate).getFullYear().toString()
+        : 'Present'
+
+    return {
+        ...work,
+        startDate: new Date(startDate).getFullYear().toString(),
+        endDate: validEndDate,
+    }
+})
 
 const skills = [
     'JavaScript',
@@ -25,15 +35,15 @@ const skills = [
     'Tailwind CSS',
 ]
 
-const education = [
-    {
-        degree: 'Bachelor of Science in Computer Science',
-        school: 'University of Technology',
-        period: '2015 - 2019',
-        description:
-            'Graduated Magna Cum Laude. Focused on software engineering, algorithms, and web development.',
-    },
-]
+const education = cv.education.map(({ endDate, startDate, ...edu }) => {
+    return {
+        ...edu,
+        startDate: new Date(startDate).getFullYear().toString(),
+        endDate: endDate
+            ? new Date(endDate).getFullYear().toString()
+            : 'Present',
+    }
+})
 ---
 
 <section id="resume" class="py-20 bg-muted/20">
@@ -69,12 +79,12 @@ const education = [
                                         {exp.name}
                                     </p>
                                     <Badge variant="secondary">
-                                        {exp.endDate}
+                                        {exp.startDate} - {exp.endDate}
                                     </Badge>
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <p class="text-muted-foreground">
+                                <p class="text-muted-foreground whitespace-pre-line">
                                     {exp.summary}
                                 </p>
                             </CardContent>
@@ -115,15 +125,17 @@ const education = [
                         {
                             education.map((edu) => (
                                 <div class="space-y-2">
-                                    <h4 class="font-semibold">{edu.degree}</h4>
+                                    <h4 class="font-semibold">
+                                        {edu.studyType}
+                                    </h4>
                                     <p class="text-primary font-medium">
-                                        {edu.school}
+                                        {edu.institution}
                                     </p>
                                     <Badge variant="secondary" class="text-xs">
-                                        {edu.period}
+                                        {edu.startDate} - {edu.endDate}
                                     </Badge>
                                     <p class="text-sm text-muted-foreground mt-2">
-                                        {edu.description}
+                                        {edu.area}
                                     </p>
                                 </div>
                             ))
