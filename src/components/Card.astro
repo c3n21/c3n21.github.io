@@ -4,14 +4,14 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 }
 
 const { class: className = '', ...props } = Astro.props
-
-// Base card classes
-const baseClasses = 'rounded-lg border bg-card text-card-foreground shadow-sm'
-
-// Combine classes
-const cardClasses = `${baseClasses} ${className}`.trim()
 ---
 
-<div class={cardClasses} {...props}>
+<div
+    class:list={[
+        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        className,
+    ]}
+    {...props}
+>
     <slot />
 </div>

@@ -366,8 +366,8 @@
         "plugins-nixpkgs": "plugins-nixpkgs"
       },
       "locked": {
-        "lastModified": 1749642507,
-        "narHash": "sha256-273H3dpfp3Rx9T3qgKkKVv9g4DJDpFQLQbH0ICSO97A=",
+        "lastModified": 1749749480,
+        "narHash": "sha256-+dss+bSVpcyYwwCr+ORW4LMpD5hwLlUkR96N3MVUJmk=",
         "path": "/home/zhifan/.config/nvim",
         "type": "path"
       },

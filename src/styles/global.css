@@ -4,8 +4,8 @@
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 @theme {
-    --color-background: 0 0% 100%;
-    --color-foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -13,8 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --color-primary: 222.2 47.4% 11.2%;
-    --color-primary-foreground: 210 40% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -49,35 +49,55 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-background: hsl(var(--background));
+    --color-border: hsl(var(--border));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-card: hsl(var(--card));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-foreground: hsl(var(--foreground));
+    --color-input: hsl(var(--input));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-ring: hsl(var(--ring));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+    --color-sidebar-accent: hsl(var(--sidebar-accent));
+    --color-sidebar-border: hsl(var(--sidebar-border));
+    --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+    --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+    --color-sidebar-primary: hsl(var(--sidebar-primary));
+    --color-sidebar-ring: hsl(var(--sidebar-ring));
+    --color-sidebar: hsl(var(--sidebar-background));
 }
 
 @layer base {
     .dark {
-        --color-background: 222.2 84% 4.9%;
-        --color-foreground: 210 40% 98%;
-
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
         --card: 222.2 84% 4.9%;
         --card-foreground: 210 40% 98%;
-
         --popover: 222.2 84% 4.9%;
         --popover-foreground: 210 40% 98%;
-
         --primary: 210 40% 98%;
         --primary-foreground: 222.2 47.4% 11.2%;
-
         --secondary: 217.2 32.6% 17.5%;
         --secondary-foreground: 210 40% 98%;
-
         --muted: 217.2 32.6% 17.5%;
         --muted-foreground: 215 20.2% 65.1%;
-
         --accent: 217.2 32.6% 17.5%;
         --accent-foreground: 210 40% 98%;
-
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 210 40% 98%;
-
-        --color-border: 217.2 32.6% 17.5%;
+        --border: 217.2 32.6% 17.5%;
         --input: 217.2 32.6% 17.5%;
         --ring: 212.7 26.8% 83.9%;
         --sidebar-background: 240 5.9% 10%;
@@ -93,6 +113,7 @@
     .hover-scale {
         transition: transform 0.2s ease-in-out;
     }
+
     .hover-scale:hover {
         transform: scale(1.02);
     }
@@ -100,6 +121,7 @@
     .story-link {
         position: relative;
     }
+
     .story-link::after {
         content: '';
         position: absolute;
@@ -112,14 +134,15 @@
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
     }
+
     .story-link:hover::after {
         transform: scaleX(1);
         transform-origin: bottom left;
     }
 
-    /* * { */
-    /*     @apply border border-border; */
-    /* } */
+    * {
+        @apply border-border;
+    }
 
     body {
         @apply bg-background text-foreground;
