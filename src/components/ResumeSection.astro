@@ -5,31 +5,10 @@ import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Badge from '@/components/Badge.astro'
 import Button from '@/components/Button.astro'
-// import { Briefcase } from 'lucide-react'
+import Briefcase from '@lucide/astro/icons/briefcase'
+import cv from '@/cv.json'
 
-const experiences = [
-    {
-        title: 'Senior Full Stack Developer',
-        company: 'Tech Company Inc.',
-        period: '2022 - Present',
-        description:
-            'Lead development of scalable web applications using React, Node.js, and cloud technologies. Managed a team of 4 developers and improved system performance by 40%.',
-    },
-    {
-        title: 'Full Stack Developer',
-        company: 'Digital Solutions Ltd.',
-        period: '2020 - 2022',
-        description:
-            'Developed and maintained multiple client projects using modern web technologies. Collaborated with designers and product managers to deliver high-quality solutions.',
-    },
-    {
-        title: 'Frontend Developer',
-        company: 'Startup Innovations',
-        period: '2019 - 2020',
-        description:
-            'Built responsive user interfaces and improved user experience. Worked with React, Vue.js, and modern CSS frameworks to create engaging web applications.',
-    },
-]
+const experiences = cv.work
 
 const skills = [
     'JavaScript',
@@ -74,7 +53,7 @@ const education = [
                 <h3
                     class="text-2xl font-bold text-foreground mb-6 flex items-center gap-2"
                 >
-                    <!-- <Briefcase class="text-primary" size={24} /> -->
+                    <Briefcase class="text-primary" size={24} />
                     Experience
                 </h3>
 
@@ -83,20 +62,20 @@ const education = [
                         <Card class="hover-scale transition-all duration-300">
                             <CardHeader>
                                 <CardTitle class="text-lg">
-                                    {exp.title}
+                                    {exp.position}
                                 </CardTitle>
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                                     <p class="text-primary font-semibold">
-                                        {exp.company}
+                                        {exp.name}
                                     </p>
                                     <Badge variant="secondary">
-                                        {exp.period}
+                                        {exp.endDate}
                                     </Badge>
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 <p class="text-muted-foreground">
-                                    {exp.description}
+                                    {exp.summary}
                                 </p>
                             </CardContent>
                         </Card>

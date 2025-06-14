@@ -5,7 +5,7 @@ import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Badge from '@/components/Badge.astro'
 import Button from '@/components/Button.astro'
-// import { Folder } from 'lucide-react'
+import Folder from '@lucide/astro/icons/folder'
 
 const projects = [
     {
@@ -101,8 +101,7 @@ const otherProjects = projects.filter((p) => !p.featured)
 
                         <CardHeader>
                             <div class="flex items-center gap-2 mb-2">
-                                <!-- <Folder className="text-primary" size={20} /> -->
-                        Folder
+                                <Folder class="text-primary" size={20} />
                                 <Badge variant="secondary">Featured</Badge>
                             </div>
                             <CardTitle class="text-xl group-hover:text-primary transition-colors">
@@ -153,11 +152,7 @@ const otherProjects = projects.filter((p) => !p.featured)
                         <Card class="group hover-scale transition-all duration-300">
                             <CardHeader>
                                 <div class="flex items-center gap-2 mb-2">
-                                    <!-- <Folder -->
-                                    <!--     className="text-primary" -->
-                                    <!--     size={18} -->
-                                    <!-- /> -->
-                            Folder
+                                    <Folder class="text-primary" size={18} />
                                 </div>
                                 <CardTitle class="text-lg group-hover:text-primary transition-colors">
                                     {project.title}
@@ -172,7 +167,7 @@ const otherProjects = projects.filter((p) => !p.featured)
                                 <div class="flex flex-wrap gap-1">
                                     {project.technologies
                                         .slice(0, 3)
-                                        .map((tech ) => (
+                                        .map((tech) => (
                                             <Badge
                                                 variant="outline"
                                                 class="text-xs"
