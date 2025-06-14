@@ -1,6 +1,14 @@
 ---
 import '@/styles/global.css'
 import Anchor from './astro/Anchor.astro'
+import cv from '@/cv.json'
+
+const now = new Date()
+const start = new Date('1/06/2018')
+const isAnniversaryPassed = now.getMonth() > start.getMonth()
+const years = isAnniversaryPassed
+    ? now.getFullYear() - start.getFullYear()
+    : now.getFullYear() - start.getFullYear() - 1
 ---
 
 <section
@@ -16,15 +24,14 @@ import Anchor from './astro/Anchor.astro'
                 <span
                     class="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text"
                 >
-                    [Your Name]
+                    Zhifan
                 </span>
             </h1>
 
             <p
                 class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed"
             >
-                A passionate full-stack developer creating beautiful,
-                functional, and user-centered digital experiences.
+                {cv.basics.label}
             </p>
 
             <div
@@ -54,7 +61,9 @@ import Anchor from './astro/Anchor.astro'
                 class="flex justify-center space-x-8 text-sm text-muted-foreground"
             >
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-foreground">5+</div>
+                    <div class="text-2xl font-bold text-foreground">
+                        {years}+
+                    </div>
                     <div>Years Experience</div>
                 </div>
                 <div class="text-center">
