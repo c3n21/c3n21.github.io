@@ -26,7 +26,10 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
       - name: Write cv.json from input
-        run: echo '${{ inputs.cv-json }}' > src/cv.json
+        run: |
+          cat <<EOF > src/cv.json
+          ${{ inputs.cv-json }}
+          EOF
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         # with:
