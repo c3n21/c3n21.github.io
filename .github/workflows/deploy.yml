@@ -25,11 +25,16 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      - name: Mask CV JSON
+        run: echo "::add-mask::${{ github.event.inputs.cv-json }}"
+
       - name: Write cv.json from input
         run: |
           cat <<EOF > src/cv.json
           ${{ inputs.cv-json }}
           EOF
+
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
