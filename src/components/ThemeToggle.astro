@@ -22,13 +22,9 @@ import Button from './Button.astro'
             : 'light'
 
         function toggle() {
-            console.log('currentTheme', currentTheme)
-
             if (currentTheme === 'dark') {
-                // document.documentElement.classList.remove('dark')
                 currentTheme = 'light'
             } else {
-                // document.documentElement.classList.add('dark')
                 currentTheme = 'dark'
             }
             document.documentElement.classList.toggle('dark')
