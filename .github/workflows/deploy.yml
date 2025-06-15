@@ -1,11 +1,5 @@
 name: Deploy to GitHub Pages
 
-inputs:
-  cv-json:
-    description: 'Actual JSON of the CV'
-    type: string
-    required: true
-
 on:
   # Trigger the workflow every time you push to the `main` branch
   # Using a different branch name? Replace `main` with your branch’s name
@@ -13,6 +7,11 @@ on:
     branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
+    inputs:
+      cv-json:
+        description: 'Actual JSON of the CV'
+        type: string
+        required: true
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
@@ -27,13 +26,16 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
       - name: Write cv.json from input
-        run: echo '${{ inputs.cv-json }}' > src/cv.json
+        run: |
+          cat <<EOF > src/cv.json
+          ${{ inputs.cv-json }}
+          EOF
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        # with:
-          # path: . # The root location of your Astro project inside the repository. (optional)
-          # node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-          # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+        with:
+          path: . # The root location of your Astro project inside the repository. (optional)
+          node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
+          package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
 
   deploy:
     needs: build
