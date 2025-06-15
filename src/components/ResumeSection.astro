@@ -20,20 +20,17 @@ const experiences = cv.work.map(({ startDate, endDate, ...work }) => {
     }
 })
 
-const skills = [
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Node.js',
-    'Python',
-    'AWS',
-    'MongoDB',
-    'PostgreSQL',
-    'Docker',
-    'Git',
-    'HTML/CSS',
-    'Tailwind CSS',
-]
+const skills = Array.from(
+    cv.skills
+        .reduce((acc, skill) => {
+            const occurrences = acc.get(skill.name) ?? 0
+            acc.set(skill.name, occurrences + 1)
+            return acc
+        }, new Map<string, number>())
+        .entries()
+)
+    .sort((a, b) => a[1] - b[1])
+    .map((a) => a[0])
 
 const education = cv.education.map(({ endDate, startDate, ...edu }) => {
     return {
