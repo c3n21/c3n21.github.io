@@ -27,7 +27,7 @@ const navItems = [
                     </div>
 
                     <div class="md:block">
-                        <divb
+                        <div
                             class="ml-10 flex flex-row-reverse items-center space-x-2 md:flex-row md:space-x-8"
                         >
                             <!-- TODO: implement toggle -->
@@ -52,13 +52,13 @@ const navItems = [
                             </div>
 
                             <ThemeToggle />
-                        </divb>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- For mobile I want to my menu to show up like a dropdown -->
+            <!-- For mobile I want to my menu to show up like a dropdown but I also need to check that I'm the viewport is not larger than md -->
             <div
-                class="hidden items-center space-x-2 border-t border-border in-has-checked:flex"
+                class="hidden items-center space-x-2 border-t border-border in-has-checked:not-md:flex"
             >
                 <div class="px-2 pt-2 pb-3 space-y-1">
                     {
