@@ -1,7 +1,7 @@
 ---
-import Button from '@/components/Button.astro'
 import ThemeToggle from './ThemeToggle.astro'
-// import { ThemeToggle } from '@/components/ThemeToggle';
+import Menu from '@lucide/astro/icons/menu'
+import X from '@lucide/astro/icons/x'
 
 const navItems = [
     { id: 'home', label: 'Home' },
@@ -14,59 +14,72 @@ const navItems = [
 <nav
     class="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border z-50"
 >
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div class="flex-shrink-0">
-                <h1 class="text-xl font-bold text-foreground">Portfolio</h1>
-            </div>
+    <label for="menu">
+        <input id="menu" class="peer md:hidden sr-only" type="checkbox" />
+        <div>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    {/* Logo */}
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-foreground">
+                            Portfolio
+                        </h1>
+                    </div>
 
-            {/* Desktop Navigation */}
-            <div class="hidden md:block">
-                <div class="ml-10 flex items-center space-x-8">
+                    <div class="md:block">
+                        <divb
+                            class="ml-10 flex flex-row-reverse items-center space-x-2 md:flex-row md:space-x-8"
+                        >
+                            <!-- TODO: implement toggle -->
+                            <div class="md:hidden">
+                                <Menu class="in-has-checked:hidden" />
+                                <X class="hidden in-has-checked:inline" />
+                            </div>
+
+                            <div
+                                class="hidden md:flex items-center space-x-2 md:space-x-8"
+                            >
+                                {
+                                    navItems.map((item) => (
+                                        <a
+                                            href={`#${item.id}`}
+                                            class="text-muted-foreground hover:text-foreground transition-colors story-link"
+                                        >
+                                            {item.label}
+                                        </a>
+                                    ))
+                                }
+                            </div>
+
+                            <ThemeToggle />
+                        </divb>
+                    </div>
+                </div>
+            </div>
+            <!-- For mobile I want to my menu to show up like a dropdown -->
+            <div
+                class="hidden items-center space-x-2 border-t border-border in-has-checked:flex"
+            >
+                <div class="px-2 pt-2 pb-3 space-y-1">
                     {
                         navItems.map((item) => (
                             <a
-                                onclick="() => scrollToSection(item.id)()"
                                 href={`#${item.id}`}
-                                class="text-muted-foreground hover:text-foreground transition-colors story-link"
+                                class="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 {item.label}
                             </a>
                         ))
                     }
-                    <ThemeToggle />
                 </div>
             </div>
-
-            {/* Mobile menu button and theme toggle */}
-            <div class="md:hidden flex items-center space-x-2">
-                <!-- <ThemeToggle /> -->
-                <Button variant="ghost" size="icon" class="hover-scale">
-                    <!-- { -->
-                    <!--     isMenuOpen ? ( -->
-                    <!--         <X class="h-6 w-6" /> -->
-                    <!--     ) : ( -->
-                    <!--         <Menu class="h-6 w-6" /> -->
-                    <!--     ) -->
-                    <!-- } -->
-                    Test
-                </Button>
-            </div>
         </div>
-        <div class="md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 border-t border-border">
-                {
-                    navItems.map((item) => (
-                        <a
-                            href={`#${item.id}`}
-                            class="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                            {item.label}
-                        </a>
-                    ))
-                }
-            </div>
-        </div>
-    </div>
+    </label>
 </nav>
+
+<style>
+    details summary::marker,
+    :is(::-webkit-details-marker) {
+        content: 'Toggle';
+    }
+</style>
