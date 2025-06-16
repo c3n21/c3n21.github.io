@@ -14,26 +14,38 @@ import Button from './Button.astro'
 </Button>
 
 <script>
-    const toggler = document.getElementById('theme-toggle')
-    if (toggler) {
-        let currentTheme = window.matchMedia('(prefers-color-scheme: dark)')
-            .matches
+    ;(() => {
+        const togglers = document.querySelectorAll('#theme-toggle')
+        if (!togglers.length) {
+            return
+        }
+
+        if (1 < togglers.length) {
+            throw new Error('There should be only one instance of ThemeToggle')
+        }
+
+        console.log('togglers', togglers)
+
+        let currentTheme: 'dark' | 'light' = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+        ).matches
             ? 'dark'
             : 'light'
 
+        if ('dark' === currentTheme) {
+            document.documentElement.classList.add(currentTheme)
+        }
+
         function toggle() {
             console.log('currentTheme', currentTheme)
-
             if (currentTheme === 'dark') {
-                // document.documentElement.classList.remove('dark')
                 currentTheme = 'light'
             } else {
-                // document.documentElement.classList.add('dark')
                 currentTheme = 'dark'
             }
             document.documentElement.classList.toggle('dark')
         }
 
-        toggler.addEventListener('click', toggle)
-    }
+        togglers.forEach((toggler) => toggler.addEventListener('click', toggle))
+    })()
 </script>
