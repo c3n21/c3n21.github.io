@@ -8,9 +8,21 @@ import ContactSection from '@/components/ContactSection.astro'
 
 const og_image =
     'https://media.licdn.com/dms/image/v2/D4D16AQFiYdy3kO95ew/profile-displaybackgroundimage-shrink_350_1400/B4DZd.1TpFH4Ag-/0/1750179593493?e=1755734400&v=beta&t=XfogOVxuOV35XsOIckuXXVtIYXzWhpgPGRJ-6MBA3t4'
+
 const description =
     'Developer ≠ Just Code · NixOS, NeoVim & Infra Enthusiast · OSS Contributor'
+
 const title = `Portfolio - ${description}`
+
+const faviconSizes = [
+    '16x16',
+    '32x32',
+    '48x48',
+    '180x180',
+    '192x192',
+    '256x256',
+    '512x512',
+] as const
 ---
 
 <html lang="en">
@@ -42,6 +54,17 @@ const title = `Portfolio - ${description}`
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
+        {
+            faviconSizes.map((size) => (
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes={size}
+                    href={`/favicon-${size}.png`}
+                />
+            ))
+        }
+        <link rel="shortcut icon" href="/favicon.ico" />
     </head>
 
     <body>
@@ -54,7 +77,6 @@ const title = `Portfolio - ${description}`
                 <ContactSection />
             </main>
 
-            {/* Footer */}
             <footer class="bg-background border-t border-border py-8">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center text-muted-foreground">
