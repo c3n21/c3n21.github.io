@@ -1,0 +1,16 @@
+---
+export interface Props extends astroHTML.JSX.LiHTMLAttributes {}
+
+const { class: className, ...props } = Astro.props
+---
+
+<li class:list={[className]} {...props}>
+    <slot />
+</li>
+
+<style>
+    li {
+        list-style: '•';
+        list-style-position: inside;
+    }
+</style>

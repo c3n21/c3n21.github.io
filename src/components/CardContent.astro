@@ -12,6 +12,6 @@ const baseClasses = 'p-6 pt-0'
 const cardContentClasses = `${baseClasses} ${className}`.trim()
 ---
 
-<div class={cardContentClasses} class:list={['whitespace-pre-line']} {...props}>
+<div class={cardContentClasses} {...props}>
     <slot />
 </div>
