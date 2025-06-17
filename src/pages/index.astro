@@ -5,36 +5,36 @@ import HeroSection from '@/components/HeroSection.astro'
 import ResumeSection from '@/components/ResumeSection.astro'
 import ProjectsSection from '@/components/ProjectsSection.astro'
 import ContactSection from '@/components/ContactSection.astro'
+
+const og_image =
+    'https://media.licdn.com/dms/image/v2/D4D16AQFiYdy3kO95ew/profile-displaybackgroundimage-shrink_350_1400/B4DZd.1TpFH4Ag-/0/1750179593493?e=1755734400&v=beta&t=XfogOVxuOV35XsOIckuXXVtIYXzWhpgPGRJ-6MBA3t4'
+const description =
+    'Developer ≠ Just Code · NixOS, NeoVim & Infra Enthusiast · OSS Contributor'
+const title = `Portfolio - ${description}`
 ---
 
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Portfolio - Full Stack Developer</title>
+        <title>
+            {title}
+        </title>
         <meta
             name="description"
             content="Professional portfolio showcasing full-stack development skills, projects, and experience"
         />
-        <meta name="author" content="Your Name" />
+        <meta name="author" content="Zhifan" />
 
-        <meta property="og:title" content="Portfolio - Full Stack Developer" />
-        <meta
-            property="og:description"
-            content="Professional portfolio showcasing full-stack development skills, projects, and experience"
-        />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
-        <meta
-            property="og:image"
-            content="https://lovable.dev/opengraph-image-p98pqg.png"
-        />
-
+        <meta property="og:image" content={og_image} />
+        <meta property="og:url" content="https://c3n21.github.io" />
+        <meta property="og:site_name" content="https://c3n21.github.io" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@lovable_dev" />
-        <meta
-            name="twitter:image"
-            content="https://lovable.dev/opengraph-image-p98pqg.png"
-        />
+        <meta name="twitter:image" content={og_image} />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
