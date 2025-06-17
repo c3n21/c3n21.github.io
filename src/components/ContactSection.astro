@@ -4,23 +4,14 @@ import CardContent from '@/components/CardContent.astro'
 import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Button from '@/components/Button.astro'
-import Mail from '@lucide/astro/icons/mail'
+import { Linkedin, Github, ExternalLink, MessageCircle } from '@lucide/astro'
+import ListItem from './astro/ListItem.astro'
 
 const contactInfo = [
     {
-        label: 'Email',
-        value: 'your.email@example.com',
-        link: 'mailto:your.email@example.com',
-    },
-    {
-        label: 'Phone',
-        value: '+1 (555) 123-4567',
-        link: 'tel:+15551234567',
-    },
-    {
         label: 'Location',
-        value: 'San Francisco, CA',
-        link: '#',
+        value: 'Italy',
+        link: 'https://www.youtube.com/watch?v=n4gSGOUxak4',
     },
 ]
 ---
@@ -38,96 +29,55 @@ const contactInfo = [
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Contact Form -->
             <div class="lg:col-span-2 animate-fade-in">
                 <Card>
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2">
-                            <Mail class="text-primary" size={24} />
-                            Mail Send me a message
+                            <Linkedin class="text-primary" size={24} />
+                            Let's Connect on LinkedIn
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <form id="contact-form" class="space-y-6">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        for="name"
-                                        class="block text-sm font-medium text-foreground mb-2"
-                                    >
-                                        Name *
-                                    </label>
-                                    <input
-                                        id="name"
-                                        name="name"
-                                        type="text"
-                                        required
-                                        placeholder="Your full name"
-                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        for="email"
-                                        class="block text-sm font-medium text-foreground mb-2"
-                                    >
-                                        Email *
-                                    </label>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        required
-                                        placeholder="your.email@example.com"
-                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                    />
-                                </div>
-                            </div>
+                    <CardContent class="space-y-6">
+                        <p class="text-muted-foreground">
+                            Ready to collaborate or explore new opportunities?
+                            LinkedIn is my preferred platform for professional
+                            conversations and building meaningful connections in
+                            the tech industry.
+                        </p>
 
-                            <div>
-                                <label
-                                    for="subject"
-                                    class="block text-sm font-medium text-foreground mb-2"
-                                >
-                                    Subject *
-                                </label>
-                                <input
-                                    id="subject"
-                                    name="subject"
-                                    type="text"
-                                    required
-                                    placeholder="What's this about?"
-                                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                />
-                            </div>
+                        <div class="bg-muted/50 p-6 rounded-lg border">
+                            <h3 class="font-semibold text-foreground mb-3">
+                                Why LinkedIn?
+                            </h3>
+                            <ul class="space-y-2 text-sm text-muted-foreground">
+                                <ListItem>
+                                    Direct and professional communication
+                                </ListItem>
+                                <ListItem>
+                                    Perfect for discussing career opportunities
+                                </ListItem>
+                                <ListItem>
+                                    Easy scheduling for video calls or meetings
+                                </ListItem>
+                                <ListItem>
+                                    Stay updated on my latest projects and
+                                    thoughts
+                                </ListItem>
+                            </ul>
+                        </div>
 
-                            <div>
-                                <label
-                                    for="message"
-                                    class="block text-sm font-medium text-foreground mb-2"
-                                >
-                                    Message *
-                                </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    required
-                                    rows="6"
-                                    placeholder="Tell me about your project or just say hello!"
-                                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                                ></textarea>
-                            </div>
-
-                            <Button
-                                type="submit"
-                                class="w-full hover-scale bg-primary"
+                        <Button size="lg" class="w-full hover-scale">
+                            <a
+                                href="https://www.linkedin.com/in/zhifanchen00/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex items-center gap-2"
                             >
-                                <span class="submit-text">Send Message</span>
-                                <span class="loading-text hidden"
-                                    >Sending...</span
-                                >
-                            </Button>
-                        </form>
+                                <Linkedin size={20} />
+                                Connect on LinkedIn
+                                <ExternalLink size={16} />
+                            </a>
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
@@ -147,6 +97,7 @@ const contactInfo = [
                                     </p>
                                     <a
                                         href={info.link}
+                                        target="_blank"
                                         class="text-foreground hover:text-primary transition-colors story-link"
                                     >
                                         {info.value}
@@ -159,33 +110,45 @@ const contactInfo = [
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Let's Connect</CardTitle>
+                        <CardTitle>Find Me Online</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p class="text-muted-foreground text-sm mb-4">
-                            Follow me on social media for updates on my latest
-                            projects and tech insights.
+                            Connect with me across different platforms to stay
+                            in touch and see my work.
                         </p>
                         <div class="flex flex-col gap-3">
                             <a
                                 href="https://www.linkedin.com/in/zhifanchen00/"
-                                target="_blank"
-                                class="text-foreground hover:text-primary transition-colors story-link"
+                                class="text-foreground hover:text-primary transition-colors story-link flex items-center gap-2"
                             >
+                                <Linkedin size={16} />
                                 LinkedIn Profile
                             </a>
                             <a
-                                href="#"
-                                class="text-foreground hover:text-primary transition-colors story-link"
+                                href="https://github.com/c3n21"
+                                target="_blank"
+                                class="text-foreground hover:text-primary transition-colors story-link flex items-center gap-2"
                             >
+                                <Github size={16} />
                                 GitHub Repository
                             </a>
                             <a
-                                href="#"
-                                class="text-foreground hover:text-primary transition-colors story-link"
+                                href="https://matrix.to/#/@c3n21:matrix.org"
+                                target="_blank"
+                                class="text-foreground hover:text-primary transition-colors story-link flex items-center gap-2"
                             >
-                                Twitter Handle
+                                <MessageCircle size={16} />
+                                Matrix (@c3n21:matrix.org)
                             </a>
+                            <!-- <a -->
+                            <!--     href="#" -->
+                            <!--     class="text-foreground hover:text-primary transition-colors story-link flex items-center gap-2" -->
+                            <!--     onclick="alert('Twitter handle coming soon!')" -->
+                            <!-- > -->
+                            <!--     <Twitter size={16} /> -->
+                            <!--     Twitter -->
+                            <!-- </a> -->
                         </div>
                     </CardContent>
                 </Card>

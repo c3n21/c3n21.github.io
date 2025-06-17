@@ -80,7 +80,7 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
                                     </Badge>
                                 </div>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent class="whitespace-pre-line">
                                 <p class="text-muted-foreground whitespace-pre-line">
                                     {exp.summary}
                                 </p>
@@ -97,7 +97,7 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
                     <CardHeader>
                         <CardTitle>Technical Skills</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent class="whitespace-pre-line">
                         <div class="flex flex-wrap gap-2">
                             {
                                 skills.map((skill) => (
@@ -118,7 +118,7 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
                     <CardHeader>
                         <CardTitle>Education</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent class="whitespace-pre-line">
                         {
                             education.map((edu) => (
                                 <div class="space-y-2">
