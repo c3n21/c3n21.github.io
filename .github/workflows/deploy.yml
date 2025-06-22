@@ -18,14 +18,30 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_NUMBER: ${{ github.run_number }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          # Repository name with owner. For example, actions/checkout
+          # Default: ${{ github.repository }}
+          repository: 'c3n21/nvim-configuration'
+          path: './neovim_config'
+
+      - name: Calculate total number of lines in NeoVim config
+        run: echo "NEOVIM_CONFIG_LINES=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')" >> "$GITHUB_ENV"
+        working-directory: './neovim_config'
+
       - name: Write cv.json from input
         run: |
+          echo "Run number: ${GITHUB_RUN_NUMBER}"
           cat <<EOF > src/cv.json
           ${{ inputs.cv-json }}
           EOF
+
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
