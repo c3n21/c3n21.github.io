@@ -33,8 +33,7 @@ jobs:
 
       - name: Calculate total number of lines in NeoVim config
         run: |
-          NEOVIM_CONFIG_LINES="$(find . -path './neovim_config/.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')"
-          export NEOVIM_CONFIG_LINES
+          echo "NEOVIM_CONFIG_LINES=$(find . -path './neovim_config/.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')" >> "$GITHUB_ENV"
 
       - name: Write cv.json from input
         run: |
