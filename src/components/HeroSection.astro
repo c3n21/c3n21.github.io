@@ -71,8 +71,10 @@ const years = isAnniversaryPassed
                     <div>Projects Completed</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-foreground">100%</div>
-                    <div>Client Satisfaction</div>
+                    <div class="text-2xl font-bold text-foreground">
+                        {import.meta.env.GITHUB_RUN_NUMBER}
+                    </div>
+                    <div>Portfolio Deployments</div>
                 </div>
             </div>
         </div>
