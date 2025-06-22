@@ -28,7 +28,7 @@ jobs:
         with:
           # Repository name with owner. For example, actions/checkout
           # Default: ${{ github.repository }}
-          repository: 'https://github.com/c3n21/nvim-configuration'
+          repository: 'c3n21/nvim-configuration'
           path: './neovim_config'
 
       - name: Calculate total number of lines in NeoVim config
