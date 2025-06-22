@@ -23,6 +23,19 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          # Repository name with owner. For example, actions/checkout
+          # Default: ${{ github.repository }}
+          repository: 'https://github.com/c3n21/nvim-configuration'
+          path: './neovim_config'
+
+      - name: Calculate total number of lines in NeoVim config
+        run: |
+          NEOVIM_CONFIG_LINES="$(find . -path './neovim_config/.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')"
+          export NEOVIM_CONFIG_LINES
+
       - name: Write cv.json from input
         run: |
           echo "Run number: ${GITHUB_RUN_NUMBER}"

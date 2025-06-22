@@ -67,8 +67,10 @@ const years = isAnniversaryPassed
                     <div>Years Experience</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-foreground">50+</div>
-                    <div>Projects Completed</div>
+                    <div class="text-2xl font-bold text-foreground">
+                        {import.meta.env.NEOVIM_CONFIG_LINES}
+                    </div>
+                    <div>NeoVim LOC</div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-foreground">
