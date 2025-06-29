@@ -12,8 +12,12 @@ import {
     noSerialize,
 } from '@builder.io/qwik'
 
+interface CarouselImage
+    extends Pick<HTMLImageElement, 'src'>,
+        Partial<Pick<HTMLImageElement, 'srcset' | 'alt' | 'loading'>> {}
+
 interface CarouselProps {
-    items: string[]
+    imgs: CarouselImage[]
     autoPlay?: boolean
     autoPlayInterval?: number
     showDots?: boolean
@@ -23,7 +27,7 @@ interface CarouselProps {
 
 const Carousel = component$<CarouselProps>((props) => {
     const {
-        items,
+        imgs: items,
         autoPlay = false,
         autoPlayInterval = 3000,
         showDots = true,
@@ -173,10 +177,10 @@ const Carousel = component$<CarouselProps>((props) => {
                         aria-hidden={index !== currentIndex.value}
                     >
                         <img
-                            src={item}
                             alt={`Slide ${index + 1}`}
                             class="w-full h-64 md:h-96 object-cover"
                             loading={index === 0 ? 'eager' : 'lazy'}
+                            {...item}
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>
@@ -284,7 +288,7 @@ export const CarouselExample = component$(() => {
                         Auto-play Carousel
                     </h2>
                     <Carousel
-                        items={sampleImages}
+                        imgs={[]}
                         autoPlay={true}
                         autoPlayInterval={4000}
                         class="mb-8"
@@ -296,7 +300,7 @@ export const CarouselExample = component$(() => {
                         Manual Navigation Only
                     </h2>
                     <Carousel
-                        items={sampleImages.slice(0, 3)}
+                        imgs={[]}
                         autoPlay={false}
                         showDots={true}
                         showArrows={true}

@@ -8,9 +8,8 @@
         "build": "astro check && astro build",
         "preview": "astro preview",
         "astro": "astro",
-        "generate-dotenv": "sh scripts/generate-dotenv.sh",
         "test": "vitest",
-        "generate-cvinformation-json-schema": "ts-json-schema-generator --path 'src/types/CVInformation.ts' --type 'CVInformation' > cvinformation-schema.json"
+        "download-assets": "tsx scripts/node/download_assets.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -28,6 +27,7 @@
     "devDependencies": {
         "@astrojs/ts-plugin": "^1.10.4",
         "@biomejs/biome": "1.9.4",
+        "@types/node": "^24.0.7",
         "@typescript-eslint/parser": "^8.34.0",
         "eslint": "^9.28.0",
         "eslint-plugin-astro": "^1.3.1",
@@ -35,6 +35,7 @@
         "prettier": "3.5.3",
         "prettier-plugin-astro": "^0.14.1",
         "ts-json-schema-generator": "^2.4.0",
+        "tsx": "^4.20.3",
         "vitest": "^3.2.3"
     }
 }
