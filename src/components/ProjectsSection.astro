@@ -7,6 +7,7 @@ import Badge from '@/components/Badge.astro'
 import Button from '@/components/Button.astro'
 import Folder from '@lucide/astro/icons/folder'
 import cv from '@/cv.json' assert { type: 'json' }
+import { CarouselExample} from './qwik/Carousel'
 const projects = cv.projects
 
 /**
@@ -25,12 +26,15 @@ const contributorRegexp = /Contributor/i
 const [featuredProjects, otherProjects] = projects.reduce(
     (acc, project) => {
         const [featured, other] = acc
-        const technologies  = cv.skills.reduce((acc, skill) => {
+        const technologies = cv.skills.reduce((acc, skill) => {
             const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
-            if (skillRegexp.test(project.name) || skillRegexp.test(project.summary) ) {
+            if (
+                skillRegexp.test(project.name) ||
+                skillRegexp.test(project.summary)
+            ) {
                 acc.push(skill.name)
             }
-            
+
             return acc
         }, [] as string[])
 
@@ -38,9 +42,9 @@ const [featuredProjects, otherProjects] = projects.reduce(
             contributorRegexp.test(project.name) ||
             contributorRegexp.test(project.summary)
         ) {
-            featured.push({...project, technologies})
+            featured.push({ ...project, technologies })
         } else {
-            other.push({...project, technologies})
+            other.push({ ...project, technologies })
         }
         return acc
     },
@@ -65,9 +69,9 @@ const [featuredProjects, otherProjects] = projects.reduce(
                 featuredProjects.map((project) => (
                     <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
                         <div class="relative overflow-hidden">
+                            <CarouselExample />
                             <!-- <img -->
-                            <!--     src={project.image} -->
-                            <!--     alt={project.title} -->
+                            <!--     alt={project.media?.[0]?.name} -->
                             <!--     class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" -->
                             <!-- /> -->
                             <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
@@ -133,7 +137,7 @@ const [featuredProjects, otherProjects] = projects.reduce(
                                 </CardTitle>
                             </CardHeader>
 
-                        <CardContent class="whitespace-pre-line space-y-4">
+                            <CardContent class="whitespace-pre-line space-y-4">
                                 <p class="text-muted-foreground text-sm">
                                     {project.summary}
                                 </p>
