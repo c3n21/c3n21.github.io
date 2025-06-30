@@ -186,17 +186,11 @@ const Carousel = component$<CarouselProps>((props) => {
                             class="block w-full h-full"
                         >
                             <img
-                                alt={item.alt || `Slide ${index + 1}`}
+                                alt={item.alt ?? `Slide ${index + 1}`}
                                 class="w-full h-64 md:h-96 object-cover"
                                 loading={index === 0 ? 'eager' : 'lazy'}
                                 {...item}
                             />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                            {item.label && (
-                                <div class="absolute bottom-4 inset-x-4 text-white bg-black/60 px-3 py-1 rounded">
-                                    {item.label}
-                                </div>
-                            )}
                         </a>
                     </div>
                 ))}
@@ -247,6 +241,12 @@ const Carousel = component$<CarouselProps>((props) => {
                         </svg>
                     </button>
                 </>
+            )}
+
+            {items[currentIndex.value]?.label && (
+                <div class="absolute bottom-10 inset-x-4 text-white bg-black/60 px-3 py-1 rounded h-6.5 flex items-center truncate">
+                    {items[currentIndex.value]?.label}
+                </div>
             )}
 
             {/* Dot indicators */}
