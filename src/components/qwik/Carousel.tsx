@@ -12,7 +12,7 @@ import {
     noSerialize,
 } from '@builder.io/qwik'
 
-interface CarouselImage
+export interface CarouselImage
     extends Pick<HTMLImageElement, 'src'>,
         Partial<Pick<HTMLImageElement, 'srcset' | 'alt' | 'loading'>> {
     link?: string // Optional: link to project page

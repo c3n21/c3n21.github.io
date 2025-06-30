@@ -7,7 +7,7 @@ import Badge from '@/components/Badge.astro'
 import Button from '@/components/Button.astro'
 import Folder from '@lucide/astro/icons/folder'
 import cv from '@/cv.json' assert { type: 'json' }
-import Carousel from './qwik/Carousel'
+import Carousel, { type CarouselImage } from './qwik/Carousel'
 import generateFileNameFromArtifact from '@/lib/linkedin/generateFileNameFromArtifact'
 import { getImage } from 'astro:assets'
 import isNil from '@/lib/common/isNil'
@@ -154,15 +154,32 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
                                     <Carousel
                                         imgs={project.images.map(
                                             (image, imageIndex) => {
-                                                return {
-                                                    ...image,
-                                                    label: project.media[
-                                                        imageIndex
-                                                    ]?.name,
-                                                    link: project.media[
-                                                        imageIndex
-                                                    ]?.url,
+                                                const carouselImage: CarouselImage =
+                                                    {
+                                                        srcset: image.srcSet
+                                                            .attribute,
+                                                        src: image.src,
+                                                        loading:
+                                                            imageIndex === 0
+                                                                ? 'eager'
+                                                                : 'lazy',
+                                                    }
+                                                const label =
+                                                    project.media[imageIndex]
+                                                        ?.name
+                                                const link =
+                                                    project.media[imageIndex]
+                                                        ?.url
+
+                                                if (label) {
+                                                    carouselImage.label = label
                                                 }
+
+                                                if (link) {
+                                                    carouselImage.link = link
+                                                }
+
+                                                return carouselImage
                                             }
                                         )}
                                     />
