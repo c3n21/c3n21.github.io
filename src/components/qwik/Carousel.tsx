@@ -14,7 +14,10 @@ import {
 
 interface CarouselImage
     extends Pick<HTMLImageElement, 'src'>,
-        Partial<Pick<HTMLImageElement, 'srcset' | 'alt' | 'loading'>> {}
+        Partial<Pick<HTMLImageElement, 'srcset' | 'alt' | 'loading'>> {
+    link?: string // Optional: link to project page
+    label?: string // Optional: visible caption or label
+}
 
 interface CarouselProps {
     imgs: CarouselImage[]
@@ -176,13 +179,25 @@ const Carousel = component$<CarouselProps>((props) => {
                         class="w-full flex-shrink-0 relative"
                         aria-hidden={index !== currentIndex.value}
                     >
-                        <img
-                            alt={`Slide ${index + 1}`}
-                            class="w-full h-64 md:h-96 object-cover"
-                            loading={index === 0 ? 'eager' : 'lazy'}
-                            {...item}
-                        />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                        <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="block w-full h-full"
+                        >
+                            <img
+                                alt={item.alt || `Slide ${index + 1}`}
+                                class="w-full h-64 md:h-96 object-cover"
+                                loading={index === 0 ? 'eager' : 'lazy'}
+                                {...item}
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                            {item.label && (
+                                <div class="absolute bottom-4 inset-x-4 text-white bg-black/60 px-3 py-1 rounded">
+                                    {item.label}
+                                </div>
+                            )}
+                        </a>
                     </div>
                 ))}
             </div>
