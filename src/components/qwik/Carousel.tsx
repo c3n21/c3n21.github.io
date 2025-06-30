@@ -1,9 +1,5 @@
 import Pipe from '@/lib/fp/pipe'
-import type {
-    QwikMouseEvent,
-    QwikKeyboardEvent,
-    NoSerialize,
-} from '@builder.io/qwik'
+import type { NoSerialize } from '@builder.io/qwik'
 import {
     component$,
     useSignal,
@@ -117,7 +113,7 @@ const Carousel = component$<CarouselProps>((props) => {
     })
 
     // Keyboard navigation
-    const handleKeyDown = $((e: QwikKeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = $((e: KeyboardEvent) => {
         switch (e.key) {
             case 'ArrowLeft':
                 e.preventDefault()
@@ -180,7 +176,7 @@ const Carousel = component$<CarouselProps>((props) => {
                         aria-hidden={index !== currentIndex.value}
                     >
                         <a
-                            href={item.link}
+                            href={item.link ?? ''}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="block w-full h-full"
@@ -282,15 +278,6 @@ const Carousel = component$<CarouselProps>((props) => {
  * @todo when I will introduce storybook I will put this there
  */
 export const CarouselExample = component$(() => {
-    // Sample images (you can replace with your own)
-    const sampleImages = [
-        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=800&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=400&fit=crop',
-    ]
-
     return (
         <div class="min-h-screen bg-gray-100 py-8">
             <div class="container mx-auto px-4">
