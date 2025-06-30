@@ -7,45 +7,129 @@ import Badge from '@/components/Badge.astro'
 import Button from '@/components/Button.astro'
 import Folder from '@lucide/astro/icons/folder'
 import cv from '@/cv.json' assert { type: 'json' }
+import Carousel, { type CarouselImage } from './qwik/Carousel'
+import generateFileNameFromArtifact from '@/lib/linkedin/generateFileNameFromArtifact'
+import { getImage } from 'astro:assets'
+import isNil from '@/lib/common/isNil'
+import type { GetImageResult } from 'astro'
 const projects = cv.projects
+const projectsAssetBasePath = '/src/assets/projects'
+
+const widths = [400, 800, 1200, 1600, 2000]
+function createWidthWith(maxWidth: number): number[] {
+    const newWidths = widths.filter((x) => x <= maxWidth)
+    if (newWidths.at(-1) !== maxWidth) {
+        newWidths.push(maxWidth)
+    }
+    return newWidths
+}
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+    `/src/assets/projects/*.jpg`,
+    {
+        eager: true,
+    }
+)
 
 /**
  * @description workaround for 'endDate' because TS infers never for undefined fields
  */
 interface Project extends Omit<(typeof projects)[number], 'endDate'> {
     technologies: string[]
+    images: GetImageResult[]
     endDate?: string
 }
 
 const contributorRegexp = /Contributor/i
 
+const imageMetadata = projects.map((project, projectId) =>
+    project.media.map((media, mediaId) => {
+        const highestResolutionArtifact =
+            media.thumbnail.entityImage.artifacts.reduce((prev, current) => {
+                return current.width > prev.width ? current : prev
+            })
+
+        const fileName = generateFileNameFromArtifact(
+            highestResolutionArtifact,
+            {
+                ProjectId: projectId,
+                MediaId: mediaId,
+            }
+        )
+        return `${projectsAssetBasePath}/${fileName}`
+
+        // return media.thumbnail.entityImage.artifacts
+        //     .map((artifact) => {
+        //         return generateFileNameFromArtifact(artifact, {
+        //             ProjectId: projectId,
+        //             MediaId: mediaId,
+        //         })
+        //     })
+        //     .sort()
+        //     .map((fileName) => {
+        //         // return images[`${projectsAssetBasePath}/${fileName}`]?.default
+        //         return `${projectsAssetBasePath}/${fileName}`
+        //     })
+        //     .filter((x) => !isNil(x))
+    })
+)
+
+const imageResult = imageMetadata.map((projectMediaMetadata) =>
+    projectMediaMetadata
+        .map((mediaPaths) => images[mediaPaths]?.default)
+        .filter((x) => !isNil(x))
+        .map((imageModule) => {
+            return getImage({
+                src: imageModule,
+                width: imageModule.width,
+                height: imageModule.height,
+                format: imageModule.format,
+                fit: 'contain',
+                widths: createWidthWith(imageModule.width),
+                sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
+            })
+        })
+)
+
+const featuredProjects: Project[] = []
+const otherProjects: Project[] = []
+
 /**
  * For me open source contributions are much more important
  */
-const [featuredProjects, otherProjects] = projects.reduce(
-    (acc, project) => {
-        const [featured, other] = acc
-        const technologies  = cv.skills.reduce((acc, skill) => {
-            const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
-            if (skillRegexp.test(project.name) || skillRegexp.test(project.summary) ) {
-                acc.push(skill.name)
-            }
-            
-            return acc
-        }, [] as string[])
+for (let projectId = 0; projectId < projects.length; projectId++) {
+    const project = projects[projectId]
+    if (!project) {
+        continue
+    }
 
+    const technologies = cv.skills.reduce((acc, skill) => {
+        const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
         if (
-            contributorRegexp.test(project.name) ||
-            contributorRegexp.test(project.summary)
+            skillRegexp.test(project.name) ||
+            skillRegexp.test(project.summary!)
         ) {
-            featured.push({...project, technologies})
-        } else {
-            other.push({...project, technologies})
+            acc.push(skill.name)
         }
+
         return acc
-    },
-    [[], []] as [Project[], Project[]]
-)
+    }, [] as string[])
+
+    const images: GetImageResult[] = []
+
+    for (const media of imageResult[projectId] ?? []) {
+        images.push(await media)
+    }
+
+    if (
+        contributorRegexp.test(project.name) ||
+        contributorRegexp.test(project.summary!)
+    ) {
+        featuredProjects.push({ ...project, technologies, images })
+    } else {
+        otherProjects.push({ ...project, technologies, images })
+    }
+}
 ---
 
 <section id="projects" class="py-20 bg-background">
@@ -64,51 +148,84 @@ const [featuredProjects, otherProjects] = projects.reduce(
             {
                 featuredProjects.map((project) => (
                     <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
-                        <div class="relative overflow-hidden">
-                            <!-- <img -->
-                            <!--     src={project.image} -->
-                            <!--     alt={project.title} -->
-                            <!--     class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" -->
-                            <!-- /> -->
-                            <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
+                        <div class="bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300">
+                            {project.images.length > 0 && (
+                                <div>
+                                    <Carousel
+                                        imgs={project.images.map(
+                                            (image, imageIndex) => {
+                                                const carouselImage: CarouselImage =
+                                                    {
+                                                        srcset: image.srcSet
+                                                            .attribute,
+                                                        src: image.src,
+                                                        loading:
+                                                            imageIndex === 0
+                                                                ? 'eager'
+                                                                : 'lazy',
+                                                    }
+                                                const label =
+                                                    project.media[imageIndex]
+                                                        ?.name
+                                                const link =
+                                                    project.media[imageIndex]
+                                                        ?.url
+
+                                                if (label) {
+                                                    carouselImage.label = label
+                                                }
+
+                                                if (link) {
+                                                    carouselImage.link = link
+                                                }
+
+                                                return carouselImage
+                                            }
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            <CardHeader>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <Folder class="text-primary" size={20} />
+                                    <Badge variant="secondary">Featured</Badge>
+                                </div>
+                                <CardTitle class="text-xl group-hover:text-primary transition-colors">
+                                    {project.name}
+                                </CardTitle>
+                            </CardHeader>
+
+                            <CardContent class="whitespace-pre-line space-y-4">
+                                <p class="text-muted-foreground">
+                                    {project.summary}
+                                </p>
+
+                                <div class="flex flex-wrap gap-2">
+                                    {project.technologies.map((tech) => (
+                                        <Badge
+                                            variant="outline"
+                                            class="text-xs"
+                                        >
+                                            {tech}
+                                        </Badge>
+                                    ))}
+                                </div>
+
+                                <div class="flex gap-3 pt-2">
+                                    <Button size="sm" class="flex-1">
+                                        Live Demo
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        class="flex-1"
+                                    >
+                                        View Code
+                                    </Button>
+                                </div>
+                            </CardContent>
                         </div>
-
-                        <CardHeader>
-                            <div class="flex items-center gap-2 mb-2">
-                                <Folder class="text-primary" size={20} />
-                                <Badge variant="secondary">Featured</Badge>
-                            </div>
-                            <CardTitle class="text-xl group-hover:text-primary transition-colors">
-                                {project.name}
-                            </CardTitle>
-                        </CardHeader>
-
-                        <CardContent class="whitespace-pre-line space-y-4">
-                            <p class="text-muted-foreground">
-                                {project.summary}
-                            </p>
-
-                            <div class="flex flex-wrap gap-2">
-                                {project.technologies.map((tech) => (
-                                    <Badge variant="outline" class="text-xs">
-                                        {tech}
-                                    </Badge>
-                                ))}
-                            </div>
-
-                            <div class="flex gap-3 pt-2">
-                                <Button size="sm" class="flex-1">
-                                    Live Demo
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    class="flex-1"
-                                >
-                                    View Code
-                                </Button>
-                            </div>
-                        </CardContent>
                     </Card>
                 ))
             }
@@ -133,7 +250,7 @@ const [featuredProjects, otherProjects] = projects.reduce(
                                 </CardTitle>
                             </CardHeader>
 
-                        <CardContent class="whitespace-pre-line space-y-4">
+                            <CardContent class="whitespace-pre-line space-y-4">
                                 <p class="text-muted-foreground text-sm">
                                     {project.summary}
                                 </p>

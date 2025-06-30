@@ -2,6 +2,8 @@
     "compilerOptions": {
         // see this issue https://github.com/withastro/language-tools/issues/642#issuecomment-2612193894
         "baseUrl": ".",
+        "jsx": "react-jsx",
+        "jsxImportSource": "@builder.io/qwik",
         "paths": {
             "@/*": ["src/*"]
         },

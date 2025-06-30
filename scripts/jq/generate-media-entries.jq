@@ -1,0 +1,1 @@
+.projects | to_entries | .[] as $entry| $entry.value as $project | $project | .media[].thumbnail.entityImage as $entity | $entity | .rootUrl as $rootUrl | $entity | .artifacts | map(($entry.key | tostring) + "/" + $rootUrl + .fileIdentifyingUrlPathSegment)

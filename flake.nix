@@ -45,6 +45,9 @@
               ]
               ++ (with nvim-pkgs; [ nastro ]);
 
+            GITHUB_RUN_NUMBER = 10;
+            NEOVIM_CONFIG_LINES = 123123;
+
             shellHook = ''
               echo "Welcome to the Node.js development environment using system ${system}!"
               echo "Node.js version: $(node --version)"
