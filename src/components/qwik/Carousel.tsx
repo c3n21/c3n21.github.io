@@ -183,7 +183,7 @@ const Carousel = component$<CarouselProps>((props) => {
                         >
                             <img
                                 alt={item.alt ?? `Slide ${index + 1}`}
-                                class="w-full h-64 md:h-96 object-cover"
+                                class="w-full h-64 md:h-96 object-scale-down"
                                 loading={index === 0 ? 'eager' : 'lazy'}
                                 {...item}
                             />
