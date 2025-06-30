@@ -31,8 +31,6 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
     }
 )
 
-console.log('images', images)
-
 /**
  * @description workaround for 'endDate' because TS infers never for undefined fields
  */
@@ -132,8 +130,6 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
         otherProjects.push({ ...project, technologies, images })
     }
 }
-
-console.log('featuredProjects', featuredProjects[0]?.images)
 ---
 
 <section id="projects" class="py-20 bg-background">
