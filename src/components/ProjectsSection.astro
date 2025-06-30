@@ -9,9 +9,20 @@ import Folder from '@lucide/astro/icons/folder'
 import cv from '@/cv.json' assert { type: 'json' }
 import Carousel from './qwik/Carousel'
 import generateFileNameFromArtifact from '@/lib/linkedin/generateFileNameFromArtifact'
-
+import { getImage } from 'astro:assets'
+import isNil from '@/lib/common/isNil'
+import type { GetImageResult } from 'astro'
 const projects = cv.projects
 const projectsAssetBasePath = '/src/assets/projects'
+
+const widths = [400, 800, 1200, 1600, 2000]
+function createWidthWith(maxWidth: number): number[] {
+    const newWidths = widths.filter((x) => x <= maxWidth)
+    if (newWidths.at(-1) !== maxWidth) {
+        newWidths.push(maxWidth)
+    }
+    return newWidths
+}
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
     `/src/assets/projects/*.jpg`,
@@ -20,46 +31,109 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
     }
 )
 
+console.log('images', images)
+
 /**
  * @description workaround for 'endDate' because TS infers never for undefined fields
  */
 interface Project extends Omit<(typeof projects)[number], 'endDate'> {
     technologies: string[]
+    images: GetImageResult[]
     endDate?: string
 }
 
 const contributorRegexp = /Contributor/i
 
+const imageMetadata = projects.map((project, projectId) =>
+    project.media.map((media, mediaId) => {
+        const highestResolutionArtifact =
+            media.thumbnail.entityImage.artifacts.reduce((prev, current) => {
+                return current.width > prev.width ? current : prev
+            })
+
+        const fileName = generateFileNameFromArtifact(
+            highestResolutionArtifact,
+            {
+                ProjectId: projectId,
+                MediaId: mediaId,
+            }
+        )
+        return `${projectsAssetBasePath}/${fileName}`
+
+        // return media.thumbnail.entityImage.artifacts
+        //     .map((artifact) => {
+        //         return generateFileNameFromArtifact(artifact, {
+        //             ProjectId: projectId,
+        //             MediaId: mediaId,
+        //         })
+        //     })
+        //     .sort()
+        //     .map((fileName) => {
+        //         // return images[`${projectsAssetBasePath}/${fileName}`]?.default
+        //         return `${projectsAssetBasePath}/${fileName}`
+        //     })
+        //     .filter((x) => !isNil(x))
+    })
+)
+
+const imageResult = imageMetadata.map((projectMediaMetadata) =>
+    projectMediaMetadata
+        .map((mediaPaths) => images[mediaPaths]?.default)
+        .filter((x) => !isNil(x))
+        .map((imageModule) => {
+            return getImage({
+                src: imageModule,
+                width: imageModule.width,
+                height: imageModule.height,
+                format: imageModule.format,
+                fit: 'contain',
+                widths: createWidthWith(imageModule.width),
+                sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
+            })
+        })
+)
+
+const featuredProjects: Project[] = []
+const otherProjects: Project[] = []
+
 /**
  * For me open source contributions are much more important
  */
-const [featuredProjects, otherProjects] = projects.reduce(
-    (acc, project) => {
-        const [featured, other] = acc
-        const technologies = cv.skills.reduce((acc, skill) => {
-            const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
-            if (
-                skillRegexp.test(project.name) ||
-                skillRegexp.test(project.summary)
-            ) {
-                acc.push(skill.name)
-            }
+for (let projectId = 0; projectId < projects.length; projectId++) {
+    const project = projects[projectId]
+    if (!project) {
+        continue
+    }
 
-            return acc
-        }, [] as string[])
-
+    const technologies = cv.skills.reduce((acc, skill) => {
+        const skillRegexp = RegExp(`\\b${skill.name}\\b`, 'i')
         if (
-            contributorRegexp.test(project.name) ||
-            contributorRegexp.test(project.summary)
+            skillRegexp.test(project.name) ||
+            skillRegexp.test(project.summary!)
         ) {
-            featured.push({ ...project, technologies })
-        } else {
-            other.push({ ...project, technologies })
+            acc.push(skill.name)
         }
+
         return acc
-    },
-    [[], []] as [Project[], Project[]]
-)
+    }, [] as string[])
+
+    const images: GetImageResult[] = []
+
+    for (const media of imageResult[projectId] ?? []) {
+        images.push(await media)
+    }
+
+    if (
+        contributorRegexp.test(project.name) ||
+        contributorRegexp.test(project.summary!)
+    ) {
+        featuredProjects.push({ ...project, technologies, images })
+    } else {
+        otherProjects.push({ ...project, technologies, images })
+    }
+}
+
+console.log('featuredProjects', featuredProjects[0]?.images)
 ---
 
 <section id="projects" class="py-20 bg-background">
@@ -79,41 +153,9 @@ const [featuredProjects, otherProjects] = projects.reduce(
                 featuredProjects.map((project) => (
                     <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
                         <div class="bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300">
-                            {project.media.length > 0 && (
+                            {project.images.length > 0 && (
                                 <div>
-                                    <Carousel
-                                        imgs={project.media.map(
-                                            (media, mediaId) => {
-                                                // const key = ''
-                                                const projectId =
-                                                    projects.findIndex(
-                                                        (p) =>
-                                                            p.name ===
-                                                            project.name
-                                                    )
-                                                const artifactFileName =
-                                                    generateFileNameFromArtifact(
-                                                        media.thumbnail
-                                                            .entityImage
-                                                            .artifacts[0]!,
-                                                        {
-                                                            ProjectId:
-                                                                projectId,
-                                                            MediaId: mediaId,
-                                                        }
-                                                    )
-
-                                                        const assetPath = `${projectsAssetBasePath}/${artifactFileName}`
-                                                const test =
-                                                    images[
-                                                    assetPath
-                                                    ]
-                                                return {
-                                                    src: test?.default.src!,
-                                                }
-                                            }
-                                        )}
-                                    />
+                                    <Carousel imgs={project.images} />
                                 </div>
                             )}
 
@@ -156,13 +198,6 @@ const [featuredProjects, otherProjects] = projects.reduce(
                                     </Button>
                                 </div>
                             </CardContent>
-                    <!--
-<img
-                                alt={project.media?.[0]?.name}
-                                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-<div class="absolute inset-0 " />
--->
                         </div>
                     </Card>
                 ))

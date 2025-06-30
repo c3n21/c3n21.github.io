@@ -8,6 +8,11 @@ type Options = {
     MediaId: number
 }
 
+/**
+ * @description Generates a file name for an artifact based on its properties and the provided options.
+ * It's not actually a jpg but it's good enough to trick vite's file globber to import it
+ * as image; it will eventually figure out the actual format.
+ */
 export default function generateFileNameFromArtifact(
     artifact: Artifact,
     { MediaId, ProjectId }: Options
