@@ -23,6 +23,8 @@ const faviconSizes = [
     '256x256',
     '512x512',
 ] as const
+
+const hideForCV = import.meta.env.CV !== undefined
 ---
 
 <html lang="en">
@@ -69,7 +71,7 @@ const faviconSizes = [
 
     <body>
         <div class="min-h-screen bg-background">
-            <Navigation />
+            {!hideForCV && <Navigation />}
             <main>
                 <HeroSection />
                 <ResumeSection />
@@ -77,19 +79,21 @@ const faviconSizes = [
                 <ContactSection />
             </main>
 
-            <footer class="bg-background border-t border-border py-8">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center text-muted-foreground">
-                        <p class="text-sm">
-                            © 2025 Zhifan. Prototyped by Loveable, built with
-                            TypeScript, Astro and Tailwind CSS.
-                        </p>
-                        <p class="text-xs mt-2">
-                            Designed with ❤️ for an amazing user experience.
-                        </p>
+            {!hideForCV && (
+                <footer class="bg-background border-t border-border py-8">
+                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center text-muted-foreground">
+                            <p class="text-sm">
+                                © 2025 Zhifan. Prototyped by Loveable, built with
+                                TypeScript, Astro and Tailwind CSS.
+                            </p>
+                            <p class="text-xs mt-2">
+                                Designed with ❤️ for an amazing user experience.
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            )}
         </div>
     </body>
 </html>

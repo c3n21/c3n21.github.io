@@ -9,6 +9,8 @@ const isAnniversaryPassed = now.getMonth() > start.getMonth()
 const years = isAnniversaryPassed
     ? now.getFullYear() - start.getFullYear()
     : now.getFullYear() - start.getFullYear() - 1
+
+const hideForCV = import.meta.env.CV !== undefined
 ---
 
 <section
@@ -34,26 +36,28 @@ const years = isAnniversaryPassed
                 {cv.basics.label}
             </p>
 
-            <div
-                class="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            >
-                <Anchor
-                    size="lg"
-                    href="#contact"
-                    class="text-lg px-8 py-3 hover:scale-103"
+            {!hideForCV && (
+                <div
+                    class="flex flex-col sm:flex-row gap-4 justify-center items-center"
                 >
-                    Get In Touch
-                </Anchor>
+                    <Anchor
+                        size="lg"
+                        href="#contact"
+                        class="text-lg px-8 py-3 hover:scale-103"
+                    >
+                        Get In Touch
+                    </Anchor>
 
-                <Anchor
-                    variant="outline"
-                    size="lg"
-                    href="#projects"
-                    class="text-lg px-8 py-3 hover:scale-103"
-                >
-                    View My Work
-                </Anchor>
-            </div>
+                    <Anchor
+                        variant="outline"
+                        size="lg"
+                        href="#projects"
+                        class="text-lg px-8 py-3 hover:scale-103"
+                    >
+                        View My Work
+                    </Anchor>
+                </div>
+            )}
         </div>
 
         <div class="mt-16 animate-fade-in">

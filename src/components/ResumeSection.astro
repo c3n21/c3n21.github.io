@@ -41,6 +41,8 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
             : 'Present',
     }
 })
+
+const hideForCV = import.meta.env.CV !== undefined
 ---
 
 <section id="resume" class="py-20 bg-muted/20">
@@ -141,11 +143,13 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
                 </Card>
 
                 {/* Download Resume */}
+                {!hideForCV && (
                 <div class="text-center">
                     <Button class="w-full hover-scale">
                         Download Full Resume (Coming soon)
                     </Button>
                 </div>
+                )}
             </div>
         </div>
     </div>
