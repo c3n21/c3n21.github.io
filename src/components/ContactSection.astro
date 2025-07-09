@@ -7,6 +7,8 @@ import Button from '@/components/Button.astro'
 import { Linkedin, Github, ExternalLink, MessageCircle } from '@lucide/astro'
 import ListItem from './astro/ListItem.astro'
 
+const hideForCV = import.meta.env.CV !== undefined
+
 const contactInfo = [
     {
         label: 'Location',
@@ -29,58 +31,66 @@ const contactInfo = [
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 animate-fade-in">
-                <Card>
-                    <CardHeader>
-                        <CardTitle class="flex items-center gap-2">
-                            <Linkedin class="text-primary" size={24} />
-                            Let's Connect on LinkedIn
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent class="space-y-6">
-                        <p class="text-muted-foreground">
-                            Ready to collaborate or explore new opportunities?
-                            LinkedIn is my preferred platform for professional
-                            conversations and building meaningful connections in
-                            the tech industry.
-                        </p>
+            {
+                !hideForCV && (
+                    <div class="lg:col-span-2 animate-fade-in">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle class="flex items-center gap-2">
+                                    <Linkedin class="text-primary" size={24} />
+                                    Let's Connect on LinkedIn
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent class="space-y-6">
+                                <p class="text-muted-foreground">
+                                    Ready to collaborate or explore new
+                                    opportunities? LinkedIn is my preferred
+                                    platform for professional conversations and
+                                    building meaningful connections in the tech
+                                    industry.
+                                </p>
 
-                        <div class="bg-muted/50 p-6 rounded-lg border">
-                            <h3 class="font-semibold text-foreground mb-3">
-                                Why LinkedIn?
-                            </h3>
-                            <ul class="space-y-2 text-sm text-muted-foreground">
-                                <ListItem>
-                                    Direct and professional communication
-                                </ListItem>
-                                <ListItem>
-                                    Perfect for discussing career opportunities
-                                </ListItem>
-                                <ListItem>
-                                    Easy scheduling for video calls or meetings
-                                </ListItem>
-                                <ListItem>
-                                    Stay updated on my latest projects and
-                                    thoughts
-                                </ListItem>
-                            </ul>
-                        </div>
+                                <div class="bg-muted/50 p-6 rounded-lg border">
+                                    <h3 class="font-semibold text-foreground mb-3">
+                                        Why LinkedIn?
+                                    </h3>
+                                    <ul class="space-y-2 text-sm text-muted-foreground">
+                                        <ListItem>
+                                            Direct and professional
+                                            communication
+                                        </ListItem>
+                                        <ListItem>
+                                            Perfect for discussing career
+                                            opportunities
+                                        </ListItem>
+                                        <ListItem>
+                                            Easy scheduling for video calls or
+                                            meetings
+                                        </ListItem>
+                                        <ListItem>
+                                            Stay updated on my latest projects
+                                            and thoughts
+                                        </ListItem>
+                                    </ul>
+                                </div>
 
-                        <Button size="lg" class="w-full hover-scale">
-                            <a
-                                href="https://www.linkedin.com/in/zhifanchen00/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="flex items-center gap-2"
-                            >
-                                <Linkedin size={20} />
-                                Connect on LinkedIn
-                                <ExternalLink size={16} />
-                            </a>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
+                                <Button size="lg" class="w-full hover-scale">
+                                    <a
+                                        href="https://www.linkedin.com/in/zhifanchen00/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="flex items-center gap-2"
+                                    >
+                                        <Linkedin size={20} />
+                                        Connect on LinkedIn
+                                        <ExternalLink size={16} />
+                                    </a>
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </div>
+                )
+            }
 
             <!-- Contact Info -->
             <div class="space-y-6 animate-fade-in">
