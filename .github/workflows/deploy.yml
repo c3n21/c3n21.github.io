@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      CV_JSON: ${{ secrets.CV }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
