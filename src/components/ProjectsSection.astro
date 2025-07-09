@@ -4,7 +4,6 @@ import CardContent from '@/components/CardContent.astro'
 import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Badge from '@/components/Badge.astro'
-import Button from '@/components/Button.astro'
 import Folder from '@lucide/astro/icons/folder'
 import cv from '@/cv.json' assert { type: 'json' }
 import Carousel, { type CarouselImage } from './qwik/Carousel'
@@ -211,19 +210,6 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
                                         </Badge>
                                     ))}
                                 </div>
-
-                                <div class="flex gap-3 pt-2">
-                                    <Button size="sm" class="flex-1">
-                                        Live Demo
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        class="flex-1"
-                                    >
-                                        View Code
-                                    </Button>
-                                </div>
                             </CardContent>
                         </div>
                     </Card>
@@ -274,23 +260,6 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
                                             +{project.technologies.length - 3}
                                         </Badge>
                                     )}
-                                </div>
-
-                                <div class="flex gap-2">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        class="flex-1 text-xs"
-                                    >
-                                        Demo
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        class="flex-1 text-xs"
-                                    >
-                                        Code
-                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
