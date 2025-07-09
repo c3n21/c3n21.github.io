@@ -3,11 +3,6 @@ name: Deploy to GitHub Pages
 on:
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
-    inputs:
-      cv-json:
-        description: 'Actual JSON of the CV'
-        type: string
-        required: true
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
@@ -35,11 +30,11 @@ jobs:
         run: echo "NEOVIM_CONFIG_LINES=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')" >> "$GITHUB_ENV"
         working-directory: './neovim_config'
 
-      - name: Write cv.json from input
+      - name: Write cv.json from secret
         run: |
           echo "Run number: ${GITHUB_RUN_NUMBER}"
           cat <<EOF > src/cv.json
-          ${{ inputs.cv-json }}
+          ${{ secrets.CV }}
           EOF
 
       - name: Install, build, and upload your site
