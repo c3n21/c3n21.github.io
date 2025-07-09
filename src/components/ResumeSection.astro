@@ -4,9 +4,9 @@ import CardContent from '@/components/CardContent.astro'
 import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Badge from '@/components/Badge.astro'
-import Button from '@/components/Button.astro'
 import Briefcase from '@lucide/astro/icons/briefcase'
 import cv from '@/cv.json'
+import Anchor from './astro/Anchor.astro'
 
 const experiences = cv.work.map(({ startDate, endDate, ...work }) => {
     const validEndDate = endDate
@@ -143,13 +143,18 @@ const hideForCV = import.meta.env.CV !== undefined
                 </Card>
 
                 {/* Download Resume */}
-                {!hideForCV && (
-                <div class="text-center">
-                    <Button class="w-full hover-scale">
-                        Download Full Resume (Coming soon)
-                    </Button>
-                </div>
-                )}
+                {
+                    !hideForCV && (
+                        <div class="text-center">
+                            <Anchor
+                                class="w-full hover-scale"
+                                href={import.meta.env.CV_LOCATION}
+                            >
+                                Download Full Resume
+                            </Anchor>
+                        </div>
+                    )
+                }
             </div>
         </div>
     </div>
