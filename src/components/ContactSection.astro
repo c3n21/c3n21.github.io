@@ -6,8 +6,9 @@ import CardTitle from '@/components/CardTitle.astro'
 import Button from '@/components/Button.astro'
 import { Linkedin, Github, ExternalLink, MessageCircle } from '@lucide/astro'
 import ListItem from './astro/ListItem.astro'
+import isCVMode from '@/lib/isCVMode'
 
-const hideForCV = import.meta.env.CV !== undefined
+const hideForCV = isCVMode()
 
 const contactInfo = [
     {

@@ -2,6 +2,7 @@
 import '@/styles/global.css'
 import Anchor from './astro/Anchor.astro'
 import cv from '@/cv.json'
+import isCVMode from '@/lib/isCVMode'
 
 const now = new Date()
 const start = new Date('1/06/2021')
@@ -10,7 +11,7 @@ const years = isAnniversaryPassed
     ? now.getFullYear() - start.getFullYear()
     : now.getFullYear() - start.getFullYear() - 1
 
-const hideForCV = import.meta.env.CV !== undefined
+const hideForCV = isCVMode()
 ---
 
 <section
@@ -36,28 +37,28 @@ const hideForCV = import.meta.env.CV !== undefined
                 {cv.basics.label}
             </p>
 
-            {!hideForCV && (
-                <div
-                    class="flex flex-col sm:flex-row gap-4 justify-center items-center"
-                >
-                    <Anchor
-                        size="lg"
-                        href="#contact"
-                        class="text-lg px-8 py-3 hover:scale-103"
-                    >
-                        Get In Touch
-                    </Anchor>
+            {
+                !hideForCV && (
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Anchor
+                            size="lg"
+                            href="#contact"
+                            class="text-lg px-8 py-3 hover:scale-103"
+                        >
+                            Get In Touch
+                        </Anchor>
 
-                    <Anchor
-                        variant="outline"
-                        size="lg"
-                        href="#projects"
-                        class="text-lg px-8 py-3 hover:scale-103"
-                    >
-                        View My Work
-                    </Anchor>
-                </div>
-            )}
+                        <Anchor
+                            variant="outline"
+                            size="lg"
+                            href="#projects"
+                            class="text-lg px-8 py-3 hover:scale-103"
+                        >
+                            View My Work
+                        </Anchor>
+                    </div>
+                )
+            }
         </div>
 
         <div class="mt-16 animate-fade-in">

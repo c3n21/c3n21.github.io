@@ -5,6 +5,7 @@ import HeroSection from '@/components/HeroSection.astro'
 import ResumeSection from '@/components/ResumeSection.astro'
 import ProjectsSection from '@/components/ProjectsSection.astro'
 import ContactSection from '@/components/ContactSection.astro'
+import isCVMode from '@/lib/isCVMode'
 
 const og_image =
     'https://media.licdn.com/dms/image/v2/D4D16AQFiYdy3kO95ew/profile-displaybackgroundimage-shrink_350_1400/B4DZd.1TpFH4Ag-/0/1750179593493?e=1755734400&v=beta&t=XfogOVxuOV35XsOIckuXXVtIYXzWhpgPGRJ-6MBA3t4'
@@ -24,7 +25,7 @@ const faviconSizes = [
     '512x512',
 ] as const
 
-const hideForCV = import.meta.env.CV !== undefined
+const hideForCV = isCVMode()
 const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
 ---
 

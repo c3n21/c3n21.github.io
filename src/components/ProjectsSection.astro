@@ -11,6 +11,7 @@ import generateFileNameFromArtifact from '@/lib/linkedin/generateFileNameFromArt
 import { getImage } from 'astro:assets'
 import isNil from '@/lib/common/isNil'
 import type { GetImageResult } from 'astro'
+import isCVMode from '@/lib/isCVMode'
 const projects = cv.projects
 const projectsAssetBasePath = '/src/assets/projects'
 
@@ -130,7 +131,7 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
     }
 }
 
-const hideForCV = import.meta.env.CV !== undefined
+const hideForCV = isCVMode()
 ---
 
 <section id="projects" class="py-20 bg-background">
