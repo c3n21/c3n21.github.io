@@ -48,7 +48,7 @@ jobs:
 
       - name: Set CV_LOCATION, CV environment variable
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
+          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
           PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
           echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
 
