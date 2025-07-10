@@ -37,19 +37,24 @@ jobs:
           ${{ secrets.CV }}
           EOF
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          # package_json_file: "${{ inputs.path }}/package.json"
+
+      - name: Install deps
+        run: pnpm install
+
       - name: Set CV_LOCATION, CV environment variable
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
           PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
           echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
-          echo "CV=dark" >> $GITHUB_ENV
 
-      - name: Install, build CV version
-        uses: withastro/action@v3
-        with:
-          path: . # The root location of your Astro project inside the repository. (optional)
-          node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-          package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+      - name: Build CV version
+        run: |
+          CV=dark pnpm build
 
       - name: Install chrome for Puppeteer
         run: |
@@ -84,13 +89,14 @@ jobs:
           echo "CV=" >> $GITHUB_ENV
           rm -r ./dist
 
+      - name: Build web version
+        run: |
+          pnpm build
 
-      - name: Install, build web version
-        uses: withastro/action@v3
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: . # The root location of your Astro project inside the repository. (optional)
-          node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-          package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          path: ./dist/
 
       - name: Remove cv.json
         run: rm src/cv.json
