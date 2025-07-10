@@ -5,6 +5,10 @@ import path from 'path'
 const chromePath = process.argv[2]
 const launchOptions: LaunchOptions = {}
 
+/**
+ * workaround needed because I can't run regular dynamic linked
+ * executables in Nix.
+ */
 if (chromePath) {
     console.log('Chrome path:', chromePath)
     launchOptions.executablePath = chromePath
