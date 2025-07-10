@@ -37,17 +37,12 @@ jobs:
           ${{ secrets.CV }}
           EOF
 
-      - name: Set CV_LOCATION environment variable
+      - name: Set CV_LOCATION, CV environment variable
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
           PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
           echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
-
-      - name: Set CV=dark environment variable
-        run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
-          echo "CV_LOCATION=dark" >> $GITHUB_ENV
+          echo "CV=dark" >> $GITHUB_ENV
 
       - name: Install, build CV version
         uses: withastro/action@v3
@@ -84,9 +79,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Unset CV= environment variable to build web version
+      - name: Unset CV= environment variable to build web version and remove dist
         run: |
           echo "CV=" >> $GITHUB_ENV
+          rm -r ./dist
 
 
       - name: Install, build web version
