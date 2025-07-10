@@ -3,7 +3,9 @@ import path from 'path'
 
 // Get the first argument passed to the Node.js script
 const chromePath = process.argv[2]
-const launchOptions: LaunchOptions = {}
+const launchOptions: LaunchOptions = {
+    args: ['--no-sandbox'],
+}
 
 /**
  * workaround needed because I can't run regular dynamic linked
