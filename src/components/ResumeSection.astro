@@ -43,7 +43,7 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
     }
 })
 
-const hideForCV = isCVMode()
+const isCV = isCVMode()
 ---
 
 <section id="resume" class="py-20 bg-muted/20">
@@ -145,7 +145,7 @@ const hideForCV = isCVMode()
 
                 {/* Download Resume */}
                 {
-                    !hideForCV && (
+                    !isCV && (
                         <div class="text-center">
                             <Anchor
                                 class="w-full hover-scale"

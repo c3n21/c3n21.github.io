@@ -25,7 +25,7 @@ const faviconSizes = [
     '512x512',
 ] as const
 
-const hideForCV = isCVMode()
+const isCV = isCVMode()
 const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
 ---
 
@@ -73,16 +73,16 @@ const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
 
     <body>
         <div class="min-h-screen bg-background">
-            {!hideForCV && <Navigation />}
+            {!isCV && <Navigation />}
             <main>
                 <HeroSection />
                 <ResumeSection />
-                {!hideForCV && <ProjectsSection />}
+                {!isCV && <ProjectsSection />}
                 <ContactSection />
             </main>
 
             {
-                !hideForCV && (
+                !isCV && (
                     <footer class="bg-background border-t border-border py-8">
                         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div class="text-center text-muted-foreground">

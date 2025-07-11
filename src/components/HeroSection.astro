@@ -11,7 +11,7 @@ const years = isAnniversaryPassed
     ? now.getFullYear() - start.getFullYear()
     : now.getFullYear() - start.getFullYear() - 1
 
-const hideForCV = isCVMode()
+const isCV = isCVMode()
 ---
 
 <section
@@ -38,7 +38,7 @@ const hideForCV = isCVMode()
             </p>
 
             {
-                !hideForCV && (
+                !isCV && (
                     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Anchor
                             size="lg"
