@@ -131,7 +131,7 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
     }
 }
 
-const hideForCV = isCVMode()
+const isCV = isCVMode()
 ---
 
 <section id="projects" class="py-20 bg-background">
@@ -151,46 +151,40 @@ const hideForCV = isCVMode()
                 featuredProjects.map((project) => (
                     <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
                         <div class="bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300">
-                            {project.images.length > 0 && (
+                            {project.images.length > 0 && !isCV && (
                                 <div>
-                                    {!hideForCV ? (
-                                        <Carousel
-                                            imgs={project.images.map(
-                                                (image, imageIndex) => {
-                                                    const carouselImage: CarouselImage =
-                                                        {
-                                                            srcset: image.srcSet
-                                                                .attribute,
-                                                            src: image.src,
-                                                            loading:
-                                                                imageIndex === 0
-                                                                    ? 'eager'
-                                                                    : 'lazy',
-                                                        }
-                                                    const label =
-                                                        project.media[
-                                                            imageIndex
-                                                        ]?.name
-                                                    const link =
-                                                        project.media[
-                                                            imageIndex
-                                                        ]?.url
-
-                                                    if (label) {
-                                                        carouselImage.label =
-                                                            label
+                                    <Carousel
+                                        imgs={project.images.map(
+                                            (image, imageIndex) => {
+                                                const carouselImage: CarouselImage =
+                                                    {
+                                                        srcset: image.srcSet
+                                                            .attribute,
+                                                        src: image.src,
+                                                        loading:
+                                                            imageIndex === 0
+                                                                ? 'eager'
+                                                                : 'lazy',
                                                     }
+                                                const label =
+                                                    project.media[imageIndex]
+                                                        ?.name
+                                                const link =
+                                                    project.media[imageIndex]
+                                                        ?.url
 
-                                                    if (link) {
-                                                        carouselImage.link =
-                                                            link
-                                                    }
-
-                                                    return carouselImage
+                                                if (label) {
+                                                    carouselImage.label = label
                                                 }
-                                            )}
-                                        />
-                                    ) : null}
+
+                                                if (link) {
+                                                    carouselImage.link = link
+                                                }
+
+                                                return carouselImage
+                                            }
+                                        )}
+                                    />
                                 </div>
                             )}
 
