@@ -11,50 +11,52 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
+    outputs:
+      pnpm-cache-key: ${{ steps.export-cache-key.outputs.key }}
+      neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v4
-
       - uses: actions/checkout@v4
+
+      # just a workaround to not duplicate the same steps
+      - uses: ./.github/actions/build-with-cv
         with:
-          # Repository name with owner. For example, actions/checkout
-          # Default: ${{ github.repository }}
+          cv: ${{ secrets.CV }}
+
+      - name: Checkout NeoVim config
+        uses: actions/checkout@v4
+        with:
           repository: 'c3n21/nvim-configuration'
           path: './neovim_config'
 
-      - name: Calculate total number of lines in NeoVim config
-        run: echo "NEOVIM_CONFIG_LINES=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')" >> "$GITHUB_ENV"
+      - id: lines
+        name: Calculate total lines in NeoVim config
+        run: |
+          COUNT=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
         working-directory: './neovim_config'
 
-      - name: Write cv.json from secret
-        run: |
-          echo "Run number: ${GITHUB_RUN_NUMBER}"
-          cat <<EOF > src/cv.json
-          ${{ secrets.CV }}
-          EOF
+  build-cv:
+    needs: prepare
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/cache@v4
         with:
-          version: 9
-          # package_json_file: "${{ inputs.path }}/package.json"
+          path: ~/.local/share/pnpm/store/v3
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
 
-      - name: Install deps
-        run: pnpm install
-
-      - name: Set CV_LOCATION, CV environment variable
-        run: |
-          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
-          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
-          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
-
-      - name: Build CV version
-        run: |
-          CV=dark pnpm build
+      - uses: ./.github/actions/build-with-cv
+        with:
+          cv: ${{ secrets.CV }}
+        env:
+          CV: dark
 
       - name: Install chrome for Puppeteer
         run: |
@@ -84,25 +86,39 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Unset CV= environment variable to build web version and remove dist
-        run: |
-          echo "CV=" >> $GITHUB_ENV
-          rm -r ./dist
+  build-web:
+    needs: prepare
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Build web version
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store/v3
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Set CV_LOCATION environment variable
         run: |
-          pnpm build
+          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
+          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
+          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/build-with-cv
+        with:
+          cv: ${{ secrets.CV }}
+
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist/
 
-      - name: Remove cv.json
-        run: rm src/cv.json
-
   deploy:
-    needs: build
+    needs: build-web
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -17,7 +17,9 @@ runs:
     - name: Write src/cv.json from input
       shell: bash
       run: |
-        echo "${{ inputs.cv }}" > src/cv.json
+        cat <<EOF > src/cv.json
+        ${{ inputs.cv }}
+        EOF
 
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
@@ -32,17 +34,14 @@ runs:
         restore-keys: ${{ runner.os }}-pnpm-
 
     - name: Install dependencies
+      shell: bash
       run: pnpm install
 
     - name: Run pnpm build
+      shell: bash
       run: pnpm build
 
-    - name: Upload dist directory as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: dist/
-
     - name: Cleanup src/cv.json
+      shell: bash
       if: always()
       run: rm -f src/cv.json
