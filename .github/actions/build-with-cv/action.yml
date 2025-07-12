@@ -1,0 +1,52 @@
+name: "Builds Portfolio with CV information generated"
+description: |
+  Writes src/cv.json from input cv,
+  runs pnpm build,
+  caches pnpm store,
+  uploads dist/ as artifact,
+  cleans up src/cv.json after.
+
+inputs:
+  cv:
+    description: "CV secret content (required)"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Write src/cv.json from input
+      shell: bash
+      run: |
+        cat <<EOF > src/cv.json
+        ${{ inputs.cv }}
+        EOF
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+
+    - name: Cache pnpm store
+      uses: actions/cache@v4
+      with:
+        path: ~/.local/share/pnpm/store/v3
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: ${{ runner.os }}-pnpm-
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
+
+    - name: Run pnpm build
+      shell: bash
+      run: pnpm build
+
+    - name: Cleanup src/cv.json
+      shell: bash
+      if: always()
+      run: rm -f src/cv.json

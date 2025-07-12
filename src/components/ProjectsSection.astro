@@ -11,6 +11,7 @@ import generateFileNameFromArtifact from '@/lib/linkedin/generateFileNameFromArt
 import { getImage } from 'astro:assets'
 import isNil from '@/lib/common/isNil'
 import type { GetImageResult } from 'astro'
+import isCVMode from '@/lib/isCVMode'
 const projects = cv.projects
 const projectsAssetBasePath = '/src/assets/projects'
 
@@ -129,6 +130,8 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
         otherProjects.push({ ...project, technologies, images })
     }
 }
+
+const isCV = isCVMode()
 ---
 
 <section id="projects" class="py-20 bg-background">
@@ -148,7 +151,7 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
                 featuredProjects.map((project) => (
                     <Card class="group overflow-hidden hover-scale transition-all duration-300 animate-fade-in">
                         <div class="bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300">
-                            {project.images.length > 0 && (
+                            {project.images.length > 0 && !isCV && (
                                 <div>
                                     <Carousel
                                         imgs={project.images.map(
@@ -241,7 +244,7 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
                                     {project.summary}
                                 </p>
 
-                                <div class="flex flex-wrap gap-1">
+                                <div class="flex flex-wrap gap-1 whitespace-nowrap">
                                     {project.technologies
                                         .slice(0, 3)
                                         .map((tech) => (
