@@ -9,7 +9,7 @@
         "preview": "astro preview",
         "astro": "astro",
         "test": "vitest",
-        "prebuild": "pnpm run download-assets",
+        "postinstall": "pnpm run download-assets",
         "download-assets": "tsx scripts/node/download_assets.ts",
         "export-pdf": "tsx scripts/node/export-pdf.ts"
     },
