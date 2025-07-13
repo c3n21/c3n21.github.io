@@ -1,0 +1,49 @@
+name: Auto Release on Version Bump
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'Bump website version')
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Get modified files in last commit
+        id: files
+        run: |
+          echo "files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})" >> $GITHUB_OUTPUT
+
+      - name: Check if only package.json was modified
+        id: check_files
+        run: |
+          files="${{ steps.files.outputs.files }}"
+          # Only package.json allowed
+          if [ "$files" != "package.json" ]; then
+            echo "Only package.json modification allowed, exiting."
+            exit 1
+          fi
+          echo "Only package.json modified."
+
+      - name: Read version from package.json
+        id: get_version
+        run: |
+          version=$(jq -r '.version' package.json)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Create release tag and GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}"
+          name: "Release v${{ steps.get_version.outputs.version }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

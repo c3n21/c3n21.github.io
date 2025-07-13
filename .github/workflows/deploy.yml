@@ -1,28 +1,26 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy
 
 on:
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  push:
+    branches:
+      - main
+  release:
+    types: [created]
   workflow_dispatch:
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: write
   pages: write
   id-token: write
 
 jobs:
-  prepare:
+  build-web:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
-      pnpm-cache-key: ${{ steps.export-cache-key.outputs.key }}
       neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
       - uses: actions/checkout@v4
-
-      # just a workaround to not duplicate the same steps
-      - uses: ./.github/actions/build-with-cv
-        with:
-          cv: ${{ secrets.CV }}
 
       - name: Checkout NeoVim config
         uses: actions/checkout@v4
@@ -35,14 +33,31 @@ jobs:
         run: |
           COUNT=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "NEOVIM_CONFIG_LINES=$COUNT" >> "$GITHUB_ENV"
         working-directory: './neovim_config'
 
+      - name: Set CV_LOCATION environment variable
+        run: |
+          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
+          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
+          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/build-with-cv
+        with:
+          cv: ${{ secrets.CV }}
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist/
+
   build-cv:
-    needs: prepare
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    needs: build-web
     runs-on: ubuntu-latest
     env:
       GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
+      NEOVIM_CONFIG_LINES: ${{ needs.build-web.outputs.neovim-lines }}
     steps:
       - uses: actions/checkout@v4
 
@@ -66,16 +81,23 @@ jobs:
         run: |
           pnpm run export-pdf
 
-      - name: Create GitHub Release (if not exists)
-        id: create_release
-        uses: softprops/action-gh-release@v2
+      - name: Upload CV Artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: ./cv.pdf
+
+  deploy-cv:
+    if: github.event_name == 'release' && github.event.action == 'created' || github.event_name == 'workflow_dispatch'
+    needs: build-cv
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      NEOVIM_CONFIG_LINES: ${{ needs.build-web.outputs.neovim-lines }}
+    steps:
+      - name: Download CV Artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: ./cv.pdf
 
       - name: Upload PDF as Release Asset
         uses: softprops/action-gh-release@v2
@@ -86,38 +108,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-web:
-    needs: prepare
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store/v3
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-
-
-      - name: Set CV_LOCATION environment variable
-        run: |
-          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
-          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
-          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
-
-      - uses: ./.github/actions/build-with-cv
-        with:
-          cv: ${{ secrets.CV }}
-
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist/
-
-  deploy:
+  deploy-web:
+    if: github.event_name == 'release' && github.event.action == 'created' || github.event_name == 'workflow_dispatch'
     needs: build-web
     runs-on: ubuntu-latest
     environment:

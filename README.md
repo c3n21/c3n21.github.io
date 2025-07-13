@@ -1,7 +1,8 @@
-#TODO
-- [ ] Implement contact me page
-- [ ] Remove tailwindcss-animate
-- [ ] Use oklch instead of hsl
-- [ ] Solve TODOs in codebase
-- [ ] Interpret • as special character and render strings containing it as `li`
-- [ ] Put my big ass face in this website
+# How does deployment work?
+Every time there is push on `main` it will trigger the build pipeline and cache
+the artifacts.
+
+To actually do the deploy of the website and CV in release artifacts the following must be carried out:
+
+1. Create a PR which only bumps the version named "Bump website version"
+2. By merging the PR it will trigger the deploy pipeline
