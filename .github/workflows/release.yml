@@ -17,15 +17,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Get modified files in last commit
-        id: files
-        run: |
-          echo "files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})" >> "$GITHUB_OUTPUT"
-
       - name: Check if only package.json was modified
-        id: check_files
         run: |
-          files="${{ steps.files.outputs.files }}"
+          files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+
           # Only package.json allowed
           if [ "$files" != "package.json" ]; then
             echo "Only package.json modification allowed, exiting."
