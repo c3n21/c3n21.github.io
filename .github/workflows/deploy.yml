@@ -11,18 +11,13 @@ permissions:
   id-token: write
 
 jobs:
-  prepare:
+  build-web:
     runs-on: ubuntu-latest
     outputs:
       pnpm-cache-key: ${{ steps.export-cache-key.outputs.key }}
       neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
       - uses: actions/checkout@v4
-
-      # just a workaround to not duplicate the same steps
-      - uses: ./.github/actions/build-with-cv
-        with:
-          cv: ${{ secrets.CV }}
 
       - name: Checkout NeoVim config
         uses: actions/checkout@v4
@@ -35,14 +30,30 @@ jobs:
         run: |
           COUNT=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "NEOVIM_CONFIG_LINES=$COUNT" >> "$GITHUB_ENV"
         working-directory: './neovim_config'
 
+      - name: Set CV_LOCATION environment variable
+        run: |
+          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
+          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
+          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/build-with-cv
+        with:
+          cv: ${{ secrets.CV }}
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist/
+
   build-cv:
-    needs: prepare
+    needs: build-web
     runs-on: ubuntu-latest
     env:
       GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
+      NEOVIM_CONFIG_LINES: ${{ needs.build-web.outputs.neovim-lines }}
     steps:
       - uses: actions/checkout@v4
 
@@ -74,37 +85,6 @@ jobs:
           files: ./cv.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-web:
-    needs: prepare
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.prepare.outputs.neovim-lines }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store/v3
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-
-
-      - name: Set CV_LOCATION environment variable
-        run: |
-          TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
-          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
-          echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
-
-      - uses: ./.github/actions/build-with-cv
-        with:
-          cv: ${{ secrets.CV }}
-
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist/
 
   deploy:
     needs: build-web
