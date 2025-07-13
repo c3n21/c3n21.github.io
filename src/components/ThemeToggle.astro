@@ -24,8 +24,6 @@ import Button from './Button.astro'
             throw new Error('There should be only one instance of ThemeToggle')
         }
 
-        console.log('togglers', togglers)
-
         let currentTheme: 'dark' | 'light' = window.matchMedia(
             '(prefers-color-scheme: dark)'
         ).matches
@@ -37,7 +35,6 @@ import Button from './Button.astro'
         }
 
         function toggle() {
-            console.log('currentTheme', currentTheme)
             if (currentTheme === 'dark') {
                 currentTheme = 'light'
             } else {

@@ -9,8 +9,9 @@
         "preview": "astro preview",
         "astro": "astro",
         "test": "vitest",
-        "prebuild": "pnpm run download-assets",
-        "download-assets": "tsx scripts/node/download_assets.ts"
+        "postinstall": "pnpm run download-assets",
+        "download-assets": "tsx scripts/node/download_assets.ts",
+        "export-pdf": "tsx scripts/node/export-pdf.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -35,6 +36,7 @@
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "prettier": "3.5.3",
         "prettier-plugin-astro": "^0.14.1",
+        "puppeteer": "^24.12.1",
         "sharp": "^0.34.2",
         "ts-json-schema-generator": "^2.4.0",
         "tsx": "^4.20.3",

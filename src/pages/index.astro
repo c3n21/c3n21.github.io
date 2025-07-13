@@ -5,6 +5,7 @@ import HeroSection from '@/components/HeroSection.astro'
 import ResumeSection from '@/components/ResumeSection.astro'
 import ProjectsSection from '@/components/ProjectsSection.astro'
 import ContactSection from '@/components/ContactSection.astro'
+import isCVMode from '@/lib/isCVMode'
 
 const og_image =
     'https://media.licdn.com/dms/image/v2/D4D16AQFiYdy3kO95ew/profile-displaybackgroundimage-shrink_350_1400/B4DZd.1TpFH4Ag-/0/1750179593493?e=1755734400&v=beta&t=XfogOVxuOV35XsOIckuXXVtIYXzWhpgPGRJ-6MBA3t4'
@@ -23,9 +24,12 @@ const faviconSizes = [
     '256x256',
     '512x512',
 ] as const
+
+const isCV = isCVMode()
+const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
 ---
 
-<html lang="en">
+<html lang="en" class:list={htmlClassList}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,27 +73,33 @@ const faviconSizes = [
 
     <body>
         <div class="min-h-screen bg-background">
-            <Navigation />
+            {!isCV && <Navigation />}
             <main>
                 <HeroSection />
                 <ResumeSection />
-                <ProjectsSection />
+                {!isCV && <ProjectsSection />}
                 <ContactSection />
             </main>
 
-            <footer class="bg-background border-t border-border py-8">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center text-muted-foreground">
-                        <p class="text-sm">
-                            © 2025 Zhifan. Prototyped by Loveable, built with
-                            TypeScript, Astro and Tailwind CSS.
-                        </p>
-                        <p class="text-xs mt-2">
-                            Designed with ❤️ for an amazing user experience.
-                        </p>
-                    </div>
-                </div>
-            </footer>
+            {
+                !isCV && (
+                    <footer class="bg-background border-t border-border py-8">
+                        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="text-center text-muted-foreground">
+                                <p class="text-sm">
+                                    © 2025 Zhifan. Prototyped by Loveable,
+                                    built with TypeScript, Astro and Tailwind
+                                    CSS.
+                                </p>
+                                <p class="text-xs mt-2">
+                                    Designed with ❤️ for an amazing user
+                                    experience.
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                )
+            }
         </div>
     </body>
 </html>

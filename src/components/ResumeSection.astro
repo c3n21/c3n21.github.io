@@ -4,9 +4,10 @@ import CardContent from '@/components/CardContent.astro'
 import CardHeader from '@/components/CardHeader.astro'
 import CardTitle from '@/components/CardTitle.astro'
 import Badge from '@/components/Badge.astro'
-import Button from '@/components/Button.astro'
 import Briefcase from '@lucide/astro/icons/briefcase'
 import cv from '@/cv.json'
+import Anchor from './astro/Anchor.astro'
+import isCVMode from '@/lib/isCVMode'
 
 const experiences = cv.work.map(({ startDate, endDate, ...work }) => {
     const validEndDate = endDate
@@ -41,6 +42,8 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
             : 'Present',
     }
 })
+
+const isCV = isCVMode()
 ---
 
 <section id="resume" class="py-20 bg-muted/20">
@@ -141,11 +144,18 @@ const education = cv.education.map(({ endDate, startDate, ...edu }) => {
                 </Card>
 
                 {/* Download Resume */}
-                <div class="text-center">
-                    <Button class="w-full hover-scale">
-                        Download Full Resume (Coming soon)
-                    </Button>
-                </div>
+                {
+                    !isCV && (
+                        <div class="text-center">
+                            <Anchor
+                                class="w-full hover-scale"
+                                href={import.meta.env.CV_LOCATION}
+                            >
+                                Download Full Resume
+                            </Anchor>
+                        </div>
+                    )
+                }
             </div>
         </div>
     </div>
