@@ -14,7 +14,6 @@ jobs:
   build-web:
     runs-on: ubuntu-latest
     outputs:
-      pnpm-cache-key: ${{ steps.export-cache-key.outputs.key }}
       neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
       - uses: actions/checkout@v4
