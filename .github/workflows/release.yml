@@ -17,17 +17,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Check if only package.json was modified
-        run: |
-          files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
-
-          # Only package.json allowed
-          if [ "$files" != "package.json" ]; then
-            echo "Only package.json modification allowed, exiting."
-            exit 1
-          fi
-          echo "Only package.json modified."
-
       - name: Read version from package.json
         id: get_version
         run: |
