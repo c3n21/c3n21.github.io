@@ -66,17 +66,6 @@ jobs:
         run: |
           pnpm run export-pdf
 
-      # - name: Create GitHub Release (if not exists)
-      #   id: create_release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     tag_name: ${{ github.ref_name }}
-      #     name: Release ${{ github.ref_name }}
-      #     draft: false
-      #     prerelease: false
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload PDF as Release Asset
         uses: softprops/action-gh-release@v2
         with:
