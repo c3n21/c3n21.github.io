@@ -19,7 +19,7 @@ jobs:
       - name: Get modified files in last commit
         id: files
         run: |
-          echo "files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})" >> $GITHUB_OUTPUT
+          echo "files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})" >> "$GITHUB_OUTPUT"
 
       - name: Check if only package.json was modified
         id: check_files
