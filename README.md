@@ -35,3 +35,13 @@ To actually do the deploy of the website and CV in release artifacts the followi
 
 1. Create a PR which only bumps the version in package.json
 2. By merging the PR it will trigger `release.yml` which in turn triggers `deploy.yml`.
+
+# Test workflows locally
+1. Install `act`, `gh`
+2. Login in `gh` with `gh auth login`
+3. Put manually `src/cv.json`
+4. Comment `Write src/cv.json from input` step in `.github/actions/build-with-cv/action.yml`
+5. Run `sh ./scripts/sh/test-workflow.sh <path to desired workflow>`
+
+Caveats:
+I've tested only `build-web` job which works properly, other workflows/jobs are not tested / are failing.
