@@ -101,6 +101,7 @@ jobs:
       - name: Upload CV Artifact
         uses: actions/upload-artifact@v4
         with:
+          name: cv
           path: ./cv.pdf
 
   deploy-cv:
@@ -114,6 +115,7 @@ jobs:
       - name: Download CV Artifact
         uses: actions/download-artifact@v4
         with:
+          name: cv
           path: ./cv.pdf
 
       - name: Upload PDF as Release Asset
