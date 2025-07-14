@@ -20,7 +20,10 @@ permissions:
 
 jobs:
   build-web:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    if: >
+      (github.event_name == 'release' && github.event.action == 'created' ) ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')) ||
+      (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     outputs:
       neovim-lines: ${{ steps.lines.outputs.count }}
@@ -57,8 +60,11 @@ jobs:
           path: ./dist/
 
   build-cv:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
-    needs: build-web
+    if: >
+      (github.event_name == 'release' && github.event.action == 'created' ) ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')) ||
+      (github.event_name == 'workflow_dispatch')
+    needs: build-web # leverage pnpm cache reuse
     runs-on: ubuntu-latest
     env:
       GITHUB_RUN_NUMBER: ${{ github.run_number }}
