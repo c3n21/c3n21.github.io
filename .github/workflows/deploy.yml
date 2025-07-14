@@ -1,3 +1,8 @@
+# 🧠 Thought process:
+# This workflow builds and deploys the website and CV.
+# - On push to main: build only, no deploy
+# - On release tag: build (if artifact is not present) and deploy both
+# - Using composite action to avoid code duplication
 name: Build and Deploy
 
 on:
