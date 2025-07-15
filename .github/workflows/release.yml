@@ -18,18 +18,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Read version from package.json
+      - name: Create release
         id: get_version
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           version=$(jq -r '.version' package.json)
           echo "version=$version" >> $GITHUB_OUTPUT
+          gh release create "$version" --title "$version" --notes ""
 
-      - name: Create release tag and GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "v${{ steps.get_version.outputs.version }}"
-          name: "Release v${{ steps.get_version.outputs.version }}"
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create release tag and GitHub Release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     tag_name: "v${{ steps.get_version.outputs.version }}"
+      #     name: "Release v${{ steps.get_version.outputs.version }}"
+      #     draft: false
+      #     prerelease: false
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
