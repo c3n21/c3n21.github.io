@@ -33,6 +33,10 @@ jobs:
     outputs:
       neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
+      - name: Initial
+        run: |
+          echo "${{ github.ref_name }}"
+
       - uses: actions/checkout@v4
 
       - name: Checkout NeoVim config
