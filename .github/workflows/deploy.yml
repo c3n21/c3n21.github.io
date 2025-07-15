@@ -11,7 +11,7 @@ on:
       - main
       - release-test
   release:
-    types: [created]
+    types: [ published unpublished created edited deleted prereleased released ]
   workflow_dispatch:
 
 # Cancel any previous workflow.
