@@ -15,9 +15,11 @@ on:
   workflow_dispatch:
 
 # Cancel any previous workflow.
-# This can happen when we merge a PR that triggers a new release
+# This can happen when we merge a PR that triggers a new release.
+# The concurrency group uses the workflow name and the sha of the commit, so that
+# we don't need to care whether it's a release or not.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.sha }}
   cancel-in-progress: true
 
 permissions:
