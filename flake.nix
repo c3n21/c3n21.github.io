@@ -42,6 +42,10 @@
               [
                 nodejs_22 # Specify Node.js version
                 pnpm
+
+                # GitHub action local testing
+                act
+                gh
               ]
               ++ (with nvim-pkgs; [ nastro ]);
 

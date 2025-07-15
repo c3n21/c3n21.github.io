@@ -9,14 +9,14 @@ on:
   push:
     branches:
       - main
-  release:
-    types: [created]
   workflow_dispatch:
 
 # Cancel any previous workflow.
-# This can happen when we merge a PR that triggers a new release
+# This can happen when we merge a PR that triggers a new release.
+# The concurrency group uses the workflow name and the sha of the commit, so that
+# we don't need to care whether it's a release or not.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.sha }}
   cancel-in-progress: true
 
 permissions:
@@ -26,10 +26,6 @@ permissions:
 
 jobs:
   build-web:
-    if: >
-      (github.event_name == 'release' && github.event.action == 'created' ) ||
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')) ||
-      (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     outputs:
       neovim-lines: ${{ steps.lines.outputs.count }}
@@ -66,10 +62,6 @@ jobs:
           path: ./dist/
 
   build-cv:
-    if: >
-      (github.event_name == 'release' && github.event.action == 'created' ) ||
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')) ||
-      (github.event_name == 'workflow_dispatch')
     needs: build-web # leverage pnpm cache reuse
     runs-on: ubuntu-latest
     env:
@@ -105,7 +97,6 @@ jobs:
           path: ./cv.pdf
 
   deploy-cv:
-    if: github.event_name == 'release' && github.event.action == 'created' || github.event_name == 'workflow_dispatch'
     needs: build-cv
     runs-on: ubuntu-latest
     env:
@@ -116,7 +107,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cv
-          path: ./cv.pdf
+          path: .
 
       - name: Upload PDF as Release Asset
         uses: softprops/action-gh-release@v2
@@ -128,7 +119,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-web:
-    if: github.event_name == 'release' && github.event.action == 'created' || github.event_name == 'workflow_dispatch'
     needs: build-web
     runs-on: ubuntu-latest
     environment:

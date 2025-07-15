@@ -19,6 +19,3 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-
-# temporary CV file (created during deployment)
-src/cv.json
