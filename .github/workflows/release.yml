@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release-test
   # for debugging purpose
   workflow_dispatch:
 
