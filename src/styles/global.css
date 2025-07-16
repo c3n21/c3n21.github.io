@@ -175,3 +175,7 @@
 ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary));
 }
+
+section {
+    page-break-before: always;
+}
