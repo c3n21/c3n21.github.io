@@ -124,19 +124,19 @@ const isCV = isCVMode()
                     <CardContent class="whitespace-pre-line">
                         {
                             education.map((edu) => (
-                                <div class="space-y-2">
+                                <div class="space-y-2 mb-8 last:mb-0">
                                     <h4 class="font-semibold">
                                         {edu.studyType}
                                     </h4>
                                     <p class="text-primary font-medium">
                                         {edu.institution}
                                     </p>
-                                    <Badge variant="secondary" class="text-xs">
-                                        {edu.startDate} - {edu.endDate}
-                                    </Badge>
                                     <p class="text-sm text-muted-foreground mt-2">
                                         {edu.area}
                                     </p>
+                                    <Badge variant="secondary" class="text-xs">
+                                        {edu.startDate} - {edu.endDate}
+                                    </Badge>
                                 </div>
                             ))
                         }
