@@ -25,12 +25,11 @@ console.log('Exporting cv.pdf...')
         waitUntil: 'networkidle0',
     })
     await page.pdf({
-        path: './cv.pdf',
+        path: 'ZhifanChen.pdf',
         format: 'A4',
         displayHeaderFooter: false,
         printBackground: true,
     })
     await browser.close()
-    console.log('PDF exported to dist/cv.pdf')
+    console.log('PDF exported to ZhifanChen.pdf')
 })()
-
