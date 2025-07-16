@@ -94,9 +94,6 @@ const imageResult = imageMetadata.map((projectMediaMetadata) =>
 const featuredProjects: Project[] = []
 const otherProjects: Project[] = []
 
-/**
- * For me open source contributions are much more important
- */
 for (let projectId = 0; projectId < projects.length; projectId++) {
     const project = projects[projectId]
     if (!project) {
@@ -125,9 +122,9 @@ for (let projectId = 0; projectId < projects.length; projectId++) {
         contributorRegexp.test(project.name) ||
         contributorRegexp.test(project.summary!)
     ) {
-        featuredProjects.push({ ...project, technologies, images })
-    } else {
         otherProjects.push({ ...project, technologies, images })
+    } else {
+        featuredProjects.push({ ...project, technologies, images })
     }
 }
 
@@ -230,6 +227,42 @@ const isCV = isCVMode()
                 {
                     otherProjects.map((project) => (
                         <Card class="group hover-scale transition-all duration-300">
+                            {project.images.length > 0 && !isCV && (
+                                <div>
+                                    <Carousel
+                                        imgs={project.images.map(
+                                            (image, imageIndex) => {
+                                                const carouselImage: CarouselImage =
+                                                    {
+                                                        srcset: image.srcSet
+                                                            .attribute,
+                                                        src: image.src,
+                                                        loading:
+                                                            imageIndex === 0
+                                                                ? 'eager'
+                                                                : 'lazy',
+                                                    }
+                                                const label =
+                                                    project.media[imageIndex]
+                                                        ?.name
+                                                const link =
+                                                    project.media[imageIndex]
+                                                        ?.url
+
+                                                if (label) {
+                                                    carouselImage.label = label
+                                                }
+
+                                                if (link) {
+                                                    carouselImage.link = link
+                                                }
+
+                                                return carouselImage
+                                            }
+                                        )}
+                                    />
+                                </div>
+                            )}
                             <CardHeader>
                                 <div class="flex items-center gap-2 mb-2">
                                     <Folder class="text-primary" size={18} />
