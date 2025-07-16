@@ -109,7 +109,7 @@ jobs:
       - name: Download CV Artifact
         uses: actions/download-artifact@v4
         with:
-          name: cv
+          name: ${{ env.PDF_NAME }}
           path: .
 
       - name: Upload PDF as Release Asset
