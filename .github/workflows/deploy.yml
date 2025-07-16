@@ -5,6 +5,9 @@
 # - Using composite action to avoid code duplication
 name: Build and Deploy
 
+env:
+  PDF_NAME: "ZhifanChen.pdf"
+
 on:
   push:
     branches:
@@ -49,7 +52,7 @@ jobs:
       - name: Set CV_LOCATION environment variable
         run: |
           TAG_NAME=${GITHUB_REF_NAME#refs/tags/}
-          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/cv.pdf"
+          PDF_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/${PDF_NAME}"
           echo "CV_LOCATION=$PDF_URL" >> $GITHUB_ENV
 
       - uses: ./.github/actions/build-with-cv
@@ -93,8 +96,8 @@ jobs:
       - name: Upload CV Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cv
-          path: ./cv.pdf
+          name: ${{ env.PDF_NAME }}
+          path: ${{ env.PDF_NAME }}
 
   deploy-cv:
     needs: build-cv
@@ -114,7 +117,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: ./cv.pdf
+          files: ${{ env.PDF_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
