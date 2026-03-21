@@ -11,7 +11,16 @@
         "test": "vitest",
         "postinstall": "pnpm run download-assets",
         "download-assets": "tsx scripts/node/download_assets.ts",
-        "export-pdf": "tsx scripts/node/export-pdf.ts"
+        "export-pdf": "tsx scripts/node/export-pdf.ts",
+        "download-linkedin-html": "tsx scripts/node/download-linkedin-html.ts",
+        "extract-linkedin-data": "tsx scripts/node/extract-linkedin-data.ts",
+        "scrape-linkedin": "pnpm download-linkedin-html && pnpm extract-linkedin-data",
+        "re-extract": "pnpm extract-linkedin-data && pnpm generate-resume",
+        "generate-resume": "tsx scripts/node/generate-resume.ts",
+        "update-resume": "pnpm scrape-linkedin && pnpm generate-resume",
+        "validate-resume": "resume validate jsonresume.json",
+        "view-raw-data": "cat linkedin-export/raw-data.json | jq .",
+        "linkedin-login": "tsx scripts/node/linkedin-login-helper.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -40,6 +49,7 @@
         "prettier": "3.5.3",
         "prettier-plugin-astro": "^0.14.1",
         "puppeteer": "^24.12.1",
+        "resume-cli": "^3.1.2",
         "sharp": "^0.34.2",
         "ts-json-schema-generator": "^2.4.0",
         "tsx": "^4.20.3",

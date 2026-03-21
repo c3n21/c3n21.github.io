@@ -1,0 +1,11 @@
+{
+    "browser": {
+        "browserName": "chromium",
+        "isolated": false,
+        "userDataDir": "../tmp",
+        "launchOptions": {
+            "headless": false
+        },
+        "cdpEndpoint": "localhost:9222"
+    }
+}
