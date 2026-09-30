@@ -8,11 +8,11 @@ const DIST_NIXOS_CASE_STUDY = path.resolve(
     process.cwd(),
     'dist/work/nixos-infrastructure/index.html'
 )
-const DIST_DRAFT_BACKEND = path.resolve(
+const DIST_BACKEND_SERVICE = path.resolve(
     process.cwd(),
     'dist/work/backend-authorization-service/index.html'
 )
-const DIST_DRAFT_OSS = path.resolve(
+const DIST_OPEN_SOURCE = path.resolve(
     process.cwd(),
     'dist/work/open-source/index.html'
 )
@@ -81,6 +81,10 @@ describe('Site output - Work index and case-study routes', () => {
         const html = fs.readFileSync(DIST_WORK_INDEX, 'utf-8')
         expect(html).toContain('Declarative Multi-Host NixOS Infrastructure')
         expect(html).toContain('href="/work/nixos-infrastructure/"')
+        expect(html).toContain('Centralized Backend Authorization')
+        expect(html).toContain('href="/work/backend-authorization-service/"')
+        expect(html).toContain('Open-Source Contributions')
+        expect(html).toContain('href="/work/open-source/"')
     })
 
     it('dist/work/nixos-infrastructure/index.html exists and contains case study sections and back link', () => {
@@ -102,15 +106,57 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('href="/work/"')
     })
 
+    it('dist/work/backend-authorization-service/index.html exists and contains case study sections', () => {
+        expect(
+            fs.existsSync(DIST_BACKEND_SERVICE),
+            `Expected ${DIST_BACKEND_SERVICE} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_BACKEND_SERVICE, 'utf-8')
+        expect(html).toContain('Centralized Backend Authorization')
+        expect(html).toContain('Problem')
+        expect(html).toContain('Constraints')
+        expect(html).toContain('Ownership')
+        expect(html).toContain('Alternatives Considered')
+        expect(html.includes('Decision &amp; Rationale') || html.includes('Decision')).toBe(true)
+        expect(html.includes('Implementation &amp; Challenges') || html.includes('Implementation')).toBe(true)
+        expect(html).toContain('Verification')
+        expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
+        expect(html).toContain('href="/work/"')
+    })
+
+    it('dist/work/open-source/index.html exists and contains case study sections', () => {
+        expect(
+            fs.existsSync(DIST_OPEN_SOURCE),
+            `Expected ${DIST_OPEN_SOURCE} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_OPEN_SOURCE, 'utf-8')
+        expect(html).toContain('Open-Source Contributions')
+        expect(html).toContain('Problem')
+        expect(html).toContain('Constraints')
+        expect(html).toContain('Ownership')
+        expect(html).toContain('Alternatives Considered')
+        expect(html.includes('Decision &amp; Rationale') || html.includes('Decision')).toBe(true)
+        expect(html.includes('Implementation &amp; Challenges') || html.includes('Implementation')).toBe(true)
+        expect(html).toContain('Verification')
+        expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
+        expect(html).toContain('Nixpkgs')
+        expect(html).toContain('href="/work/"')
+    })
+
     it('does not emit routes for draft work entries', () => {
+        const DIST_SAMPLE_DRAFT_WORK = path.resolve(
+            process.cwd(),
+            'dist/work/sample-draft-work/index.html'
+        )
         expect(
-            fs.existsSync(DIST_DRAFT_BACKEND),
-            `Expected draft route ${DIST_DRAFT_BACKEND} NOT to exist`
+            fs.existsSync(DIST_SAMPLE_DRAFT_WORK),
+            `Expected draft route ${DIST_SAMPLE_DRAFT_WORK} NOT to exist`
         ).toBe(false)
-        expect(
-            fs.existsSync(DIST_DRAFT_OSS),
-            `Expected draft route ${DIST_DRAFT_OSS} NOT to exist`
-        ).toBe(false)
+
+        const workIndexHtml = fs.readFileSync(DIST_WORK_INDEX, 'utf-8')
+        expect(workIndexHtml).not.toContain('Sample Internal Draft Project')
     })
 })
 
@@ -205,9 +251,17 @@ describe('Site output - Services and Contact routes', () => {
 
 describe('Site output - Writing and RSS routes', () => {
     const DIST_WRITING_INDEX = path.resolve(process.cwd(), 'dist/writing/index.html')
+    const DIST_ARTICLE_1 = path.resolve(
+        process.cwd(),
+        'dist/writing/debugging-dynamic-linkers-on-nixos/index.html'
+    )
+    const DIST_ARTICLE_2 = path.resolve(
+        process.cwd(),
+        'dist/writing/multi-host-nixos-and-attic-caching/index.html'
+    )
     const DIST_RSS = path.resolve(process.cwd(), 'dist/rss.xml')
 
-    it('dist/writing/index.html exists and renders intentional empty state when no articles published', () => {
+    it('dist/writing/index.html exists and renders published articles', () => {
         expect(
             fs.existsSync(DIST_WRITING_INDEX),
             `Expected ${DIST_WRITING_INDEX} to exist`
@@ -215,13 +269,36 @@ describe('Site output - Writing and RSS routes', () => {
 
         const html = fs.readFileSync(DIST_WRITING_INDEX, 'utf-8')
         expect(html).toContain('Writing')
-        expect(
-            html.includes('Writing coming soon') ||
-                html.includes('No articles published yet')
-        ).toBe(true)
+        expect(html).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(html).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
+        expect(html).toContain('href="/writing/debugging-dynamic-linkers-on-nixos/"')
+        expect(html).toContain('href="/writing/multi-host-nixos-and-attic-caching/"')
     })
 
-    it('dist/rss.xml exists and produces valid RSS XML feed', () => {
+    it('dist/writing/<id>/index.html routes exist and render complete article content', () => {
+        expect(
+            fs.existsSync(DIST_ARTICLE_1),
+            `Expected ${DIST_ARTICLE_1} to exist`
+        ).toBe(true)
+        expect(
+            fs.existsSync(DIST_ARTICLE_2),
+            `Expected ${DIST_ARTICLE_2} to exist`
+        ).toBe(true)
+
+        const html1 = fs.readFileSync(DIST_ARTICLE_1, 'utf-8')
+        expect(html1).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(html1).toContain('Observation')
+        expect(html1).toContain('Hypotheses')
+        expect(html1).toContain('href="/writing/"')
+
+        const html2 = fs.readFileSync(DIST_ARTICLE_2, 'utf-8')
+        expect(html2).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
+        expect(html2).toContain('Problem')
+        expect(html2).toContain('Attic')
+        expect(html2).toContain('href="/writing/"')
+    })
+
+    it('dist/rss.xml exists and produces valid RSS XML feed with published articles', () => {
         expect(
             fs.existsSync(DIST_RSS),
             `Expected ${DIST_RSS} to exist`
@@ -231,6 +308,8 @@ describe('Site output - Writing and RSS routes', () => {
         expect(xml).toContain('<rss')
         expect(xml).toContain('<channel>')
         expect(xml).toContain('Zhifan Chen')
+        expect(xml).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(xml).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
     })
 
     it('excludes draft writing entries from routes, index, and RSS feed', () => {
@@ -256,9 +335,13 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
         'dist/index.html',
         'dist/work/index.html',
         'dist/work/nixos-infrastructure/index.html',
+        'dist/work/backend-authorization-service/index.html',
+        'dist/work/open-source/index.html',
         'dist/resume/index.html',
         'dist/services/index.html',
         'dist/writing/index.html',
+        'dist/writing/debugging-dynamic-linkers-on-nixos/index.html',
+        'dist/writing/multi-host-nixos-and-attic-caching/index.html',
         'dist/about/index.html',
         'dist/contact/index.html',
     ]

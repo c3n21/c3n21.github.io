@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # generated resume data
 src/cv.json
+
+# private career materials
+career-private/
