@@ -251,3 +251,63 @@ describe('Site output - Writing and RSS routes', () => {
     })
 })
 
+describe('Site output - Structural, SEO, and Accessibility requirements', () => {
+    const pages = [
+        'dist/index.html',
+        'dist/work/index.html',
+        'dist/work/nixos-infrastructure/index.html',
+        'dist/resume/index.html',
+        'dist/services/index.html',
+        'dist/writing/index.html',
+        'dist/about/index.html',
+        'dist/contact/index.html',
+    ]
+
+    it('every major page exists, has exactly one <h1>, a non-empty meta description, canonical link, and skip/main structure', () => {
+        for (const relativePath of pages) {
+            const filePath = path.resolve(process.cwd(), relativePath)
+            expect(fs.existsSync(filePath), `Expected ${relativePath} to exist`).toBe(true)
+
+            const html = fs.readFileSync(filePath, 'utf-8')
+
+            // Exactly one <h1>
+            const h1Matches = html.match(/<h1(\s|>)/g) || []
+            expect(h1Matches.length, `Expected exactly one <h1> in ${relativePath}`).toBe(1)
+
+            // Non-empty meta description
+            const metaDescMatch = html.match(
+                /<meta\s+name="description"\s+content="([^"]*)"/i
+            )
+            expect(
+                metaDescMatch,
+                `Expected meta description in ${relativePath}`
+            ).toBeTruthy()
+            const metaDesc: string =
+                metaDescMatch && metaDescMatch[1] ? metaDescMatch[1] : ''
+            expect(
+                metaDesc.trim().length,
+                `Expected non-empty meta description in ${relativePath}`
+            ).toBeGreaterThan(10)
+
+            // Canonical link
+            const canonicalMatch = html.match(
+                /<link\s+rel="canonical"\s+href="([^"]*)"/i
+            )
+            expect(
+                canonicalMatch,
+                `Expected canonical link in ${relativePath}`
+            ).toBeTruthy()
+            const canonicalUrl: string =
+                canonicalMatch && canonicalMatch[1] ? canonicalMatch[1] : ''
+            expect(
+                canonicalUrl.startsWith('https://'),
+                `Expected https canonical URL in ${relativePath}`
+            ).toBe(true)
+
+            // Skip link and main-content landmark
+            expect(html, `Expected skip-to-content link in ${relativePath}`).toContain('href="#main-content"')
+            expect(html, `Expected main landmark with id="main-content" in ${relativePath}`).toContain('id="main-content"')
+        }
+    })
+})
+

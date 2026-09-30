@@ -108,6 +108,16 @@ const faviconSizes = [
         }
     </head>
     <body class="min-h-screen bg-background text-foreground flex flex-col">
+        {
+            !isCV && (
+                <a
+                    href="#main-content"
+                    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                    Skip to content
+                </a>
+            )
+        }
         {!isCV && <SiteHeader />}
         <div class="flex-1">
             <slot />

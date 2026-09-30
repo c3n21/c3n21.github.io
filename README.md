@@ -1,96 +1,111 @@
-# Personal Website & CV
+# Personal Engineering Platform & Portfolio
 
-Welcome! This repo is a showcase of modern web development, automation, and best practices. Here’s what makes it stand out:
+Personal website, engineering case-study platform, and automated CV system for **Zhifan Chen — Software Engineer** (focused on backend, platform, developer tooling, and infrastructure).
 
-## 📄 CV/Resume System
-
-This project uses **JSON Resume** format to maintain a unified CV/resume that powers both the website and generates PDF exports. The system automates the entire process from LinkedIn data to deployed website and downloadable PDF.
-
-### JSON Resume Format
-The CV data is stored in JSON Resume format (`cv.json`), which includes standardized fields for:
-- Personal information and contact details
-- Work experience with dates and descriptions
-- Skills and expertise
-- Projects with media support
-- Education and certifications
-
-### LinkedIn Integration
-- **Data Source**: LinkedIn profile serves as the primary data source
-- **Browser Extension**: Use the [@c3n21/linkedin-to-jsonresume](https://github.com/c3n21/linkedin-to-jsonresume) browser extension to extract your LinkedIn data
-- **Project Media Support**: The extension supports extracting project media (images, videos) from LinkedIn posts
-- **Asset Management**: Project media is automatically downloaded and optimized during the build process
-
-### Automated CV Updates
-1. **CV Secret**: Update the `CV` repository secret with your JSON Resume data
-2. **Automatic Deployment**: Any changes to the CV secret trigger automatic website rebuild and PDF regeneration
-3. **Synchronized Updates**: Both the website and downloadable PDF stay in sync automatically
-
-### PDF Generation
-- **CV Mode**: Set the `CV` environment variable to enable PDF-optimized rendering
-- **Interactive Components**: CV mode strips out interactive components for clean printing
-- **Automated Export**: PDF is generated using Puppeteer and attached to GitHub releases
-- **Print-Ready**: Optimized for A4 format with proper styling for professional documents
-## 🚀 Tech Stack
-- **Astro**: Lightning-fast static site generator for modern web apps
-- **Qwik**: Ultra-fast interactive components
-- **TypeScript**: Type-safe codebase for reliability
-- **Tailwind CSS**: Utility-first styling for rapid UI development
-- **Vitest**: Next-gen testing framework
-- **Puppeteer**: Automated PDF export of the CV
-
-## 🛠️ Tooling
-- **pnpm**: Fast, disk-efficient package manager
-- **ESLint & Prettier**: Code quality and style enforcement
-- **Sharp**: Image processing for assets
-- **Custom Scripts**: Automated asset downloads and PDF generation
-- **Nix Flake**: Reproducible development environments via `flake.nix`.
-
-## ⚙️ GitHub Actions & Automation Pipeline
-
-The project features a comprehensive automation pipeline that handles everything from CV updates to deployment:
-
-### Build Process
-- **Automatic Builds**: Every push to `main` triggers the build pipeline
-- **CV Integration**: CV data is injected from the `CV` repository secret during build
-- **Asset Processing**: LinkedIn project media is downloaded and optimized automatically
-- **Caching**: Intelligent caching of pnpm store and dependencies speeds up CI
-
-### Deployment Workflow
-- **Website Deployment**: Automatic deployment to GitHub Pages on every push
-- **PDF Generation**: CV is exported as PDF using Puppeteer in headless Chrome
-- **Release Management**: PDF is attached to GitHub releases for easy distribution
-- **Artifact Management**: Both website and CV artifacts are properly managed and deployed
-
-### New User Quick Start
-1. **Extract LinkedIn Data**: Use the [@c3n21/linkedin-to-jsonresume](https://github.com/c3n21/linkedin-to-jsonresume) browser extension on your LinkedIn profile
-2. **Update CV Secret**: Add your JSON Resume data to the `CV` repository secret in GitHub
-3. **Automatic Updates**: Website and PDF will rebuild automatically on every change
-4. **Version Releases**: Create a PR to bump `package.json` version to trigger a new release with PDF
+Built with Astro 5, TypeScript, Tailwind CSS, Content Collections, and JSON Resume automation.
 
 ---
-See the workflows in `.github/workflows/` for more details on automation. Explore the code for best practices in TypeScript, Astro, and modern frontend engineering.
 
-## Deployment Details
+## 🗺️ Site Architecture & Routes
 
-The deployment process is automated but follows a specific workflow:
+The site is organized around multi-audience routing (engineering hiring managers, recruiters, and part-time consulting clients):
 
-### Continuous Integration
-- **Push to Main**: Every push to `main` triggers the build pipeline and caches artifacts
-- **Automatic Website Deploy**: Website is automatically deployed to GitHub Pages
+- **`/` (Homepage)**: High-signal overview leading with primary identity (`Software Engineer`), production experience, featured engineering case studies, consulting services teaser, and technical writing.
+- **`/work/`**: Engineering case studies index. Detailed case studies follow an engineering retrospective format: Problem, Constraints, Ownership, Alternatives Considered, Decision & Rationale, Implementation & Challenges, Verification, and Retrospective & Lessons.
+- **`/resume/`**: Dedicated web resume driven by JSON Resume (`src/cv.json`), with experience timeline, grouped skills, ongoing degree clarity, and an on-demand PDF download link.
+- **`/services/`**: Bounded part-time consulting services across 5 domains (software modernization, backend/integrations, developer tooling/CI, Nix/reproducible environments, and technical debugging) with clear engagement-fit boundaries.
+- **`/writing/`**: Technical engineering articles and systems deep-dives, with an automated RSS feed at **`/rss.xml`**.
+- **`/about/`**: Engineering philosophy, systems/tooling focus, languages, and education overview.
+- **`/contact/`**: Direct communication channels (Email, LinkedIn, GitHub).
 
-### Release Process
-To deploy a new version with PDF generation:
-1. **Create Version PR**: Create a PR that only bumps the version in `package.json`  
-2. **Merge to Release**: Merging the PR triggers the release workflow
-3. **PDF Generation**: CV is built with `CV=dark` environment variable for print optimization
-4. **Release Assets**: PDF is automatically attached to the GitHub release
+---
 
-### Local Development & Testing
-1. Install `act`, `gh`
-2. Login in `gh` with `gh auth login`
-3. Put manually `src/cv.json`
-4. Comment `Write src/cv.json from input` step in `.github/actions/build-with-cv/action.yml`
-5. Run `sh ./scripts/sh/test-workflow.sh <path to desired workflow>`
+## 📄 CV / Resume System & Source-of-Truth Model
 
-Caveats:
-I've tested only `build-web` job which works properly, other workflows/jobs are not tested / are failing.
+This project maintains a strict boundary between public presentation and factual career history:
+
+1. **LinkedIn is the Source of Truth**:
+   - Employment roles, companies, dates, education, and base project records originate on LinkedIn.
+   - Exported using [@c3n21/linkedin-to-jsonresume](https://github.com/c3n21/linkedin-to-jsonresume) browser extension into standardized JSON Resume format.
+2. **`src/cv.json` is Git-Ignored**:
+   - `src/cv.json` is a generated local file and is ignored by git to protect private contact details and prevent fork drift.
+   - In GitHub Actions CI, `src/cv.json` is automatically injected from the `CV` repository secret on build.
+3. **Automated PDF Export**:
+   - Running with `CV=dark` env variable builds print-optimized pages (stripping navigation, footers, and web chrome).
+   - Puppeteer (`scripts/node/export-pdf.ts`) captures `/resume/` (`dist/resume/index.html`) using headless Chromium to generate `ZhifanChen.pdf`.
+
+---
+
+## ✍️ Content Authoring Workflow
+
+Content is managed via Astro 5 typed content collections with strict Zod schemas defined in `src/content.config.ts`:
+
+### Engineering Case Studies (`src/content/work/`)
+Create markdown files under `src/content/work/<slug>.md`:
+```yaml
+---
+title: 'Declarative Multi-Host NixOS Infrastructure'
+summary: 'Reproducible multi-machine NixOS setup with Flakes and binary caching.'
+kind: 'personal' # 'professional' | 'open-source' | 'personal' | 'university' | 'hackathon'
+featured: true
+date: '2022-01-01'
+endDate: '2026-09-29'
+technologies: ['Nix', 'NixOS', 'Linux', 'Flakes', 'Attic']
+draft: false
+---
+```
+Case study body template:
+- `## Problem`
+- `## Constraints`
+- `## Ownership`
+- `## Alternatives Considered`
+- `## Decision & Rationale`
+- `## Implementation & Challenges`
+- `## Verification`
+- `## Retrospective & Lessons`
+
+> **Note on Drafts**: Entries with `draft: true` are automatically excluded from production builds and routes.
+
+### Technical Writing (`src/content/writing/`)
+Create markdown files under `src/content/writing/<slug>.md`:
+```yaml
+---
+title: 'Debugging Linux Memory Pressure Under Heavy I/O'
+description: 'Analyzing slab cache growth and tuning kernel vm parameters.'
+publishDate: '2026-09-30'
+tags: ['linux', 'debugging', 'kernel']
+draft: false
+---
+```
+> Non-draft articles are automatically published to `/writing/<id>/` and the RSS feed at `/rss.xml`. Drafts are excluded from feeds and routes.
+
+---
+
+## 🚀 Local Development & Verification
+
+On NixOS or machines with Nix Flakes:
+```bash
+# Enter devshell or use nix shell
+nix shell nixpkgs#pnpm nixpkgs#nodejs_22
+
+# Ensure local src/cv.json exists
+# Run development server
+pnpm dev
+
+# Run Vitest test suite
+pnpm exec vitest run
+
+# Run production build and type checking
+pnpm run build
+
+# Test CV mode and export PDF
+CV=dark pnpm run build
+pnpm exec tsx scripts/node/export-pdf.ts /path/to/chromium
+```
+
+---
+
+## ⚙️ GitHub Actions & CI/CD Pipeline
+
+- **`build-web`**: Injects `CV` secret, runs `astro check` and `astro build`, and deploys static artifacts to GitHub Pages.
+- **`generate-pdf`**: Runs CV-mode build and Puppeteer export to attach `ZhifanChen.pdf` to versioned releases.

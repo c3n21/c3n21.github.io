@@ -1,0 +1,128 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import Anchor from '@/components/astro/Anchor.astro'
+import Card from '@/components/Card.astro'
+import CardContent from '@/components/CardContent.astro'
+
+const title = 'About — Zhifan Chen'
+const description =
+    'Background, engineering philosophy, and technical focus of Zhifan Chen — Software Engineer focused on backend, platform, and infrastructure.'
+---
+
+<SiteLayout title={title} description={description}>
+    <main id="main-content" class="py-12 md:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <!-- Header section -->
+            <header class="space-y-4">
+                <p class="text-xs font-mono uppercase tracking-wider text-primary">
+                    Background & Focus
+                </p>
+                <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+                    About Me
+                </h1>
+                <p class="text-lg text-muted-foreground leading-relaxed">
+                    I am a software engineer focused on backend systems, platform engineering, and developer infrastructure.
+                </p>
+            </header>
+
+            <!-- Engineering Philosophy & Background -->
+            <section class="space-y-6 text-foreground/90 leading-relaxed text-base">
+                <p>
+                    Over several years of building production applications, I have worked across the entire delivery lifecycle—from React and TypeScript client applications to .NET microservices, database schemas, and Linux deployment environments. That full-stack perspective shaped how I write code: with strong attention to maintainability, testability, and operational simplicity.
+                </p>
+
+                <p>
+                    My deepest technical focus centers on <strong>systems, developer tooling, and reproducibility</strong>. I believe developer friction and environment discrepancies are primary drivers of software defects. By engineering declarative, reproducible workstations and CI pipelines with <strong>Nix and Linux</strong>, teams can eliminate whole classes of "works on my machine" failures and deploy with confidence.
+                </p>
+
+                <p>
+                    When software breaks, I enjoy diving beneath high-level abstractions to identify root causes. Whether analyzing database lock contention, diagnosing memory allocation pressure, or submitting upstream patches to open-source development tools and Nix packages, I look for enduring fixes rather than temporary workarounds.
+                </p>
+            </section>
+
+            <!-- Core Areas Grid -->
+            <section aria-labelledby="core-areas-heading" class="space-y-4 pt-4">
+                <h2 id="core-areas-heading" class="text-xl font-bold tracking-tight text-foreground">
+                    Core Interests & Capabilities
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Card class="bg-card">
+                        <CardContent class="p-5 space-y-2">
+                            <h3 class="text-sm font-semibold text-foreground">
+                                Backend & Platform Engineering
+                            </h3>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                Resilient REST and gRPC services, authentication/authorization workflows, database modeling, and scalable async architectures.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card class="bg-card">
+                        <CardContent class="p-5 space-y-2">
+                            <h3 class="text-sm font-semibold text-foreground">
+                                Declarative Systems & NixOS
+                            </h3>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                Reproducible developer environments, hermetic build pipelines, self-hosted binary caching, and automated infrastructure flakes.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card class="bg-card">
+                        <CardContent class="p-5 space-y-2">
+                            <h3 class="text-sm font-semibold text-foreground">
+                                Tooling & Automation
+                            </h3>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                Continuous integration tuning, custom developer CLIs, Neovim ecosystem tooling, and automated code validation workflows.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card class="bg-card">
+                        <CardContent class="p-5 space-y-2">
+                            <h3 class="text-sm font-semibold text-foreground">
+                                Root-Cause Debugging
+                            </h3>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                Investigating subtle concurrency bugs, profiling runtime bottlenecks, and fixing upstream dependencies in open source.
+                            </p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+
+            <!-- Education & Languages -->
+            <section class="space-y-4 pt-4 border-t border-border/60">
+                <h2 class="text-xl font-bold tracking-tight text-foreground">
+                    Education & Languages
+                </h2>
+                <div class="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                    <p>
+                        <strong class="text-foreground">Education:</strong> Bachelor of Science in Computer Science (ongoing, part-time) at Università degli Studi di Milano, pursuing foundational computer science theory concurrently with full-time professional engineering practice.
+                    </p>
+                    <p>
+                        <strong class="text-foreground">Languages:</strong> Fluent in English and Italian (professional working proficiency), native Chinese.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Next steps CTAs -->
+            <section class="pt-6 border-t border-border/60 flex flex-wrap items-center gap-4">
+                <Anchor href="/work/" variant="default">
+                    See my work &rarr;
+                </Anchor>
+                <Anchor href="/resume/" variant="outline">
+                    View full resume
+                </Anchor>
+                <Anchor href="/services/" variant="outline">
+                    Services & consulting
+                </Anchor>
+                <Anchor href="/contact/" variant="outline">
+                    Get in touch &rarr;
+                </Anchor>
+            </section>
+        </div>
+    </main>
+</SiteLayout>
