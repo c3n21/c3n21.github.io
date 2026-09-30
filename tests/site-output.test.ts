@@ -3,6 +3,19 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const DIST_INDEX = path.resolve(process.cwd(), 'dist/index.html')
+const DIST_WORK_INDEX = path.resolve(process.cwd(), 'dist/work/index.html')
+const DIST_NIXOS_CASE_STUDY = path.resolve(
+    process.cwd(),
+    'dist/work/nixos-infrastructure/index.html'
+)
+const DIST_DRAFT_BACKEND = path.resolve(
+    process.cwd(),
+    'dist/work/backend-authorization-service/index.html'
+)
+const DIST_DRAFT_OSS = path.resolve(
+    process.cwd(),
+    'dist/work/open-source/index.html'
+)
 
 describe('Site output - Homepage shell and route navigation', () => {
     it('dist/index.html exists', () => {
@@ -57,3 +70,47 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(html).not.toContain('Portfolio Deployments')
     })
 })
+
+describe('Site output - Work index and case-study routes', () => {
+    it('dist/work/index.html exists and renders published work', () => {
+        expect(
+            fs.existsSync(DIST_WORK_INDEX),
+            `Expected ${DIST_WORK_INDEX} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_WORK_INDEX, 'utf-8')
+        expect(html).toContain('Declarative Multi-Host NixOS Infrastructure')
+        expect(html).toContain('href="/work/nixos-infrastructure/"')
+    })
+
+    it('dist/work/nixos-infrastructure/index.html exists and contains case study sections and back link', () => {
+        expect(
+            fs.existsSync(DIST_NIXOS_CASE_STUDY),
+            `Expected ${DIST_NIXOS_CASE_STUDY} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_NIXOS_CASE_STUDY, 'utf-8')
+        expect(html).toContain('Declarative Multi-Host NixOS Infrastructure')
+        expect(html).toContain('Problem')
+        expect(html).toContain('Constraints')
+        expect(html).toContain('Ownership')
+        expect(html).toContain('Alternatives Considered')
+        expect(html.includes('Decision &amp; Rationale') || html.includes('Decision')).toBe(true)
+        expect(html.includes('Implementation &amp; Challenges') || html.includes('Implementation')).toBe(true)
+        expect(html).toContain('Verification')
+        expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
+        expect(html).toContain('href="/work/"')
+    })
+
+    it('does not emit routes for draft work entries', () => {
+        expect(
+            fs.existsSync(DIST_DRAFT_BACKEND),
+            `Expected draft route ${DIST_DRAFT_BACKEND} NOT to exist`
+        ).toBe(false)
+        expect(
+            fs.existsSync(DIST_DRAFT_OSS),
+            `Expected draft route ${DIST_DRAFT_OSS} NOT to exist`
+        ).toBe(false)
+    })
+})
+

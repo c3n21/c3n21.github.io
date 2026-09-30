@@ -1,0 +1,158 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import WorkMeta from '@/components/work/WorkMeta.astro'
+
+export interface Props {
+    entry: CollectionEntry<'work'>
+}
+
+const { entry } = Astro.props
+const { title, summary } = entry.data
+---
+
+<SiteLayout
+    title={`${title} — Case Study — Zhifan Chen`}
+    description={summary}
+>
+    <main class="py-12 md:py-16">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <a
+                    href="/work/"
+                    class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
+                >
+                    <span
+                        aria-hidden="true"
+                        class="group-hover:-translate-x-0.5 transition-transform"
+                        >&larr;</span
+                    >
+                    <span>Back to all work</span>
+                </a>
+            </div>
+
+            <header class="mb-10">
+                <h1
+                    class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4"
+                >
+                    {title}
+                </h1>
+                <p
+                    class="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed"
+                >
+                    {summary}
+                </p>
+
+                <div class="p-6 rounded-lg bg-card border border-border">
+                    <WorkMeta entry={entry} />
+                </div>
+            </header>
+
+            <hr class="my-8 border-border/60" />
+
+            <div class="case-study-content">
+                <slot />
+            </div>
+
+            <footer
+                class="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            >
+                <a
+                    href="/work/"
+                    class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    &larr; Back to all work
+                </a>
+                <a
+                    href="/contact/"
+                    class="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-4"
+                >
+                    Discuss an engagement &rarr;
+                </a>
+            </footer>
+        </article>
+    </main>
+</SiteLayout>
+
+<style is:global>
+    .case-study-content h2 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        color: hsl(var(--foreground));
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid hsl(var(--border) / 0.6);
+    }
+    .case-study-content h3 {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        font-weight: 600;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
+    }
+    .case-study-content p {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        line-height: 1.75;
+        color: hsl(var(--foreground) / 0.9);
+    }
+    .case-study-content ul {
+        list-style-type: disc;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+    .case-study-content ol {
+        list-style-type: decimal;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+    .case-study-content li {
+        margin-top: 0.375rem;
+        margin-bottom: 0.375rem;
+        line-height: 1.625;
+        color: hsl(var(--foreground) / 0.9);
+    }
+    .case-study-content strong {
+        font-weight: 600;
+        color: hsl(var(--foreground));
+    }
+    .case-study-content code {
+        font-family: var(--font-mono);
+        font-size: 0.875em;
+        background-color: hsl(var(--muted));
+        padding: 0.15em 0.35em;
+        border-radius: 0.25rem;
+        color: hsl(var(--foreground));
+    }
+    .case-study-content pre {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        line-height: 1.6;
+        background-color: hsl(var(--muted));
+        border: 1px solid hsl(var(--border));
+    }
+    .case-study-content pre code {
+        background-color: transparent;
+        padding: 0;
+        border-radius: 0;
+    }
+    .case-study-content blockquote {
+        border-left: 3px solid hsl(var(--border));
+        padding-left: 1rem;
+        font-style: italic;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: hsl(var(--muted-foreground));
+    }
+</style>
