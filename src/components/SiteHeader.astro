@@ -1,0 +1,124 @@
+---
+import ThemeToggle from './ThemeToggle.astro'
+import Menu from '@lucide/astro/icons/menu'
+import X from '@lucide/astro/icons/x'
+import { SITE } from '@/lib/site'
+
+const navItems = [
+    { href: '/work/', label: 'Work' },
+    { href: '/resume/', label: 'Resume' },
+    { href: '/writing/', label: 'Writing' },
+    { href: '/services/', label: 'Services' },
+    { href: '/about/', label: 'About' },
+    { href: '/contact/', label: 'Contact' },
+]
+
+const currentPath = Astro.url.pathname
+const normalizedPath = currentPath.endsWith('/')
+    ? currentPath
+    : `${currentPath}/`
+---
+
+<header
+    class="sticky top-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border z-50"
+>
+    <input
+        id="menu"
+        class="peer md:hidden sr-only"
+        type="checkbox"
+        aria-label="Toggle navigation menu"
+    />
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div class="flex-shrink-0">
+                <a
+                    href="/"
+                    class="text-xl font-bold tracking-tight text-foreground hover:opacity-90 transition-opacity"
+                >
+                    {SITE.name}
+                </a>
+            </div>
+
+            <div class="md:block">
+                <div
+                    class="ml-10 flex flex-row-reverse items-center space-x-2 md:flex-row md:space-x-8"
+                >
+                    <label
+                        for="menu"
+                        class="md:hidden cursor-pointer p-2 inline-flex items-center justify-center"
+                        aria-label="Toggle menu"
+                    >
+                        <Menu class="in-has-checked:hidden w-6 h-6" />
+                        <X class="hidden in-has-checked:inline w-6 h-6" />
+                    </label>
+
+                    <nav
+                        aria-label="Main navigation"
+                        class="hidden md:flex items-center space-x-2 md:space-x-6"
+                    >
+                        {
+                            navItems.map((item) => {
+                                const isActive =
+                                    normalizedPath === item.href ||
+                                    (item.href !== '/' &&
+                                        normalizedPath.startsWith(item.href))
+                                return (
+                                    <a
+                                        href={item.href}
+                                        aria-current={
+                                            isActive ? 'page' : undefined
+                                        }
+                                        class:list={[
+                                            'text-sm transition-colors story-link py-1',
+                                            isActive
+                                                ? 'text-foreground font-medium'
+                                                : 'text-muted-foreground hover:text-foreground',
+                                        ]}
+                                    >
+                                        {item.label}
+                                    </a>
+                                )
+                            })
+                        }
+                    </nav>
+
+                    <ThemeToggle />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu dropdown -->
+    <div
+        class="hidden items-center space-x-2 border-t border-border in-has-checked:not-md:flex"
+    >
+        <nav
+            aria-label="Mobile navigation"
+            class="px-2 pt-2 pb-3 space-y-1 w-full"
+        >
+            {
+                navItems.map((item) => {
+                    const isActive =
+                        normalizedPath === item.href ||
+                        (item.href !== '/' &&
+                            normalizedPath.startsWith(item.href))
+                    return (
+                        <a
+                            href={item.href}
+                            aria-current={isActive ? 'page' : undefined}
+                            class:list={[
+                                'block w-full text-left px-3 py-2 rounded-md text-base transition-colors',
+                                isActive
+                                    ? 'text-foreground font-medium bg-muted'
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
+                            ]}
+                        >
+                            {item.label}
+                        </a>
+                    )
+                })
+            }
+        </nav>
+    </div>
+</header>

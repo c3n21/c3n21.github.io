@@ -20,8 +20,8 @@ console.log('Exporting cv.pdf...')
 ;(async () => {
     const browser = await puppeteer.launch(launchOptions)
     const page = await browser.newPage()
-    // Update 'dist/index.html' if your entry point is different
-    await page.goto(`file://${path.resolve('dist/index.html')}`, {
+    // Dedicated resume entry point for CV export
+    await page.goto(`file://${path.resolve('dist/resume/index.html')}`, {
         waitUntil: 'networkidle0',
     })
     await page.pdf({

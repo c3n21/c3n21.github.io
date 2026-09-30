@@ -1,5 +1,6 @@
 # build output
 dist/
+*.pdf
 
 # generated types
 .astro/

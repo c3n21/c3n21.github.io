@@ -1,0 +1,111 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import { SERVICES } from '@/data/services'
+import ServiceCard from '@/components/services/ServiceCard.astro'
+import Anchor from '@/components/astro/Anchor.astro'
+import Card from '@/components/Card.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import CardContent from '@/components/CardContent.astro'
+
+const title = 'Services & Consulting'
+const description =
+    'Selected part-time software engineering and consulting engagements across backend, platform, developer tooling, and systems.'
+---
+
+<SiteLayout title={title} description={description}>
+    <main id="main-content" class="py-12 md:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            <!-- Header section -->
+            <header class="max-w-3xl space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono">
+                    <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true"></span>
+                    Available for selected part-time engagements
+                </div>
+                <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+                    Services & Consulting
+                </h1>
+                <p class="text-lg text-muted-foreground leading-relaxed">
+                    I partner with engineering teams, startups, and organizations that need senior software engineering depth, architecture modernization, and developer tooling improvements.
+                </p>
+            </header>
+
+            <!-- Service families grid -->
+            <section aria-labelledby="services-list-heading" class="space-y-8">
+                <h2 id="services-list-heading" class="sr-only">
+                    Consulting Services
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {
+                        SERVICES.map((service, index) => (
+                            <ServiceCard service={service} index={index} />
+                        ))
+                    }
+                </div>
+            </section>
+
+            <!-- Engagement Fit Section -->
+            <section aria-labelledby="engagement-fit-heading" class="pt-8 border-t border-border/60">
+                <div class="max-w-3xl space-y-6">
+                    <div>
+                        <p class="text-xs font-mono uppercase tracking-wider text-primary mb-1">
+                            Working Model
+                        </p>
+                        <h2 id="engagement-fit-heading" class="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                            Engagement Fit & Availability
+                        </h2>
+                    </div>
+
+                    <p class="text-muted-foreground leading-relaxed">
+                        To maintain engineering quality and deliver high-impact results, I accept a limited number of concurrent engagements that align with my technical focus:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <Card class="bg-card">
+                            <CardHeader class="pb-2">
+                                <CardTitle class="text-base text-foreground font-semibold flex items-center gap-2">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    Strong Fit
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul class="space-y-2 text-sm text-muted-foreground">
+                                    <li>• Asynchronous, written-first collaboration</li>
+                                    <li>• Technically deep problem solving and debugging</li>
+                                    <li>• Architecture, API design, and code modernization</li>
+                                    <li>• Developer tooling, Nix environments, and CI pipelines</li>
+                                    <li>• Bounded projects or advisory retainers (5–15 hrs/week)</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+
+                        <Card class="bg-card">
+                            <CardHeader class="pb-2">
+                                <CardTitle class="text-base text-foreground font-semibold flex items-center gap-2">
+                                    <span class="text-amber-500 font-bold">✕</span>
+                                    Out of Scope
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul class="space-y-2 text-sm text-muted-foreground">
+                                    <li>• 24/7 on-call operational coverage or immediate incident SLA</li>
+                                    <li>• Synchronous full-day meeting schedules</li>
+                                    <li>• Unbounded open-ended staff augmentation without clear scope</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div class="pt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <Anchor href="/contact/" variant="default">
+                            Discuss an engagement &rarr;
+                        </Anchor>
+                        <span class="text-sm text-muted-foreground">
+                            Usually respond within 24–48 hours.
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</SiteLayout>

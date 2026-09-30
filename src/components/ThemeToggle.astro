@@ -3,7 +3,13 @@ import { Sun, Moon } from '@lucide/astro'
 import Button from './Button.astro'
 ---
 
-<Button variant="ghost" size="icon" class="hover-scale" id="theme-toggle">
+<Button
+    variant="ghost"
+    size="icon"
+    class="hover-scale"
+    id="theme-toggle"
+    aria-label="Toggle theme"
+>
     <Sun
         class="sun dark:hidden h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-88 dark:scale-0"
     />
@@ -20,29 +26,15 @@ import Button from './Button.astro'
             return
         }
 
-        if (1 < togglers.length) {
-            throw new Error('There should be only one instance of ThemeToggle')
-        }
-
-        let currentTheme: 'dark' | 'light' = window.matchMedia(
-            '(prefers-color-scheme: dark)'
-        ).matches
-            ? 'dark'
-            : 'light'
-
-        if ('dark' === currentTheme) {
-            document.documentElement.classList.add(currentTheme)
-        }
-
         function toggle() {
-            if (currentTheme === 'dark') {
-                currentTheme = 'light'
-            } else {
-                currentTheme = 'dark'
+            const isDark = document.documentElement.classList.toggle('dark')
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('theme', isDark ? 'dark' : 'light')
             }
-            document.documentElement.classList.toggle('dark')
         }
 
-        togglers.forEach((toggler) => toggler.addEventListener('click', toggle))
+        togglers.forEach((toggler) => {
+            toggler.addEventListener('click', toggle)
+        })
     })()
 </script>

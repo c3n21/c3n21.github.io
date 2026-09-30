@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content'
+import ArticleLayout from '@/layouts/ArticleLayout.astro'
+
+export async function getStaticPaths() {
+    const writingEntries = await getCollection(
+        'writing',
+        ({ data }) => !data.draft
+    )
+    return writingEntries.map((entry) => ({
+        params: { id: entry.id },
+        props: { entry },
+    }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<ArticleLayout entry={entry}>
+    <Content />
+</ArticleLayout>

@@ -1,0 +1,19 @@
+---
+import Anchor from '@/components/astro/Anchor.astro'
+import type ComponentBaseProps from '@/components/astro/theme/types/ComponentBaseProps'
+
+interface Props
+    extends ComponentBaseProps,
+        astroHTML.JSX.AnchorHTMLAttributes {}
+
+const { href: _ignoredHref, ...rest } = Astro.props
+
+const cvLocation = import.meta.env.CV_LOCATION
+const hasCvLocation =
+    typeof cvLocation === 'string' && cvLocation.trim().length > 0
+
+const href = hasCvLocation ? cvLocation.trim() : '/resume/'
+const defaultLabel = hasCvLocation ? 'Download CV' : 'View resume'
+---
+
+<Anchor href={href} {...rest}><slot>{defaultLabel}</slot></Anchor>

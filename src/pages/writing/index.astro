@@ -1,0 +1,76 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import { getPublishedWriting } from '@/lib/content/writing'
+import ArticleCard from '@/components/writing/ArticleCard.astro'
+import Card from '@/components/Card.astro'
+import CardContent from '@/components/CardContent.astro'
+
+const title = 'Writing'
+const description =
+    'Technical articles, systems investigations, and engineering reflections on NixOS, reproducible workflows, and backend architecture.'
+
+const articles = await getPublishedWriting()
+---
+
+<SiteLayout title={title} description={description}>
+    <main id="main-content" class="py-12 md:py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <!-- Header section -->
+            <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div class="space-y-4">
+                    <p class="text-xs font-mono uppercase tracking-wider text-primary">
+                        Engineering Notes
+                    </p>
+                    <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+                        Writing
+                    </h1>
+                    <p class="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                        Technical investigations, reproducible build workflows, and lessons learned from production systems and open-source contributions.
+                    </p>
+                </div>
+                <div>
+                    <a
+                        href="/rss.xml"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border text-xs font-mono text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors"
+                    >
+                        <span class="text-primary font-bold">RSS</span>
+                        <span>Feed</span>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Articles List or Intentional Empty State -->
+            {
+                articles.length > 0 ? (
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {articles.map((entry) => (
+                            <ArticleCard entry={entry} />
+                        ))}
+                    </div>
+                ) : (
+                    <Card class="bg-card/50 border-dashed border-border/80">
+                        <CardContent class="py-12 px-6 text-center space-y-4 max-w-lg mx-auto">
+                            <p class="text-xs font-mono text-primary uppercase tracking-wider">
+                                Writing coming soon
+                            </p>
+                            <h2 class="text-xl font-semibold text-foreground">
+                                No articles published yet
+                            </h2>
+                            <p class="text-sm text-muted-foreground leading-relaxed">
+                                Deep dives into declarative NixOS infrastructure, systems debugging, and backend engineering trade-offs are currently being authored.
+                            </p>
+                            <div class="pt-2">
+                                <a
+                                    href="/rss.xml"
+                                    class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline underline-offset-4"
+                                >
+                                    Subscribe via RSS to get notified &rarr;
+                                </a>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )
+            }
+        </div>
+    </main>
+</SiteLayout>

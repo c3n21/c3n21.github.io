@@ -1,0 +1,58 @@
+---
+import { SITE } from '@/lib/site'
+
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="bg-background border-t border-border py-8 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"
+        >
+            <div>
+                <p class="font-medium text-foreground">{SITE.name}</p>
+                <p class="text-xs">
+                    Software Engineer — Backend, Platform & Infrastructure
+                </p>
+            </div>
+
+            <nav
+                aria-label="Footer links"
+                class="flex flex-wrap items-center gap-6"
+            >
+                <a
+                    href={SITE.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground transition-colors story-link"
+                >
+                    GitHub
+                </a>
+                <a
+                    href={SITE.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground transition-colors story-link"
+                >
+                    LinkedIn
+                </a>
+                <a
+                    href="/resume/"
+                    class="hover:text-foreground transition-colors story-link"
+                >
+                    Resume
+                </a>
+                <a
+                    href="/contact/"
+                    class="hover:text-foreground transition-colors story-link"
+                >
+                    Contact
+                </a>
+            </nav>
+
+            <div class="text-xs">
+                © {currentYear} {SITE.name}. All rights reserved.
+            </div>
+        </div>
+    </div>
+</footer>

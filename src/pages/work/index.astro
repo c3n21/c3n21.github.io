@@ -1,0 +1,45 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import WorkCard from '@/components/work/WorkCard.astro'
+import { getPublishedWork } from '@/lib/content/work'
+
+const workEntries = await getPublishedWork()
+---
+
+<SiteLayout
+    title="Engineering Work & Case Studies — Zhifan Chen"
+    description="Production systems, infrastructure, and engineering case studies detailing problem context, technical decisions, and verifiable results."
+>
+    <main id="main-content" class="py-16 md:py-24">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-12">
+                <h1
+                    class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
+                >
+                    Engineering Work & Case Studies
+                </h1>
+                <p class="mt-4 text-lg text-muted-foreground leading-relaxed">
+                    Production systems, infrastructure, and technical investigations.
+                    Each case study details the core problem, engineering constraints,
+                    trade-offs evaluated, and verifiable outcomes.
+                </p>
+            </div>
+
+            {
+                workEntries.length === 0 ? (
+                    <div class="rounded-lg border border-dashed border-border p-12 text-center">
+                        <p class="text-muted-foreground">
+                            No case studies are currently published. Check back soon for new engineering write-ups.
+                        </p>
+                    </div>
+                ) : (
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {workEntries.map((entry) => (
+                            <WorkCard entry={entry} />
+                        ))}
+                    </div>
+                )
+            }
+        </div>
+    </main>
+</SiteLayout>

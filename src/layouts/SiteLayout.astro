@@ -1,0 +1,127 @@
+---
+import '../styles/global.css'
+import SiteHeader from '@/components/SiteHeader.astro'
+import SiteFooter from '@/components/SiteFooter.astro'
+import isCVMode from '@/lib/isCVMode'
+import { SITE } from '@/lib/site'
+
+export interface Props {
+    title?: string
+    description?: string
+    image?: string
+    noindex?: boolean
+}
+
+const {
+    title = SITE.title,
+    description = SITE.description,
+    image,
+    noindex = false,
+} = Astro.props
+
+const isCV = isCVMode()
+const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
+
+const ogImage =
+    image ??
+    'https://media.licdn.com/dms/image/v2/D4D16AQFiYdy3kO95ew/profile-displaybackgroundimage-shrink_350_1400/B4DZd.1TpFH4Ag-/0/1750179593493?e=1755734400&v=beta&t=XfogOVxuOV35XsOIckuXXVtIYXzWhpgPGRJ-6MBA3t4'
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.origin).href
+
+const faviconSizes = [
+    '16x16',
+    '32x32',
+    '48x48',
+    '180x180',
+    '192x192',
+    '256x256',
+    '512x512',
+] as const
+---
+
+<!doctype html>
+<html lang="en" class:list={htmlClassList}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content={SITE.name} />
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
+        <link rel="canonical" href={canonicalURL} />
+
+        <!-- OpenGraph -->
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:site_name" content={SITE.name} />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        {
+            faviconSizes.map((size) => (
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes={size}
+                    href={`/favicon-${size}.png`}
+                />
+            ))
+        }
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+        {
+            !isCV && (
+                <script is:inline>
+                    ;(() => {
+                        const storedTheme =
+                            typeof localStorage !== 'undefined'
+                                ? localStorage.getItem('theme')
+                                : null
+                        const systemPrefersDark = window.matchMedia(
+                            '(prefers-color-scheme: dark)'
+                        ).matches
+                        if (
+                            storedTheme === 'dark' ||
+                            (!storedTheme && systemPrefersDark)
+                        ) {
+                            document.documentElement.classList.add('dark')
+                        } else {
+                            document.documentElement.classList.remove('dark')
+                        }
+                    })()
+                </script>
+            )
+        }
+    </head>
+    <body class="min-h-screen bg-background text-foreground flex flex-col">
+        {
+            !isCV && (
+                <a
+                    href="#main-content"
+                    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                    Skip to content
+                </a>
+            )
+        }
+        {!isCV && <SiteHeader />}
+        <div class="flex-1">
+            <slot />
+        </div>
+        {!isCV && <SiteFooter />}
+    </body>
+</html>
