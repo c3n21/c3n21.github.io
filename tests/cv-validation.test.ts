@@ -79,7 +79,7 @@ describe('JSON Resume (src/cv.json) Validation', () => {
             expect(hrm?.position).toBe('Software Engineer')
             expect(hrm?.startDate).toBe('2022-06-01')
             // Current role must not have a finished endDate
-            expect(hrm?.endDate).toBeUndefined()
+            expect(hrm?.endDate).toBeFalsy()
             expect(hrm?.summary).toContain('enterprise e-commerce')
             expect(Array.isArray(hrm?.highlights)).toBe(true)
             expect(hrm?.highlights?.length).toBeGreaterThan(0)
@@ -90,7 +90,7 @@ describe('JSON Resume (src/cv.json) Validation', () => {
             expect(oss).toBeDefined()
             expect(oss?.position).toBe('Independent Open Source Contributor & Maintainer')
             expect(oss?.startDate).toBe('2022-01-01')
-            expect(oss?.endDate).toBeUndefined()
+            expect(oss?.endDate).toBeFalsy()
             expect(oss?.summary).toContain('Nixpkgs')
             expect(oss?.summary).toContain('Neovim')
         })

@@ -23,3 +23,5 @@ pnpm-debug.log*
 # tooling / scratch
 .superpowers/
 
+# generated resume data
+src/cv.json
