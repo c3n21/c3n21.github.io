@@ -114,3 +114,42 @@ describe('Site output - Work index and case-study routes', () => {
     })
 })
 
+describe('Site output - Resume route', () => {
+    const DIST_RESUME = path.resolve(process.cwd(), 'dist/resume/index.html')
+
+    it('dist/resume/index.html exists and renders complete web resume', () => {
+        expect(
+            fs.existsSync(DIST_RESUME),
+            `Expected ${DIST_RESUME} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_RESUME, 'utf-8')
+
+        // Header identity & headline
+        expect(html).toContain('Zhifan Chen')
+        expect(html).toContain('Software Engineer')
+        expect(html).toContain(
+            'Software Engineer — Backend, Platform &amp; Infrastructure'
+        )
+
+        // Web mode chrome
+        expect(html).toContain('aria-label="Main navigation"')
+        expect(html).toContain('<footer')
+
+        // Experience & Education
+        expect(html).toContain('HRM Group')
+        expect(html).toContain('Università degli Studi di Milano')
+        expect(html).toContain('BSc Computer Science — ongoing, part-time')
+
+        // Grouped skills
+        expect(html).toContain('Technical Skills')
+        expect(html).toContain('Backend &amp; Systems')
+        expect(html).toContain('Infrastructure &amp; Tooling')
+
+        // On-demand PDF link in web mode
+        const hasPdfLink =
+            html.includes('Download PDF CV') || html.includes('View resume')
+        expect(hasPdfLink).toBe(true)
+    })
+})
+

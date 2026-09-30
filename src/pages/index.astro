@@ -4,13 +4,34 @@ import HomeHero from '@/components/home/HomeHero.astro'
 import FeaturedWork from '@/components/home/FeaturedWork.astro'
 import ServicesTeaser from '@/components/home/ServicesTeaser.astro'
 import WritingTeaser from '@/components/home/WritingTeaser.astro'
+import isCVMode from '@/lib/isCVMode'
+
+const isCV = isCVMode()
 ---
 
-<SiteLayout>
-    <main id="main-content">
-        <HomeHero />
-        <FeaturedWork />
-        <ServicesTeaser />
-        <WritingTeaser />
-    </main>
-</SiteLayout>
+{
+    isCV ? (
+        <SiteLayout title="Redirecting to resume...">
+            <meta http-equiv="refresh" content="0;url=/resume/" />
+            <main class="max-w-4xl mx-auto p-8 text-center">
+                <p>
+                    Redirecting to{' '}
+                    <a href="/resume/" class="underline">
+                        resume
+                    </a>
+                    ...
+                </p>
+            </main>
+        </SiteLayout>
+    ) : (
+        <SiteLayout>
+            <main id="main-content">
+                <HomeHero />
+                <FeaturedWork />
+                <ServicesTeaser />
+                <WritingTeaser />
+            </main>
+        </SiteLayout>
+    )
+}
+

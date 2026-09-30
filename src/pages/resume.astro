@@ -1,0 +1,218 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import ExperienceList from '@/components/resume/ExperienceList.astro'
+import SkillGroups from '@/components/resume/SkillGroups.astro'
+import CvDownloadLink from '@/components/CvDownloadLink.astro'
+import isCVMode from '@/lib/isCVMode'
+import { formatDateRange } from '@/lib/resume'
+import cv from '@/cv.json'
+
+const isCV = isCVMode()
+
+const headline = 'Software Engineer — Backend, Platform & Infrastructure'
+const canonicalIdentity = 'Software Engineer'
+
+// First summary paragraph focusing on core competencies
+const summaryText =
+    'Software engineer with several years of experience building enterprise applications with React, TypeScript and .NET, alongside hands-on work in Linux infrastructure, Nix/NixOS, containers, CI/CD and open source. Strong focus on debugging, reproducibility, developer tooling and understanding systems end-to-end.'
+
+// Filter out duplicate employment roles that appear in projects from LinkedIn export
+const verifiedProjects = cv.projects.filter(
+    (p) =>
+        p.name !== 'Full Stack Developer — E-commerce platform' &&
+        p.name !== 'Magento 2 & Next.js Integration'
+)
+---
+
+<SiteLayout
+    title={`Resume — Zhifan Chen | ${canonicalIdentity}`}
+    description={`${headline} — Zhifan Chen resume.`}
+>
+    <main
+        id="main-content"
+        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-12 print:py-6 print:space-y-8"
+    >
+        {/* On-demand PDF CTA (web mode only) */}
+        {
+            !isCV && (
+                <div class="print:hidden flex justify-end">
+                    <CvDownloadLink
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-border rounded-md hover:bg-muted transition-colors text-foreground"
+                    >
+                        Download PDF CV
+                    </CvDownloadLink>
+                </div>
+            )
+        }
+
+        {/* Header Summary */}
+        <header class="space-y-4 border-b border-border/60 pb-8">
+            <div class="space-y-1">
+                <p class="text-sm font-mono uppercase tracking-wider text-muted-foreground">
+                    {canonicalIdentity}
+                </p>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                    {cv.basics.name}
+                </h1>
+                <p class="text-lg sm:text-xl font-medium text-foreground/90 pt-1">
+                    {headline}
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground font-mono">
+                {cv.basics.email && (
+                    <a
+                        href={`mailto:${cv.basics.email}`}
+                        class="hover:text-foreground hover:underline"
+                    >
+                        {cv.basics.email}
+                    </a>
+                )}
+                <span>·</span>
+                {cv.basics.location && (
+                    <span>
+                        {cv.basics.location.city}, {cv.basics.location.region}
+                    </span>
+                )}
+                <span>·</span>
+                <a
+                    href="https://github.com/c3n21"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground hover:underline"
+                >
+                    github.com/c3n21
+                </a>
+                <span>·</span>
+                <a
+                    href="https://www.linkedin.com/in/zhifanchen00/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground hover:underline"
+                >
+                    linkedin.com/in/zhifanchen00
+                </a>
+            </div>
+
+            <p class="text-sm sm:text-base text-muted-foreground leading-relaxed pt-2">
+                {summaryText}
+            </p>
+        </header>
+
+        {/* 1. Experience List */}
+        <ExperienceList />
+
+        {/* 2. Grouped Technical Skills */}
+        <SkillGroups />
+
+        {/* 3. Open Source & Key Projects */}
+        {
+            verifiedProjects.length > 0 && (
+                <section
+                    class="space-y-6"
+                    aria-labelledby="oss-projects-heading"
+                >
+                    <h2
+                        id="oss-projects-heading"
+                        class="text-2xl font-bold tracking-tight text-foreground border-b border-border/60 pb-2"
+                    >
+                        Open Source & Projects
+                    </h2>
+                    <div class="space-y-6">
+                        {verifiedProjects.map((project) => (
+                            <article class="break-inside-avoid space-y-1">
+                                <header class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                                    <h3 class="text-base font-semibold text-foreground">
+                                        {project.url ? (
+                                            <a
+                                                href={project.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="hover:underline text-primary"
+                                            >
+                                                {project.name}
+                                            </a>
+                                        ) : (
+                                            project.name
+                                        )}
+                                    </h3>
+                                    {project.startDate && (
+                                        <span class="text-xs font-mono text-muted-foreground shrink-0">
+                                            {formatDateRange(
+                                                project.startDate,
+                                                project.endDate
+                                            )}
+                                        </span>
+                                    )}
+                                </header>
+                                {project.summary && (
+                                    <p class="text-sm text-muted-foreground/90 leading-relaxed">
+                                        {project.summary}
+                                    </p>
+                                )}
+                            </article>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+
+        {/* 4. Education */}
+        <section class="space-y-6" aria-labelledby="education-heading">
+            <h2
+                id="education-heading"
+                class="text-2xl font-bold tracking-tight text-foreground border-b border-border/60 pb-2"
+            >
+                Education
+            </h2>
+            <div class="space-y-6">
+                {
+                    cv.education.map((edu) => {
+                        const dateRange = formatDateRange(
+                            edu.startDate,
+                            edu.endDate
+                        )
+                        return (
+                            <article class="break-inside-avoid space-y-1">
+                                <header class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                                    <div>
+                                        <h3 class="text-base font-semibold text-foreground">
+                                            {edu.studyType}
+                                        </h3>
+                                        <div class="text-sm font-medium text-primary">
+                                            {edu.url ? (
+                                                <a
+                                                    href={edu.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="hover:underline"
+                                                >
+                                                    {edu.institution}
+                                                </a>
+                                            ) : (
+                                                edu.institution
+                                            )}
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-mono text-muted-foreground shrink-0">
+                                        {dateRange}
+                                    </span>
+                                </header>
+                                {edu.description && (
+                                    <p class="text-sm text-muted-foreground/90 leading-relaxed">
+                                        {edu.description}
+                                    </p>
+                                )}
+                                {edu.courses && edu.courses.length > 0 && (
+                                    <p class="text-xs text-muted-foreground/80 mt-1 font-mono">
+                                        Coursework: {edu.courses.join(' · ')}
+                                    </p>
+                                )}
+                            </article>
+                        )
+                    })
+                }
+            </div>
+        </section>
+    </main>
+</SiteLayout>
