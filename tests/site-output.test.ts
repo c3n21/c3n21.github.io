@@ -203,3 +203,51 @@ describe('Site output - Services and Contact routes', () => {
     })
 })
 
+describe('Site output - Writing and RSS routes', () => {
+    const DIST_WRITING_INDEX = path.resolve(process.cwd(), 'dist/writing/index.html')
+    const DIST_RSS = path.resolve(process.cwd(), 'dist/rss.xml')
+
+    it('dist/writing/index.html exists and renders intentional empty state when no articles published', () => {
+        expect(
+            fs.existsSync(DIST_WRITING_INDEX),
+            `Expected ${DIST_WRITING_INDEX} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_WRITING_INDEX, 'utf-8')
+        expect(html).toContain('Writing')
+        expect(
+            html.includes('Writing coming soon') ||
+                html.includes('No articles published yet')
+        ).toBe(true)
+    })
+
+    it('dist/rss.xml exists and produces valid RSS XML feed', () => {
+        expect(
+            fs.existsSync(DIST_RSS),
+            `Expected ${DIST_RSS} to exist`
+        ).toBe(true)
+
+        const xml = fs.readFileSync(DIST_RSS, 'utf-8')
+        expect(xml).toContain('<rss')
+        expect(xml).toContain('<channel>')
+        expect(xml).toContain('Zhifan Chen')
+    })
+
+    it('excludes draft writing entries from routes, index, and RSS feed', () => {
+        const DIST_DRAFT_ARTICLE = path.resolve(
+            process.cwd(),
+            'dist/writing/sample-draft-investigation/index.html'
+        )
+        expect(
+            fs.existsSync(DIST_DRAFT_ARTICLE),
+            `Expected draft article route ${DIST_DRAFT_ARTICLE} NOT to exist`
+        ).toBe(false)
+
+        const indexHtml = fs.readFileSync(DIST_WRITING_INDEX, 'utf-8')
+        expect(indexHtml).not.toContain('Sample Draft Investigation')
+
+        const rssXml = fs.readFileSync(DIST_RSS, 'utf-8')
+        expect(rssXml).not.toContain('Sample Draft Investigation')
+    })
+})
+

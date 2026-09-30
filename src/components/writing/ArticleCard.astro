@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import Card from '@/components/Card.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import CardContent from '@/components/CardContent.astro'
+import Badge from '@/components/Badge.astro'
+
+export interface Props {
+    entry: CollectionEntry<'writing'>
+    class?: string | undefined
+}
+
+const { entry, class: className = '' } = Astro.props
+const { title, description, publishDate, updatedDate, tags } = entry.data
+
+function formatDate(d: Date | string): string {
+    const parsed = new Date(d)
+    return parsed.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        timeZone: 'UTC',
+    })
+}
+---
+
+<Card
+    class:list={[
+        'flex flex-col h-full bg-card hover:border-foreground/30 transition-colors',
+        className,
+    ]}
+>
+    <CardHeader>
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <time
+                datetime={new Date(publishDate).toISOString()}
+                class="text-xs font-mono text-muted-foreground"
+            >
+                {formatDate(publishDate)}
+                {updatedDate && ` (Updated ${formatDate(updatedDate)})`}
+            </time>
+        </div>
+        <CardTitle class="text-xl">
+            <a
+                href={`/writing/${entry.id}/`}
+                class="hover:text-primary transition-colors story-link"
+            >
+                {title}
+            </a>
+        </CardTitle>
+    </CardHeader>
+    <CardContent class="flex-1 flex flex-col justify-between space-y-4">
+        <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+            {description}
+        </p>
+        {
+            tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-1.5 pt-2">
+                    {tags.map((tag) => (
+                        <Badge variant="outline" class="text-xs font-mono">
+                            {tag}
+                        </Badge>
+                    ))}
+                </div>
+            )
+        }
+    </CardContent>
+</Card>
