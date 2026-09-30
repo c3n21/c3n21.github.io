@@ -241,9 +241,17 @@ describe('Site output - Services and Contact routes', () => {
 
 describe('Site output - Writing and RSS routes', () => {
     const DIST_WRITING_INDEX = path.resolve(process.cwd(), 'dist/writing/index.html')
+    const DIST_ARTICLE_1 = path.resolve(
+        process.cwd(),
+        'dist/writing/debugging-dynamic-linkers-on-nixos/index.html'
+    )
+    const DIST_ARTICLE_2 = path.resolve(
+        process.cwd(),
+        'dist/writing/multi-host-nixos-and-attic-caching/index.html'
+    )
     const DIST_RSS = path.resolve(process.cwd(), 'dist/rss.xml')
 
-    it('dist/writing/index.html exists and renders intentional empty state when no articles published', () => {
+    it('dist/writing/index.html exists and renders published articles', () => {
         expect(
             fs.existsSync(DIST_WRITING_INDEX),
             `Expected ${DIST_WRITING_INDEX} to exist`
@@ -251,13 +259,36 @@ describe('Site output - Writing and RSS routes', () => {
 
         const html = fs.readFileSync(DIST_WRITING_INDEX, 'utf-8')
         expect(html).toContain('Writing')
-        expect(
-            html.includes('Writing coming soon') ||
-                html.includes('No articles published yet')
-        ).toBe(true)
+        expect(html).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(html).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
+        expect(html).toContain('href="/writing/debugging-dynamic-linkers-on-nixos/"')
+        expect(html).toContain('href="/writing/multi-host-nixos-and-attic-caching/"')
     })
 
-    it('dist/rss.xml exists and produces valid RSS XML feed', () => {
+    it('dist/writing/<id>/index.html routes exist and render complete article content', () => {
+        expect(
+            fs.existsSync(DIST_ARTICLE_1),
+            `Expected ${DIST_ARTICLE_1} to exist`
+        ).toBe(true)
+        expect(
+            fs.existsSync(DIST_ARTICLE_2),
+            `Expected ${DIST_ARTICLE_2} to exist`
+        ).toBe(true)
+
+        const html1 = fs.readFileSync(DIST_ARTICLE_1, 'utf-8')
+        expect(html1).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(html1).toContain('Observation')
+        expect(html1).toContain('Hypotheses')
+        expect(html1).toContain('href="/writing/"')
+
+        const html2 = fs.readFileSync(DIST_ARTICLE_2, 'utf-8')
+        expect(html2).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
+        expect(html2).toContain('Problem')
+        expect(html2).toContain('Attic')
+        expect(html2).toContain('href="/writing/"')
+    })
+
+    it('dist/rss.xml exists and produces valid RSS XML feed with published articles', () => {
         expect(
             fs.existsSync(DIST_RSS),
             `Expected ${DIST_RSS} to exist`
@@ -267,6 +298,8 @@ describe('Site output - Writing and RSS routes', () => {
         expect(xml).toContain('<rss')
         expect(xml).toContain('<channel>')
         expect(xml).toContain('Zhifan Chen')
+        expect(xml).toContain('Debugging Dynamic Linker and Runtime Failures on NixOS')
+        expect(xml).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
     })
 
     it('excludes draft writing entries from routes, index, and RSS feed', () => {
@@ -297,6 +330,8 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
         'dist/resume/index.html',
         'dist/services/index.html',
         'dist/writing/index.html',
+        'dist/writing/debugging-dynamic-linkers-on-nixos/index.html',
+        'dist/writing/multi-host-nixos-and-attic-caching/index.html',
         'dist/about/index.html',
         'dist/contact/index.html',
     ]
