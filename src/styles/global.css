@@ -1,9 +1,11 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/jetbrains-mono';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 @theme {
+    --font-mono: 'JetBrains Mono Variable', monospace;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -176,6 +178,9 @@
     background: hsl(var(--primary));
 }
 
-section {
-    page-break-before: always;
+@media print {
+    section {
+        break-before: page;
+        page-break-before: always;
+    }
 }
