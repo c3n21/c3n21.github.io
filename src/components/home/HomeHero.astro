@@ -1,0 +1,53 @@
+---
+import Anchor from '@/components/astro/Anchor.astro'
+import CvDownloadLink from '@/components/CvDownloadLink.astro'
+
+const now = new Date()
+const start = new Date('2021-06-01')
+const isAnniversaryPassed = now.getMonth() >= start.getMonth()
+const years = isAnniversaryPassed
+    ? now.getFullYear() - start.getFullYear()
+    : now.getFullYear() - start.getFullYear() - 1
+---
+
+<section class="py-16 md:py-20 flex flex-col justify-center">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-3">
+            Zhifan Chen
+        </p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6">
+            Software Engineer
+        </h1>
+        <p class="text-xl sm:text-2xl text-foreground/90 font-medium max-w-2xl mx-auto mb-4 leading-relaxed">
+            I build web products and internal tools across frontend, backend, and infrastructure.
+        </p>
+        <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+            Strong debugging and problem-solving across abstraction boundaries, with particular depth in Linux/Nix, backend systems, developer tooling, reproducibility, automation, and infrastructure.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <Anchor href="/work/" size="lg" class="w-full sm:w-auto">
+                See my work
+            </Anchor>
+            <CvDownloadLink variant="outline" size="lg" class="w-full sm:w-auto" />
+            <Anchor href="/services/" variant="outline" size="lg" class="w-full sm:w-auto">
+                Work with me
+            </Anchor>
+        </div>
+
+        <div class="pt-8 border-t border-border/50 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+            <div>
+                <div class="text-2xl font-bold text-foreground">{years}+</div>
+                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Years experience</div>
+            </div>
+            <div>
+                <div class="text-2xl font-bold text-foreground">Backend & Platform</div>
+                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Full-stack production breadth</div>
+            </div>
+            <div>
+                <div class="text-2xl font-bold text-foreground">Linux & NixOS</div>
+                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Tooling, reproducibility & OSS</div>
+            </div>
+        </div>
+    </div>
+</section>

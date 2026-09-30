@@ -1,0 +1,80 @@
+---
+import Anchor from '@/components/astro/Anchor.astro'
+import Card from '@/components/Card.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import CardContent from '@/components/CardContent.astro'
+
+const services = [
+    {
+        title: 'Software Development & Modernization',
+        description:
+            'Full-stack product delivery and code modernization for existing systems requiring clean architecture and maintainability.',
+    },
+    {
+        title: 'Backend Systems, APIs & Auth',
+        description:
+            'High-performance backend services, REST/gRPC APIs, database persistence, and secure authentication/authorization pipelines.',
+    },
+    {
+        title: 'Developer Tooling & CI/CD',
+        description:
+            'Fast, dependable build pipelines, automated testing harnesses, and tooling that removes friction from everyday developer workflows.',
+    },
+    {
+        title: 'Nix & Reproducible Environments',
+        description:
+            'Declarative, reproducible development environments, Nix flakes, remote build setups, and robust multi-machine configurations.',
+    },
+    {
+        title: 'Technical Debugging & Root-Cause Investigation',
+        description:
+            'Deep problem-solving across abstraction boundaries to isolate tricky concurrency, performance, network, or runtime regressions.',
+    },
+] as const
+---
+
+<section id="services" class="py-16 md:py-24 border-t border-border/40 bg-muted/20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+            <div>
+                <p class="text-xs font-mono uppercase tracking-wider text-primary mb-2">
+                    Consulting & Advisory
+                </p>
+                <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                    Services & Consulting
+                </h2>
+                <p class="mt-2 text-muted-foreground text-lg max-w-2xl">
+                    Available for selected part-time engagements focusing on deep technical problems, architecture, and developer productivity.
+                </p>
+            </div>
+            <div>
+                <Anchor href="/services/" variant="outline">
+                    Work with me &rarr;
+                </Anchor>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+                services.map((service, index) => (
+                    <Card class="flex flex-col h-full bg-card hover:border-foreground/30 transition-colors">
+                        <CardHeader>
+                            <span class="text-xs font-mono text-muted-foreground mb-1">
+                                0{index + 1}
+                            </span>
+                            <CardTitle class="text-lg">
+                                {service.title}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p class="text-sm text-muted-foreground leading-relaxed">
+                                {service.description}
+                            </p>
+                        </CardContent>
+                    </Card>
+                ))
+            }
+        </div>
+    </div>
+</section>

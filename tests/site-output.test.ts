@@ -40,4 +40,20 @@ describe('Site output - Homepage shell and route navigation', () => {
         // Must remove the generic Loveable/heart copy
         expect(html).not.toContain('Designed with ❤️')
     })
+
+    it('displays Software Engineer identity and key CTAs, and removes vanity counters', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+
+        expect(html).toContain('Software Engineer')
+        expect(html).toContain('See my work')
+        expect(html).toContain('Work with me')
+
+        const hasResumeCta =
+            html.includes('Download CV') || html.includes('View resume')
+        expect(hasResumeCta).toBe(true)
+
+        // Vanity counters must be absent
+        expect(html).not.toContain('NeoVim LOC')
+        expect(html).not.toContain('Portfolio Deployments')
+    })
 })

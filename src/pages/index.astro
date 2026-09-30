@@ -1,19 +1,16 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import HeroSection from '@/components/HeroSection.astro'
-import ResumeSection from '@/components/ResumeSection.astro'
-import ProjectsSection from '@/components/ProjectsSection.astro'
-import ContactSection from '@/components/ContactSection.astro'
-import isCVMode from '@/lib/isCVMode'
-
-const isCV = isCVMode()
+import HomeHero from '@/components/home/HomeHero.astro'
+import FeaturedWork from '@/components/home/FeaturedWork.astro'
+import ServicesTeaser from '@/components/home/ServicesTeaser.astro'
+import WritingTeaser from '@/components/home/WritingTeaser.astro'
 ---
 
 <SiteLayout>
-    <main>
-        <HeroSection />
-        {!isCV && <ResumeSection />}
-        <ProjectsSection />
-        <ContactSection />
+    <main id="main-content">
+        <HomeHero />
+        <FeaturedWork />
+        <ServicesTeaser />
+        <WritingTeaser />
     </main>
 </SiteLayout>
