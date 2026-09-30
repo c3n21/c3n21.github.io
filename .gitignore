@@ -19,3 +19,9 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# tooling / scratch
+.superpowers/
+
+# generated resume data
+src/cv.json
