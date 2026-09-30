@@ -34,7 +34,17 @@ Developer tooling, package ecosystems, and extensible editor plugins often exhib
 
 Primary contributor and author of each submitted change. Responsible for isolating root causes, developing minimal reproductions, writing code fixes with regression test coverage, and addressing maintainer code review feedback through to upstream merge.
 
-## Verifiable Contributions
+## Alternatives Considered
+
+- **Maintaining private forks and local patches**: Kept local overrides and ad-hoc patches in personal dotfiles; led to ongoing merge conflicts, high rebase maintenance burden, and divergence from upstream releases.
+- **Waiting for upstream maintainers to encounter and resolve niche issues**: Avoided immediate development overhead, but blocked workflows indefinitely since maintainers rarely reproduce edge cases specific to declarative Linux or lazy plugin loading.
+- **Upstreaming minimal, targeted patches with reproducible test cases**: Demanded upfront effort to navigate diverse project conventions, but eliminated recurring maintenance debt permanently and improved software reliability for the entire ecosystem.
+
+## Decision & Rationale
+
+Prioritized contributing directly to upstream repositories over maintaining private local overlays. While upstream review requires navigating diverse project conventions and maintainer feedback cycles, it ensures long-term software maintainability and prevents private forks from bit-rotting over time. Structured contributions around reproducible test cases and minimal diffs to accelerate maintainer review and acceptance.
+
+## Implementation & Challenges
 
 ### 1. Nixpkgs: SonarLint Language Server Packaging (`sonarlint-ls`)
 - **Problem**: The SonarSource language server (`sonarlint-ls`) failed to launch on NixOS due to unpatched dynamic ELF loader dependencies and missing Java native library bindings in the bundled runtime.
@@ -55,10 +65,6 @@ Primary contributor and author of each submitted change. Responsible for isolati
 - **Problem**: Standard resume extraction tools omitted project rich media (diagrams, architecture screenshots) and misclassified ongoing education records.
 - **Change**: Maintained a custom fork (`c3n21/linkedin-to-jsonresume`) supporting media extraction, clean date normalization, and lossless JSON Resume schema export.
 - **Outcome**: Powers the automated CI/CD resume pipeline for this personal engineering platform.
-
-## Decision & Rationale
-
-Prioritized contributing directly to upstream repositories over maintaining private local overlays. While upstream review requires navigating diverse project conventions and maintainer feedback cycles, it ensures long-term software maintainability and prevents private forks from bit-rotting over time.
 
 ## Verification
 

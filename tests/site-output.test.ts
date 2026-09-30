@@ -8,11 +8,11 @@ const DIST_NIXOS_CASE_STUDY = path.resolve(
     process.cwd(),
     'dist/work/nixos-infrastructure/index.html'
 )
-const DIST_DRAFT_BACKEND = path.resolve(
+const DIST_BACKEND_SERVICE = path.resolve(
     process.cwd(),
     'dist/work/backend-authorization-service/index.html'
 )
-const DIST_DRAFT_OSS = path.resolve(
+const DIST_OPEN_SOURCE = path.resolve(
     process.cwd(),
     'dist/work/open-source/index.html'
 )
@@ -108,29 +108,39 @@ describe('Site output - Work index and case-study routes', () => {
 
     it('dist/work/backend-authorization-service/index.html exists and contains case study sections', () => {
         expect(
-            fs.existsSync(DIST_DRAFT_BACKEND),
-            `Expected ${DIST_DRAFT_BACKEND} to exist`
+            fs.existsSync(DIST_BACKEND_SERVICE),
+            `Expected ${DIST_BACKEND_SERVICE} to exist`
         ).toBe(true)
 
-        const html = fs.readFileSync(DIST_DRAFT_BACKEND, 'utf-8')
+        const html = fs.readFileSync(DIST_BACKEND_SERVICE, 'utf-8')
         expect(html).toContain('Centralized Backend Authorization')
         expect(html).toContain('Problem')
         expect(html).toContain('Constraints')
         expect(html).toContain('Ownership')
+        expect(html).toContain('Alternatives Considered')
+        expect(html.includes('Decision &amp; Rationale') || html.includes('Decision')).toBe(true)
+        expect(html.includes('Implementation &amp; Challenges') || html.includes('Implementation')).toBe(true)
         expect(html).toContain('Verification')
+        expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
         expect(html).toContain('href="/work/"')
     })
 
     it('dist/work/open-source/index.html exists and contains case study sections', () => {
         expect(
-            fs.existsSync(DIST_DRAFT_OSS),
-            `Expected ${DIST_DRAFT_OSS} to exist`
+            fs.existsSync(DIST_OPEN_SOURCE),
+            `Expected ${DIST_OPEN_SOURCE} to exist`
         ).toBe(true)
 
-        const html = fs.readFileSync(DIST_DRAFT_OSS, 'utf-8')
+        const html = fs.readFileSync(DIST_OPEN_SOURCE, 'utf-8')
         expect(html).toContain('Open-Source Contributions')
         expect(html).toContain('Problem')
+        expect(html).toContain('Constraints')
         expect(html).toContain('Ownership')
+        expect(html).toContain('Alternatives Considered')
+        expect(html.includes('Decision &amp; Rationale') || html.includes('Decision')).toBe(true)
+        expect(html.includes('Implementation &amp; Challenges') || html.includes('Implementation')).toBe(true)
+        expect(html).toContain('Verification')
+        expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
         expect(html).toContain('Nixpkgs')
         expect(html).toContain('href="/work/"')
     })
