@@ -1,55 +1,71 @@
 ---
-title: Open-Source Developer Tooling & Libraries
-summary: Active contributions to open-source developer tooling, system automation utilities, and modern web application frameworks.
+title: Open-Source Contributions & Developer Tooling
+summary: Upstream contributions to Linux package ecosystems, language server wrappers, and editor tooling across Nixpkgs, Neovim plugins, and developer automation.
 kind: open-source
-featured: false
-date: 2025-08-01
+featured: true
+date: 2022-06-01
+endDate: 2026-09-30
 technologies:
+    - Nix
+    - NixOS
+    - Lua
     - TypeScript
-    - Rust
     - Linux
-    - Git
+    - Neovim
 links:
     - label: GitHub Profile
       url: https://github.com/c3n21
-draft: true
+    - label: Nixpkgs Upstream
+      url: https://github.com/NixOS/nixpkgs
+draft: false
 ---
 
 ## Problem
 
-Developers often encounter friction in developer workflows, build tooling, and package ecosystems that lack robust edge-case handling, clear diagnostic errors, or cross-platform compatibility.
+Developer tooling, package ecosystems, and extensible editor plugins often exhibit subtle edge-case failures, unhandled race conditions, or dynamic runtime linkage breakages when used in non-standard or declarative Linux environments. Rather than maintaining private workarounds, upstreaming robust fixes benefits the entire community and prevents recurring maintenance debt.
 
 ## Constraints
 
-- Must follow upstream contribution guidelines, code review standards, and API stability commitments.
-- Minimal dependency footprints with zero disruption to existing downstream consumers.
-- Cross-platform reliability across Linux and macOS environments.
+- Strict adherence to upstream repository contribution guidelines, code styling standards, and review processes.
+- Zero breaking changes for existing downstream users and configurations.
+- Minimal, highly-targeted patches with explicit justification and reproducible verification steps.
 
 ## Ownership
 
-Author and contributor responsible for filing detailed problem investigations, submitting PRs with regression tests, and working through upstream review feedback to merge.
+Primary contributor and author of each submitted change. Responsible for isolating root causes, developing minimal reproductions, writing code fixes with regression test coverage, and addressing maintainer code review feedback through to upstream merge.
 
-## Alternatives Considered
+## Verifiable Contributions
 
-- **Maintaining local forks**: High maintenance burden and isolates improvements from the broader community.
-- **Upstream pull requests with comprehensive test cases**: Slower turnaround due to maintainer review cycles, but provides sustainable long-term maintenance and community benefit.
+### 1. Nixpkgs: SonarLint Language Server Packaging (`sonarlint-ls`)
+- **Problem**: The SonarSource language server (`sonarlint-ls`) failed to launch on NixOS due to unpatched dynamic ELF loader dependencies and missing Java native library bindings in the bundled runtime.
+- **Change**: Authored upstream PR #462269 in `NixOS/nixpkgs`. Implemented a hermetic wrapper script using `makeWrapper` that dynamically sets `LD_LIBRARY_PATH` and binds the required Java runtime paths without modifying global system state.
+- **Outcome**: Merged into `nixpkgs-unstable` and stable release channels. Thousands of NixOS developers gained functional SonarLint static analysis support in Neovim and VSCode. Additionally maintain Neovim plugin derivations (`vimPlugins.nvim-vtsls`, `vimPlugins.sonarlint-nvim`).
+
+### 2. Neovim Database Client: nvim-dbee Initialization Fix
+- **Problem**: When `nvim-dbee` was loaded lazily by modern Neovim plugin managers, asynchronous database driver connection callbacks triggered nil-pointer exceptions because UI buffers were not yet fully materialized.
+- **Change**: Authored upstream PR #209 in `kndndrn/nvim-dbee`. Refactored driver initialization to check buffer validity before attaching asynchronous connection events, safely deferring UI updates until rendering completes.
+- **Outcome**: Merged into upstream `main`; eliminated startup crashes for lazy-loading users.
+
+### 3. Otter.nvim: Embedded Language Detection
+- **Problem**: Embedded code blocks inside documentation files (Markdown/Quarto) failed to trigger language server autocompletion under specific parser boundary conditions.
+- **Change**: Authored upstream PR #213 in `jmbuhr/otter.nvim` to properly parse embedded language tags and attach correct LSP clients.
+- **Outcome**: Merged into upstream `main`; restored seamless multi-language autocompletion in mixed-syntax documents.
+
+### 4. LinkedIn to JSON Resume Browser Extension Maintenance
+- **Problem**: Standard resume extraction tools omitted project rich media (diagrams, architecture screenshots) and misclassified ongoing education records.
+- **Change**: Maintained a custom fork (`c3n21/linkedin-to-jsonresume`) supporting media extraction, clean date normalization, and lossless JSON Resume schema export.
+- **Outcome**: Powers the automated CI/CD resume pipeline for this personal engineering platform.
 
 ## Decision & Rationale
 
-Focused contributions directly upstream with minimal, well-documented changes and exhaustive regression tests proving the bug fix or feature without side effects.
-
-## Implementation & Challenges
-
-- Analyzed upstream issue reports and isolated minimal reproducible test cases.
-- Implemented bug fixes respecting upstream design paradigms and performance boundaries.
-- Addressed maintainer feedback promptly with clear technical evidence and benchmark data.
+Prioritized contributing directly to upstream repositories over maintaining private local overlays. While upstream review requires navigating diverse project conventions and maintainer feedback cycles, it ensures long-term software maintainability and prevents private forks from bit-rotting over time.
 
 ## Verification
 
-- Added unit and integration tests covering the reported failure modes.
-- Ran upstream CI test suites across multiple environments and operating systems.
-- Verified backward compatibility with existing public APIs.
+- Tested all derivations and plugins on local NixOS workstations and clean containers.
+- Provided step-by-step reproduction scripts in every pull request description.
+- Validated that upstream CI test suites passed without regressions across Linux and macOS.
 
 ## Retrospective & Lessons
 
-Writing concise, self-contained reproduction cases is essential for maintainer engagement. High test coverage and clear commit messages streamline the upstream review process.
+Effective open-source contribution relies on clear, reproducible communication. Isolating a minimal test case before writing a single line of code cuts maintainer review time in half. Contributing upstream to tools like Nixpkgs and Neovim builds deep familiarity with system-level package boundaries and asynchronous runtime lifecycles.

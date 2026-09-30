@@ -1,56 +1,60 @@
 ---
-title: High-Performance Backend Authorization Service
-summary: Centralized policy enforcement and fine-grained authorization service built to handle high-throughput access decisions with sub-millisecond latency.
+title: Centralized Backend Authorization & Policy Middleware
+summary: Centralized policy enforcement, JWT claim transformation, and role-based access control (RBAC) middleware designed to eliminate authorization drift across backend services.
 kind: professional
 featured: true
-date: 2025-11-01
-endDate: 2026-02-15
+date: 2024-03-01
+endDate: 2024-09-30
 technologies:
-    - Go
-    - gRPC
+    - ASP.NET Core
+    - C#
+    - JWT
     - Redis
     - PostgreSQL
     - Docker
-draft: true
+draft: false
 ---
 
 ## Problem
 
-Distributed microservices required a consistent, auditable, and low-latency mechanism to evaluate fine-grained user permissions and tenant isolation policies without duplicating authorization logic across teams.
+As backend APIs and internal services expanded, individual development teams were implementing disparate authorization checks and token claim validations across endpoints. This duplication created maintenance overhead, increased the risk of permission drift, and complicated security auditing.
 
 ## Constraints
 
-- P99 authorization check latency under 5 milliseconds.
-- Strict multi-tenant isolation and complete audit logging for regulatory compliance.
-- High availability with graceful degradation during downstream cache or database partitions.
-- Zero leakage of proprietary internal domain schemas.
+- Seamless integration with existing REST APIs without requiring breaking contract changes.
+- Minimal latency overhead on hot request paths.
+- Strict protection of confidential client data and enterprise domain logic.
+- Graceful degradation when validating permissions during transient downstream service or cache interruptions.
 
 ## Ownership
 
-Served as primary backend engineer designing the service architecture, data model, RPC interfaces, and cache invalidation mechanics.
+Served as primary backend software engineer responsible for the architectural design, middleware implementation, claim transformation logic, and test harness validation.
 
 ## Alternatives Considered
 
-- **Decentralized in-library evaluation**: Fast locally, but difficult to synchronize policy updates across heterogeneous language stacks and impossible to audit centrally.
-- **Third-party SaaS authorization**: High external network latency and vendor lock-in concerns for high-volume internal request paths.
-- **Custom lightweight policy service with local in-memory caching**: Met both latency requirements and custom business policy semantics while maintaining full internal ownership.
+- **Decentralized in-controller authorization**: Leaving permission logic inside each controller or service method resulted in duplicated boilerplate, missed edge cases, and high audit overhead.
+- **Dedicated external authorization sidecar**: Introduced operational deployment complexity and additional network latency per HTTP request that was unjustified for internal service boundaries.
+- **Centralized policy middleware with in-memory claim caching**: Provided uniform enforcement at the application pipeline layer, eliminated duplicate logic, and avoided extra network hops on hot paths.
 
 ## Decision & Rationale
 
-Implemented a dedicated internal Go service exposing gRPC endpoints for synchronous policy evaluation. Utilized local in-memory caching paired with Redis pub/sub for instant policy revocation broadcasts.
+Implemented composable ASP.NET Core authorization middleware utilizing custom requirement handlers and role-based access policies:
+1. **Decoupled authentication from authorization**: JWT tokens are verified once at the pipeline entry point; claims are normalized and transformed into a standardized identity principal.
+2. **Policy-based authorization**: Replaced hardcoded role checks with declarative policy attributes (`[Authorize(Policy = "TenantAdmin")]`), separating permission rules from business logic.
+3. **In-memory claim validation with cache invalidation**: Cached permission lookups in memory with short TTLs and Redis pub/sub invalidation hooks for immediate token revocation.
 
 ## Implementation & Challenges
 
-- Designed efficient graph-based role inheritance traversal to minimize evaluation depth.
-- Solved cache stampede and stale-read issues during permission assignment spikes using distributed locking and atomic version checks.
-- Implemented robust error handling and fallback modes ensuring that failed dependency calls default to secure denial.
+- **Hierarchical Role Inheritance**: Designed efficient claim resolution that handles role hierarchies without recursive database lookups on every request.
+- **Fail-Secure Defaults**: Engineered policy handlers to default to rejection (`AuthorizationResult.Failed()`) whenever required claims are absent, unparseable, or expired.
+- **Deterministic Resource Disposal**: Bound database and cache connection lifetimes strictly to request scopes using deterministic `using` patterns to prevent resource leakage under high concurrent load.
 
 ## Verification
 
-- Benchmarked synthetic load up to 25,000 requests per second with sustained P99 latency under 2ms.
-- Executed automated integration and contract testing across client services.
-- Conducted fault-injection tests validating fail-closed behavior during network partitions.
+- Authored comprehensive unit test suites covering valid, expired, tampered, and malformed JWT scenarios.
+- Implemented integration test harnesses simulating multi-tenant permission boundaries and validating fail-closed behavior.
+- Verified that all downstream endpoints enforce consistent status codes (HTTP 401 for unauthenticated, HTTP 403 for unauthorized) across the entire API surface.
 
 ## Retrospective & Lessons
 
-Separating policy evaluation from application logic significantly reduced security review surface area. Cache invalidation consistency requires careful versioning when handling rapid permission changes.
+Centralizing authorization logic into composable middleware dramatically tightens the security posture of an evolving codebase. Moving from ad-hoc controller checks to declarative policy requirements made permissions auditable in minutes rather than requiring deep code inspections. Future iterations would benefit from adopting Open Policy Agent (OPA) standards if heterogeneous polyglot runtimes are introduced.

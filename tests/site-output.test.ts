@@ -81,6 +81,10 @@ describe('Site output - Work index and case-study routes', () => {
         const html = fs.readFileSync(DIST_WORK_INDEX, 'utf-8')
         expect(html).toContain('Declarative Multi-Host NixOS Infrastructure')
         expect(html).toContain('href="/work/nixos-infrastructure/"')
+        expect(html).toContain('Centralized Backend Authorization')
+        expect(html).toContain('href="/work/backend-authorization-service/"')
+        expect(html).toContain('Open-Source Contributions')
+        expect(html).toContain('href="/work/open-source/"')
     })
 
     it('dist/work/nixos-infrastructure/index.html exists and contains case study sections and back link', () => {
@@ -102,15 +106,47 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('href="/work/"')
     })
 
-    it('does not emit routes for draft work entries', () => {
+    it('dist/work/backend-authorization-service/index.html exists and contains case study sections', () => {
         expect(
             fs.existsSync(DIST_DRAFT_BACKEND),
-            `Expected draft route ${DIST_DRAFT_BACKEND} NOT to exist`
-        ).toBe(false)
+            `Expected ${DIST_DRAFT_BACKEND} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_DRAFT_BACKEND, 'utf-8')
+        expect(html).toContain('Centralized Backend Authorization')
+        expect(html).toContain('Problem')
+        expect(html).toContain('Constraints')
+        expect(html).toContain('Ownership')
+        expect(html).toContain('Verification')
+        expect(html).toContain('href="/work/"')
+    })
+
+    it('dist/work/open-source/index.html exists and contains case study sections', () => {
         expect(
             fs.existsSync(DIST_DRAFT_OSS),
-            `Expected draft route ${DIST_DRAFT_OSS} NOT to exist`
+            `Expected ${DIST_DRAFT_OSS} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_DRAFT_OSS, 'utf-8')
+        expect(html).toContain('Open-Source Contributions')
+        expect(html).toContain('Problem')
+        expect(html).toContain('Ownership')
+        expect(html).toContain('Nixpkgs')
+        expect(html).toContain('href="/work/"')
+    })
+
+    it('does not emit routes for draft work entries', () => {
+        const DIST_SAMPLE_DRAFT_WORK = path.resolve(
+            process.cwd(),
+            'dist/work/sample-draft-work/index.html'
+        )
+        expect(
+            fs.existsSync(DIST_SAMPLE_DRAFT_WORK),
+            `Expected draft route ${DIST_SAMPLE_DRAFT_WORK} NOT to exist`
         ).toBe(false)
+
+        const workIndexHtml = fs.readFileSync(DIST_WORK_INDEX, 'utf-8')
+        expect(workIndexHtml).not.toContain('Sample Internal Draft Project')
     })
 })
 
@@ -256,6 +292,8 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
         'dist/index.html',
         'dist/work/index.html',
         'dist/work/nixos-infrastructure/index.html',
+        'dist/work/backend-authorization-service/index.html',
+        'dist/work/open-source/index.html',
         'dist/resume/index.html',
         'dist/services/index.html',
         'dist/writing/index.html',
