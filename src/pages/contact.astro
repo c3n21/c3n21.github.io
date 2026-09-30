@@ -1,0 +1,127 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro'
+import { SITE } from '@/lib/site'
+import Card from '@/components/Card.astro'
+import CardHeader from '@/components/CardHeader.astro'
+import CardTitle from '@/components/CardTitle.astro'
+import CardContent from '@/components/CardContent.astro'
+import Anchor from '@/components/astro/Anchor.astro'
+
+const title = 'Contact'
+const description =
+    'Get in touch with Zhifan Chen for full-time engineering roles, selected part-time consulting, or open-source collaboration.'
+---
+
+<SiteLayout title={title} description={description}>
+    <main id="main-content" class="py-12 md:py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <!-- Header section -->
+            <header class="space-y-4">
+                <p class="text-xs font-mono uppercase tracking-wider text-primary">
+                    Get in touch
+                </p>
+                <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+                    Contact
+                </h1>
+                <p class="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                    Whether you are discussing a senior engineering role, scoping a part-time consulting engagement, or wanting to connect around systems and developer tooling, reach out through any of the channels below.
+                </p>
+            </header>
+
+            <!-- Contact options grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Email -->
+                <Card class="flex flex-col justify-between bg-card hover:border-foreground/30 transition-colors">
+                    <CardHeader>
+                        <span class="text-xs font-mono text-primary mb-1">
+                            Direct
+                        </span>
+                        <CardTitle class="text-xl">
+                            Email
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent class="space-y-4 flex-1 flex flex-col justify-between">
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            Best for consulting project briefs, technical proposals, or direct communication.
+                        </p>
+                        <div>
+                            <Anchor
+                                href={`mailto:${SITE.email}`}
+                                variant="outline"
+                                class="w-full text-center"
+                            >
+                                {SITE.email}
+                            </Anchor>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <!-- LinkedIn -->
+                <Card class="flex flex-col justify-between bg-card hover:border-foreground/30 transition-colors">
+                    <CardHeader>
+                        <span class="text-xs font-mono text-primary mb-1">
+                            Professional
+                        </span>
+                        <CardTitle class="text-xl">
+                            LinkedIn
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent class="space-y-4 flex-1 flex flex-col justify-between">
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            Best for recruiters, hiring managers, and professional networking.
+                        </p>
+                        <div>
+                            <Anchor
+                                href={SITE.linkedinUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline"
+                                class="w-full text-center"
+                            >
+                                View Profile &rarr;
+                            </Anchor>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <!-- GitHub -->
+                <Card class="flex flex-col justify-between bg-card hover:border-foreground/30 transition-colors">
+                    <CardHeader>
+                        <span class="text-xs font-mono text-primary mb-1">
+                            Code
+                        </span>
+                        <CardTitle class="text-xl">
+                            GitHub
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent class="space-y-4 flex-1 flex flex-col justify-between">
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            Inspect open-source repositories, dotfiles, Nix derivations, and contributions.
+                        </p>
+                        <div>
+                            <Anchor
+                                href={SITE.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline"
+                                class="w-full text-center"
+                            >
+                                github.com/c3n21 &rarr;
+                            </Anchor>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <!-- Notes & Guidelines -->
+            <section class="p-6 rounded-lg border border-border/60 bg-muted/20 space-y-3">
+                <h2 class="text-base font-semibold text-foreground">
+                    Inquiries & Response Expectations
+                </h2>
+                <p class="text-sm text-muted-foreground leading-relaxed">
+                    I typically respond within 24 to 48 hours. For consulting inquiries, please share a brief summary of the problem, relevant technical stack, and your target timeline so we can quickly determine mutual fit.
+                </p>
+            </section>
+        </div>
+    </main>
+</SiteLayout>

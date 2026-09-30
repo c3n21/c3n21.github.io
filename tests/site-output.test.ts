@@ -153,3 +153,53 @@ describe('Site output - Resume route', () => {
     })
 })
 
+describe('Site output - Services and Contact routes', () => {
+    const DIST_SERVICES = path.resolve(process.cwd(), 'dist/services/index.html')
+    const DIST_CONTACT = path.resolve(process.cwd(), 'dist/contact/index.html')
+
+    it('dist/services/index.html exists and renders 5 service families and fit boundaries', () => {
+        expect(
+            fs.existsSync(DIST_SERVICES),
+            `Expected ${DIST_SERVICES} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_SERVICES, 'utf-8')
+
+        // Title and availability banner
+        expect(html).toContain('Services &amp; Consulting')
+        expect(html).toContain('Available for selected part-time engagements')
+
+        // The 5 service families
+        expect(html).toContain('Software Development &amp; Modernization')
+        expect(html).toContain('Backend Features, APIs &amp; Integrations')
+        expect(html).toContain('Developer Tooling &amp; CI/CD Pipelines')
+        expect(html).toContain('Nix &amp; Reproducible Environments')
+        expect(html).toContain('Technical Debugging &amp; Root-Cause Investigation')
+
+        // Engagement fit section
+        expect(
+            html.includes('Engagement Fit &amp; Availability') ||
+                html.includes('Engagement Fit & Availability')
+        ).toBe(true)
+        expect(html).toContain('Out of Scope')
+        expect(html).toContain('href="/contact/"')
+    })
+
+    it('dist/contact/index.html exists and renders contact channels without joke copy', () => {
+        expect(
+            fs.existsSync(DIST_CONTACT),
+            `Expected ${DIST_CONTACT} to exist`
+        ).toBe(true)
+
+        const html = fs.readFileSync(DIST_CONTACT, 'utf-8')
+
+        // Direct email, LinkedIn, and GitHub links
+        expect(html).toContain('mailto:me@zhifan.me')
+        expect(html).toContain('https://www.linkedin.com/in/zhifanchen00/')
+        expect(html).toContain('https://github.com/c3n21')
+
+        // No joke location link or generic sales copy
+        expect(html).not.toContain('Why LinkedIn?')
+    })
+})
+
