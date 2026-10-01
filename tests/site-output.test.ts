@@ -445,5 +445,27 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
             expect(html, `Expected main landmark with id="main-content" in ${relativePath}`).toContain('id="main-content"')
         }
     })
+
+    it('dist/about/index.html contains editorial portrait with Zhifan Chen alt text, absent from homepage hero', () => {
+        const aboutHtml = fs.readFileSync(
+            path.resolve(process.cwd(), 'dist/about/index.html'),
+            'utf-8'
+        )
+        const indexHtml = fs.readFileSync(
+            path.resolve(process.cwd(), 'dist/index.html'),
+            'utf-8'
+        )
+
+        expect(aboutHtml).toContain('about-portrait')
+        expect(aboutHtml).toMatch(/<img[^>]+alt="[^"]*Zhifan Chen[^"]*"/)
+
+        const heroMatch = indexHtml.match(/<section[^>]*home-hero[\s\S]*?<\/section>/)
+        expect(heroMatch).not.toBeNull()
+        if (heroMatch) {
+            expect(heroMatch[0]).not.toContain('about-portrait')
+            expect(heroMatch[0]).not.toContain('Zhifan Chen')
+        }
+    })
 })
+
 
