@@ -4,6 +4,7 @@ import {
     getEducationStatus,
     groupSkills,
     normalizeDescription,
+    canonicalSkillName,
 } from './resume'
 
 describe('resume helpers - date normalization', () => {
@@ -68,10 +69,10 @@ describe('resume helpers - skill grouping', () => {
 
         const grouped = groupSkills(inputSkills)
 
-        // All input skill names must be preserved
+        // All input skill names must be preserved in canonical form
         const allResultSkills = grouped.flatMap((g) => g.skills)
         for (const skill of inputSkills) {
-            expect(allResultSkills).toContain(skill.name)
+            expect(allResultSkills).toContain(canonicalSkillName(skill.name))
         }
 
         // Verify known categories
@@ -82,7 +83,7 @@ describe('resume helpers - skill grouping', () => {
         expect(languagesGroup?.skills).toContain('TypeScript')
 
         const frontendGroup = grouped.find((g) => g.category === 'Frontend')
-        expect(frontendGroup?.skills).toContain('React 18')
+        expect(frontendGroup?.skills).toContain('React')
 
         const infraGroup = grouped.find(
             (g) => g.category === 'Infrastructure & Tooling'
@@ -128,3 +129,28 @@ describe('resume helpers - skill grouping', () => {
         }
     })
 })
+
+describe('resume helpers - canonicalSkillName and deduplication', () => {
+    it('canonicalizes skill aliases correctly', () => {
+        expect(canonicalSkillName('React 18')).toBe('React')
+        expect(canonicalSkillName('React.js')).toBe('React')
+        expect(canonicalSkillName('NextJS')).toBe('Next.js')
+        expect(canonicalSkillName('Next.js')).toBe('Next.js')
+        expect(canonicalSkillName('Nix / NixOS')).toBe('Nix / NixOS')
+        expect(canonicalSkillName('Nix')).toBe('Nix')
+    })
+
+    it('deduplicates skill aliases when grouping skills', () => {
+        const inputSkills = [
+            { name: 'React 18' },
+            { name: 'React.js' },
+            { name: 'NextJS' },
+            { name: 'Next.js' },
+        ]
+
+        const grouped = groupSkills(inputSkills)
+        const frontendGroup = grouped.find((g) => g.category === 'Frontend')
+        expect(frontendGroup?.skills).toEqual(['React', 'Next.js'])
+    })
+})
+
