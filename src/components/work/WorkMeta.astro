@@ -1,7 +1,7 @@
 ---
-import Badge from '@/components/Badge.astro'
 import type { CollectionEntry } from 'astro:content'
 import type { WorkLink } from '@/lib/content/work'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 export interface Props {
     entry?: CollectionEntry<'work'> | undefined
@@ -32,16 +32,16 @@ function formatDate(d: Date | string): string {
 }
 ---
 
-<div class:list={['flex flex-col gap-4 text-sm', className]}>
-    <div class="flex flex-wrap items-center gap-3">
+<div class:list={['work-meta', className]}>
+    <div class="work-meta__row">
         {
             kind && (
-                <Badge variant="secondary" class="capitalize text-xs font-medium">
+                <span class="work-meta__tag meta-text">
                     {kind}
-                </Badge>
+                </span>
             )
         }
-        <span class="text-xs text-muted-foreground font-mono">
+        <span class="work-meta__date meta-text">
             {formatDate(date)}
             {endDate ? ` – ${formatDate(endDate)}` : ''}
         </span>
@@ -49,32 +49,92 @@ function formatDate(d: Date | string): string {
 
     {
         technologies && technologies.length > 0 && (
-            <div class="flex flex-wrap gap-1.5 items-center">
-                <span class="text-xs text-muted-foreground mr-1 font-mono">Stack:</span>
-                {technologies.map((tech) => (
-                    <Badge variant="outline" class="text-xs font-mono">
-                        {tech}
-                    </Badge>
-                ))}
+            <div class="work-meta__stack">
+                <span class="meta-text work-meta__stack-label">Stack:</span>
+                <ul class="work-meta__tech-list" aria-label="Technologies">
+                    {technologies.map((tech: string) => (
+                        <li class="work-meta__tech-item">{tech}</li>
+                    ))}
+                </ul>
             </div>
         )
     }
 
     {
         links && links.length > 0 && (
-            <div class="flex flex-wrap gap-3 items-center pt-1">
-                {links.map((link) => (
-                    <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline underline-offset-4"
-                    >
-                        <span>{link.label}</span>
-                        <span aria-hidden="true">&rarr;</span>
-                    </a>
+            <div class="work-meta__links">
+                {links.map((link: WorkLink) => (
+                    <ArrowLink href={link.url} kind="external">
+                        {link.label}
+                    </ArrowLink>
                 ))}
             </div>
         )
     }
 </div>
+
+<style>
+    .work-meta {
+        display: grid;
+        gap: 0.85rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+    }
+
+    .work-meta__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .work-meta__tag {
+        display: inline-block;
+        padding: 0.15rem 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background: var(--surface);
+        color: var(--text);
+    }
+
+    .work-meta__date {
+        color: var(--text-muted);
+    }
+
+    .work-meta__stack {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .work-meta__stack-label {
+        color: var(--text-muted);
+    }
+
+    .work-meta__tech-list {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .work-meta__tech-item {
+        display: inline-block;
+        font-size: 0.75rem;
+        padding: 0.1rem 0.4rem;
+        background: var(--surface-raised);
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        color: var(--text-muted);
+    }
+
+    .work-meta__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding-top: 0.25rem;
+    }
+</style>

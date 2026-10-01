@@ -1,87 +1,42 @@
 ---
 import { getPublishedWork } from '@/lib/content/work'
-import Card from '@/components/Card.astro'
-import CardHeader from '@/components/CardHeader.astro'
-import CardTitle from '@/components/CardTitle.astro'
-import CardContent from '@/components/CardContent.astro'
-import Badge from '@/components/Badge.astro'
-import Anchor from '@/components/astro/Anchor.astro'
+import WorkCard from '@/components/work/WorkCard.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 const publishedWork = await getPublishedWork()
-const featuredItems = publishedWork.slice(0, 3)
-
-function formatDate(date: Date | string): string {
-    const d = new Date(date)
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
-}
+const featuredItems = publishedWork.filter((item) => item.data.featured).slice(0, 3)
+const itemsToDisplay = featuredItems.length > 0 ? featuredItems : publishedWork.slice(0, 3)
 ---
 
-<section id="work" class="py-16 md:py-24 border-t border-border/40">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="work" class="py-16 md:py-24 border-t border-border">
+    <div class="site-container">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
             <div>
-                <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                    Featured Work
+                <SectionLabel label="Selected Work" />
+                <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mt-3">
+                    Featured Systems & Projects
                 </h2>
                 <p class="mt-2 text-muted-foreground text-lg">
                     Production systems, infrastructure, and engineering case studies.
                 </p>
             </div>
             <div>
-                <Anchor href="/work/" variant="outline">
-                    All work &rarr;
-                </Anchor>
+                <ArrowLink href="/work/">All work</ArrowLink>
             </div>
         </div>
 
         {
-            featuredItems.length === 0 ? (
-                <div class="rounded-lg border border-dashed border-border p-12 text-center">
+            itemsToDisplay.length === 0 ? (
+                <div class="border border-dashed border-border p-12 text-center">
                     <p class="text-muted-foreground">
                         Case studies are currently being prepared. Check back soon or browse <a href="/work/" class="underline hover:text-foreground">all work</a>.
                     </p>
                 </div>
             ) : (
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {featuredItems.map((item) => (
-                        <Card class="flex flex-col h-full hover:border-foreground/30 transition-colors">
-                            <CardHeader>
-                                <div class="flex items-center justify-between gap-2 mb-2">
-                                    <Badge variant="secondary" class="capitalize text-xs">
-                                        {item.data.kind}
-                                    </Badge>
-                                    <span class="text-xs text-muted-foreground font-mono">
-                                        {formatDate(item.data.date)}
-                                        {item.data.endDate ? ` – ${formatDate(item.data.endDate)}` : ''}
-                                    </span>
-                                </div>
-                                <CardTitle class="text-xl">
-                                    <a
-                                        href={`/work/${item.id}/`}
-                                        class="hover:text-primary transition-colors story-link"
-                                    >
-                                        {item.data.title}
-                                    </a>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent class="flex-1 flex flex-col justify-between space-y-4">
-                                <p class="text-sm text-muted-foreground line-clamp-3">
-                                    {item.data.summary}
-                                </p>
-                                <div class="flex flex-wrap gap-1.5 pt-2">
-                                    {item.data.technologies.slice(0, 4).map((tech) => (
-                                        <Badge variant="outline" class="text-xs font-mono">
-                                            {tech}
-                                        </Badge>
-                                    ))}
-                                    {item.data.technologies.length > 4 && (
-                                        <Badge variant="outline" class="text-xs font-mono">
-                                            +{item.data.technologies.length - 4}
-                                        </Badge>
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>
+                <div class="work-list">
+                    {itemsToDisplay.map((item, i) => (
+                        <WorkCard entry={item} index={i + 1} />
                     ))}
                 </div>
             )

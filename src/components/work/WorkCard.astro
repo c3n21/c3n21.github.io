@@ -1,85 +1,175 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import Card from '@/components/Card.astro'
-import CardHeader from '@/components/CardHeader.astro'
-import CardTitle from '@/components/CardTitle.astro'
-import CardContent from '@/components/CardContent.astro'
-import Badge from '@/components/Badge.astro'
+import { Image } from 'astro:assets'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
+import WorkMeta from '@/components/work/WorkMeta.astro'
 
 export interface Props {
     entry: CollectionEntry<'work'>
+    index?: string | number
+    compact?: boolean
     class?: string | undefined
 }
 
-const { entry, class: className = '' } = Astro.props
-const { title, summary, kind, date, endDate, technologies, featured } =
-    entry.data
+const { entry, index, compact = false, class: className = '' } = Astro.props
+const {
+    title,
+    summary,
+    kind,
+    date,
+    endDate,
+    technologies,
+    featured,
+    heroImage,
+    heroAlt,
+} = entry.data
 
-function formatDate(d: Date | string): string {
-    const parsed = new Date(d)
-    return parsed.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-    })
-}
+const indexFormatted =
+    typeof index === 'number' ? String(index).padStart(2, '0') : index
 ---
 
-<Card
+<article
     class:list={[
-        'flex flex-col h-full hover:border-foreground/30 transition-colors',
+        'work-row',
+        { 'work-row--featured': featured, 'work-row--compact': compact },
         className,
     ]}
 >
-    <CardHeader>
-        <div class="flex items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-1.5">
-                <Badge variant="secondary" class="capitalize text-xs font-medium">
-                    {kind}
-                </Badge>
-                {
-                    featured && (
-                        <Badge
-                            variant="outline"
-                            class="text-xs text-primary border-primary/30"
-                        >
-                            Featured
-                        </Badge>
-                    )
-                }
+    <div class="work-row__header">
+        {
+            indexFormatted && (
+                <span class="work-row__index meta-text" aria-hidden="true">
+                    {indexFormatted}
+                </span>
+            )
+        }
+        <div class="work-row__content">
+            <h2 class="work-row__title">
+                <a href={`/work/${entry.id}/`} class="work-row__link">
+                    {title}
+                </a>
+            </h2>
+            <p class="work-row__summary">
+                {summary}
+            </p>
+            <div class="work-row__action">
+                <ArrowLink href={`/work/${entry.id}/`}>Read case study</ArrowLink>
             </div>
-            <span class="text-xs text-muted-foreground font-mono">
-                {formatDate(date)}
-                {endDate ? ` – ${formatDate(endDate)}` : ''}
-            </span>
         </div>
-        <CardTitle class="text-xl">
-            <a
-                href={`/work/${entry.id}/`}
-                class="hover:text-primary transition-colors story-link"
-            >
-                {title}
-            </a>
-        </CardTitle>
-    </CardHeader>
-    <CardContent class="flex-1 flex flex-col justify-between space-y-4">
-        <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
-            {summary}
-        </p>
-        <div class="flex flex-wrap gap-1.5 pt-2">
-            {
-                technologies.slice(0, 4).map((tech) => (
-                    <Badge variant="outline" class="text-xs font-mono">
-                        {tech}
-                    </Badge>
-                ))
-            }
-            {
-                technologies.length > 4 && (
-                    <Badge variant="outline" class="text-xs font-mono">
-                        +{technologies.length - 4}
-                    </Badge>
-                )
-            }
-        </div>
-    </CardContent>
-</Card>
+
+        <aside class="work-row__meta">
+            <WorkMeta
+                kind={kind}
+                date={date}
+                endDate={endDate}
+                technologies={technologies}
+            />
+        </aside>
+    </div>
+
+    {
+        heroImage && (
+            <div class="work-row__visual">
+                <Image
+                    src={heroImage as any}
+                    alt={heroAlt || title}
+                    widths={[640, 960, 1280]}
+                    sizes="(max-width: 768px) 100vw, 840px"
+                />
+            </div>
+        )
+    }
+</article>
+
+<style>
+    .work-row {
+        padding-block: clamp(2rem, 4vw, 3.5rem);
+        border-top: 1px solid var(--border);
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .work-row:last-child {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .work-row__header {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    @media (min-width: 56rem) {
+        .work-row__header {
+            grid-template-columns: minmax(2.5rem, 3.5rem) 1.6fr 1fr;
+            gap: 2rem;
+        }
+    }
+
+    .work-row__index {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        padding-top: 0.2rem;
+    }
+
+    .work-row__title {
+        font-size: clamp(1.35rem, 2vw, 1.85rem);
+        font-weight: 650;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.75rem;
+    }
+
+    .work-row__link {
+        color: var(--text);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    .work-row__link:hover {
+        color: var(--accent);
+    }
+
+    .work-row__summary {
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 1.25rem;
+        max-width: 58ch;
+    }
+
+    .work-row--compact .work-row__title {
+        font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    }
+
+    .work-row--compact .work-row__summary {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .work-row__visual {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        margin-top: 1rem;
+    }
+
+    .work-row__visual img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: transform var(--duration-normal) var(--ease-standard);
+    }
+
+    .work-row:hover .work-row__visual img {
+        transform: scale(1.012);
+    }
+
+    @media (max-width: 56rem) {
+        .work-row__meta {
+            grid-column: 2;
+            margin-top: 0.5rem;
+        }
+    }
+</style>

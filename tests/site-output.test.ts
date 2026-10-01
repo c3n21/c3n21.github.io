@@ -125,6 +125,7 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('href="/work/backend-authorization-service/"')
         expect(html).toContain('Open-Source Contributions')
         expect(html).toContain('href="/work/open-source/"')
+        expect(html).toContain('work-row')
     })
 
     it('dist/work/nixos-infrastructure/index.html exists and contains case study sections and back link', () => {
