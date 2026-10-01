@@ -23,7 +23,7 @@ const {
 } = Astro.props
 
 const isCV = isCVMode()
-const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
+const htmlClassList = !isCV && import.meta.env.CV === 'dark' ? ['dark'] : []
 
 const ogImage =
     image ??
@@ -43,7 +43,12 @@ const faviconSizes = [
 ---
 
 <!doctype html>
-<html lang="en" class:list={htmlClassList} data-theme-mode="system">
+<html
+    lang="en"
+    class:list={htmlClassList}
+    data-theme-mode={isCV ? undefined : 'system'}
+    data-cv-theme={isCV ? 'light' : undefined}
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,31 +91,35 @@ const faviconSizes = [
         }
         <link rel="shortcut icon" href="/favicon.ico" />
 
-        <script is:inline>
-            ;(() => {
-                const key = "portfolio-theme";
-                const saved = localStorage.getItem(key);
-                const root = document.documentElement;
+        {
+            !isCV && (
+                <script is:inline>
+                    ;(() => {
+                        const key = "portfolio-theme";
+                        const saved = localStorage.getItem(key);
+                        const root = document.documentElement;
 
-                if (saved === "light" || saved === "dark") {
-                    root.dataset.theme = saved;
-                    root.dataset.themeMode = "manual";
-                    if (saved === "dark") {
-                        root.classList.add("dark");
-                    } else {
-                        root.classList.remove("dark");
-                    }
-                } else {
-                    delete root.dataset.theme;
-                    root.dataset.themeMode = "system";
-                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                        root.classList.add("dark");
-                    } else {
-                        root.classList.remove("dark");
-                    }
-                }
-            })()
-        </script>
+                        if (saved === "light" || saved === "dark") {
+                            root.dataset.theme = saved;
+                            root.dataset.themeMode = "manual";
+                            if (saved === "dark") {
+                                root.classList.add("dark");
+                            } else {
+                                root.classList.remove("dark");
+                            }
+                        } else {
+                            delete root.dataset.theme;
+                            root.dataset.themeMode = "system";
+                            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                                root.classList.add("dark");
+                            } else {
+                                root.classList.remove("dark");
+                            }
+                        }
+                    })()
+                </script>
+            )
+        }
     </head>
     <body class="min-h-screen bg-background text-foreground flex flex-col">
         {

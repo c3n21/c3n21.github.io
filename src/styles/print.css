@@ -1,0 +1,74 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 14mm 14mm;
+  }
+
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-raised: #f5f7f7;
+    --text: #111820;
+    --text-muted: #4f5d66;
+    --border: #d8dee2;
+    --accent: #0f766e;
+    --accent-strong: #115e59;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: var(--text) !important;
+  }
+
+  .screen-only,
+  [data-site-header],
+  [data-site-footer],
+  [data-contact-cta] {
+    display: none !important;
+  }
+
+  .resume-shell,
+  .resume-main,
+  .resume-layout,
+  .resume-layout__main {
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .resume-sidebar {
+    position: static !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  article,
+  section,
+  .experience-item,
+  .education-item {
+    break-inside: avoid;
+  }
+
+  pre,
+  figure {
+    break-inside: avoid;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}

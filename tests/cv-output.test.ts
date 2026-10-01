@@ -55,10 +55,16 @@ describe('CV build output verification', () => {
             expect(html).toContain('Technical Skills')
             expect(html).toContain('Backend &amp; Systems')
             expect(html).toContain('Infrastructure &amp; Tooling')
+
+            // Languages & Interests
             expect(html).toContain('Languages')
+            expect(html).toContain('Interests')
 
             // Open source / projects
             expect(html).toContain('Nixpkgs Contributor')
+
+            // CV mode markers
+            expect(html).toContain('data-cv-theme="light"')
         }
     )
 
@@ -70,9 +76,21 @@ describe('CV build output verification', () => {
             // Global header / navigation must be absent
             expect(html).not.toContain('aria-label="Main navigation"')
             expect(html).not.toContain('<header class="sticky')
+            expect(html).not.toContain('data-site-header')
+
+            // Theme toggle must be absent
+            expect(html).not.toContain('portfolio-theme')
+            expect(html).not.toContain('theme-toggle')
 
             // Global footer must be absent
             expect(html).not.toContain('<footer')
+            expect(html).not.toContain('data-site-footer')
+
+            // Contact CTA must be absent
+            expect(html).not.toContain('data-contact-cta')
+
+            // Sticky sidebar must be absent in CV mode
+            expect(html).not.toContain('resume-sidebar')
 
             // Web-only marketing / teaser sections must be absent
             expect(html).not.toContain('Work with me')
