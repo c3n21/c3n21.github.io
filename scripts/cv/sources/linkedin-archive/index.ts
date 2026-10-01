@@ -47,8 +47,8 @@ function parseWebsites(raw?: string): Array<{ label: string; url: string }> {
 
   for (const match of bracketMatches) {
     matchedAny = true;
-    const label = match[1].trim();
-    const url = match[2].trim();
+    const label = (match[1] ?? "").trim();
+    const url = (match[2] ?? "").trim();
     try {
       const parsed = new URL(url);
       if (parsed.protocol === "http:" || parsed.protocol === "https:") {

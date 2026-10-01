@@ -20,7 +20,7 @@ export function normalizeLinkedInDate(input?: string): string | undefined {
   if (/^\d{4}$/.test(value)) return value;
 
   const match = /^([A-Z][a-z]{2}) (\d{4})$/.exec(value);
-  if (!match) {
+  if (!match || !match[1] || !match[2]) {
     throw new Error(`Unsupported LinkedIn date: ${value}`);
   }
 
@@ -33,7 +33,7 @@ export function normalizeLinkedInDate(input?: string): string | undefined {
 }
 
 export function splitDescription(input?: string): {
-  summary?: string;
+  summary?: string | undefined;
   highlights: string[];
 } {
   const value = input?.trim();

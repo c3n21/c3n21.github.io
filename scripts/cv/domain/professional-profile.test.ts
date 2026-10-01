@@ -28,8 +28,8 @@ describe("ProfessionalProfileSchema", () => {
       languages: [],
     });
 
-    expect(result.positions[0].startDate).toBe("2022-06");
-    expect(result.education[0].startDate).toBe("2019");
+    expect(result.positions[0]!.startDate).toBe("2022-06");
+    expect(result.education[0]!.startDate).toBe("2019");
   });
 
   it("rejects full dates that were not part of the supported precision model", () => {

@@ -74,24 +74,24 @@ describe("toJsonResume", () => {
     expect(resume.basics.location?.countryCode).toBe("IT");
 
     expect(resume.work).toHaveLength(2);
-    expect(resume.work[0].name).toBe("HRM Group");
-    expect(resume.work[0].position).toBe("Software Engineer");
-    expect(resume.work[0].startDate).toBe("2022-06");
-    expect(resume.work[0].endDate).toBeUndefined();
-    expect(resume.work[0].summary).toBe("Built systems.");
-    expect(resume.work[0].highlights).toEqual(["Improved CI.", "Debugged issues."]);
+    expect(resume.work[0]!.name).toBe("HRM Group");
+    expect(resume.work[0]!.position).toBe("Software Engineer");
+    expect(resume.work[0]!.startDate).toBe("2022-06");
+    expect(resume.work[0]!.endDate).toBeNull();
+    expect(resume.work[0]!.summary).toBe("Built systems.");
+    expect(resume.work[0]!.highlights).toEqual(["Improved CI.", "Debugged issues."]);
 
-    expect(resume.work[1].endDate).toBe("2020-04");
+    expect(resume.work[1]!.endDate).toBe("2020-04");
 
     expect(resume.education).toHaveLength(2);
-    expect(resume.education[0].institution).toBe("Università degli Studi di Milano");
-    expect(resume.education[0].studyType).toBe("Bachelor’s degree in Computer Science");
-    expect(resume.education[0].endDate).toBeUndefined();
+    expect(resume.education[0]!.institution).toBe("Università degli Studi di Milano");
+    expect(resume.education[0]!.studyType).toBe("Bachelor’s degree in Computer Science");
+    expect(resume.education[0]!.endDate).toBeNull();
 
     expect(resume.projects).toHaveLength(2);
-    expect(resume.projects[0].name).toBe("Nixpkgs Contributor");
-    expect(resume.projects[0].url).toBeUndefined();
-    expect(resume.projects[1].url).toBe("https://c3n21.github.io");
+    expect(resume.projects[0]!.name).toBe("Nixpkgs Contributor");
+    expect(resume.projects[0]!.url).toBeNull();
+    expect(resume.projects[1]!.url).toBe("https://c3n21.github.io");
 
     expect(resume.skills).toEqual([
       { name: "TypeScript" },

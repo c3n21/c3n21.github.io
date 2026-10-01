@@ -19,7 +19,7 @@ cv.projects?.forEach((project: any, project_index: number) =>
     project.media?.forEach(async (media: any, media_index: number) => {
         const entityImage = media.thumbnail.entityImage
         const highestResolutionArtifact = entityImage.artifacts.reduce(
-            (prev, current) => {
+            (prev: any, current: any) => {
                 return current.width > prev.width ? current : prev
             }
         )

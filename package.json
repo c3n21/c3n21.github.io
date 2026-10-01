@@ -11,7 +11,8 @@
         "test": "vitest",
         "postinstall": "pnpm run download-assets",
         "download-assets": "tsx scripts/node/download_assets.ts",
-        "export-pdf": "tsx scripts/node/export-pdf.ts"
+        "export-pdf": "tsx scripts/node/export-pdf.ts",
+        "cv:import": "tsx scripts/cv/cli.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",

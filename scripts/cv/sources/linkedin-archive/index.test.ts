@@ -29,19 +29,19 @@ describe("LinkedInArchiveSource", () => {
     expect(profile.basics.lastName).toBe("Chen");
     expect(profile.basics.summary).toBe("Builds software end-to-end.");
     expect(profile.positions).toHaveLength(1);
-    expect(profile.positions[0].company).toBe("Example Company");
-    expect(profile.positions[0].startDate).toBe("2022-06");
-    expect(profile.positions[0].endDate).toBeUndefined();
+    expect(profile.positions[0]!.company).toBe("Example Company");
+    expect(profile.positions[0]!.startDate).toBe("2022-06");
+    expect(profile.positions[0]!.endDate).toBeUndefined();
     expect(profile.education).toHaveLength(1);
-    expect(profile.education[0].institution).toBe("Example University");
-    expect(profile.education[0].startDate).toBe("2019");
+    expect(profile.education[0]!.institution).toBe("Example University");
+    expect(profile.education[0]!.startDate).toBe("2019");
     expect(profile.projects).toHaveLength(1);
-    expect(profile.projects[0].name).toBe("Example Project");
-    expect(profile.projects[0].url).toBeUndefined();
+    expect(profile.projects[0]!.name).toBe("Example Project");
+    expect(profile.projects[0]!.url).toBeUndefined();
     expect(profile.skills).toContain("TypeScript");
     expect(profile.skills).toContain("Nix");
     expect(profile.languages).toHaveLength(2);
-    expect(profile.languages[0].language).toBe("Italian");
+    expect(profile.languages[0]!.language).toBe("Italian");
   });
 
   it("preserves Profile.csv summary when Profile Summary.csv is empty or missing", async () => {
