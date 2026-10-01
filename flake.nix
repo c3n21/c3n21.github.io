@@ -2,7 +2,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nvim.url = "path:/home/zhifan/.config/nvim";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -14,7 +13,6 @@
     inputs@{
       self,
       nixpkgs,
-      nvim,
       flake-parts,
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -32,7 +30,43 @@
           ...
         }:
         let
-          nvim-pkgs = nvim.packages.${system};
+
+          playwrightLibs = with pkgs; [
+            alsa-lib
+            at-spi2-atk
+            atk
+            cairo
+            cups
+            dbus
+            expat
+            fontconfig
+            freetype
+            gdk-pixbuf
+            glib
+            gtk3
+            libX11
+            libXcomposite
+            libXcursor
+            libXdamage
+            libXext
+            libXfixes
+            libXi
+            libXrandr
+            libXrender
+            libdrm
+            libgbm
+            libglvnd
+            libudev-zero
+            libxcb
+            libxkbcommon
+            mesa
+            nspr
+            nss
+            pango
+            pipewire
+            stdenv.cc.cc.lib
+            wayland
+          ];
         in
         {
           devShells.default = pkgs.mkShell {
@@ -40,15 +74,16 @@
             buildInputs =
               with pkgs;
               [
-                nodejs_22 # Specify Node.js version
+                nodejs_24
                 pnpm
 
                 # GitHub action local testing
                 act
                 gh
               ]
-              ++ (with nvim-pkgs; [ nastro ]);
+              ++ playwrightLibs;
 
+            NIX_LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath playwrightLibs}";
             GITHUB_RUN_NUMBER = 10;
             NEOVIM_CONFIG_LINES = 123123;
 
