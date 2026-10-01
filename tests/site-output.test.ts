@@ -29,6 +29,13 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(html).toContain('data-theme-mode="system"')
     })
 
+    it('contains system-first theme bootstrap script in head', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        expect(html).toContain('portfolio-theme')
+        expect(html).toContain('root.dataset.themeMode = "system"')
+        expect(html).toContain('root.dataset.themeMode = "manual"')
+    })
+
     it('contains route-based navigation links instead of hash links', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 

@@ -83,29 +83,31 @@ const faviconSizes = [
         }
         <link rel="shortcut icon" href="/favicon.ico" />
 
-        {
-            !isCV && (
-                <script is:inline>
-                    ;(() => {
-                        const storedTheme =
-                            typeof localStorage !== 'undefined'
-                                ? localStorage.getItem('theme')
-                                : null
-                        const systemPrefersDark = window.matchMedia(
-                            '(prefers-color-scheme: dark)'
-                        ).matches
-                        if (
-                            storedTheme === 'dark' ||
-                            (!storedTheme && systemPrefersDark)
-                        ) {
-                            document.documentElement.classList.add('dark')
-                        } else {
-                            document.documentElement.classList.remove('dark')
-                        }
-                    })()
-                </script>
-            )
-        }
+        <script is:inline>
+            ;(() => {
+                const key = "portfolio-theme";
+                const saved = localStorage.getItem(key);
+                const root = document.documentElement;
+
+                if (saved === "light" || saved === "dark") {
+                    root.dataset.theme = saved;
+                    root.dataset.themeMode = "manual";
+                    if (saved === "dark") {
+                        root.classList.add("dark");
+                    } else {
+                        root.classList.remove("dark");
+                    }
+                } else {
+                    delete root.dataset.theme;
+                    root.dataset.themeMode = "system";
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        root.classList.add("dark");
+                    } else {
+                        root.classList.remove("dark");
+                    }
+                }
+            })()
+        </script>
     </head>
     <body class="min-h-screen bg-background text-foreground flex flex-col">
         {
