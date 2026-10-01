@@ -1,5 +1,6 @@
 ---
-import Anchor from '@/components/astro/Anchor.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 import CvDownloadLink from '@/components/CvDownloadLink.astro'
 
 const now = new Date()
@@ -12,9 +13,9 @@ const years = isAnniversaryPassed
 
 <section class="py-16 md:py-20 flex flex-col justify-center">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-3">
-            Zhifan Chen
-        </p>
+        <div class="flex justify-center mb-3">
+            <SectionLabel label="Software Engineer / Milan, Italy" />
+        </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6">
             Software Engineer
         </h1>
@@ -26,13 +27,8 @@ const years = isAnniversaryPassed
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Anchor href="/work/" size="lg" class="w-full sm:w-auto">
-                See my work
-            </Anchor>
+            <ArrowLink href="/work/">See my work</ArrowLink>
             <CvDownloadLink variant="outline" size="lg" class="w-full sm:w-auto" />
-            <Anchor href="/services/" variant="outline" size="lg" class="w-full sm:w-auto">
-                Work with me
-            </Anchor>
         </div>
 
         <div class="pt-8 border-t border-border/50 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">

@@ -1,3 +1,4 @@
+@import './tokens.css';
 @import 'tailwindcss';
 @import '@fontsource-variable/jetbrains-mono';
 
@@ -204,5 +205,60 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+html {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    min-width: 320px;
+    background: var(--bg);
+}
+
+::selection {
+    color: var(--text);
+    background: var(--selection);
+}
+
+.site-container {
+    width: min(calc(100% - (2 * var(--page-gutter))), var(--page-max));
+    margin-inline: auto;
+}
+
+.editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2rem);
+}
+
+.prose-column {
+    max-width: var(--prose-max);
+}
+
+.meta-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.rule {
+    border-top: 1px solid var(--border);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+@media (max-width: 48rem) {
+    .editorial-grid {
+        grid-template-columns: 1fr;
     }
 }

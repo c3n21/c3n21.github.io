@@ -178,7 +178,7 @@ const verifiedProjects = cv.projects.filter(
                                 <header class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                                     <div>
                                         <h3 class="text-base font-semibold text-foreground">
-                                            {edu.studyType}
+                                            {edu.institution?.includes('Università degli Studi di Milano') ? 'BSc Computer Science — ongoing, part-time' : edu.studyType}
                                         </h3>
                                         <div class="text-sm font-medium text-primary">
                                             {edu.url ? (

@@ -22,6 +22,13 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(fs.existsSync(DIST_INDEX), `Expected ${DIST_INDEX} to exist`).toBe(true)
     })
 
+    it('contains dossier layout primitives and system theme mode attribute', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        expect(html).toContain('data-section-label')
+        expect(html).toContain('data-arrow="internal"')
+        expect(html).toContain('data-theme-mode="system"')
+    })
+
     it('contains route-based navigation links instead of hash links', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 

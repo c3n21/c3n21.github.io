@@ -1,0 +1,63 @@
+---
+type Kind = "internal" | "external" | "download";
+
+interface Props {
+  href: string;
+  kind?: Kind;
+  class?: string;
+  download?: boolean;
+}
+
+const {
+  href,
+  kind = "internal",
+  class: className = "",
+  download = kind === "download",
+} = Astro.props;
+
+const glyph = {
+  internal: "→",
+  external: "↗",
+  download: "↓",
+}[kind];
+
+const external = kind === "external";
+---
+
+<a
+  href={href}
+  class:list={["arrow-link", className]}
+  data-arrow={kind}
+  download={download || undefined}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noreferrer" : undefined}
+>
+  <span><slot /></span>
+  <span class="arrow-link__glyph" aria-hidden="true">{glyph}</span>
+</a>
+
+<style>
+  .arrow-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .arrow-link__glyph {
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .arrow-link:hover .arrow-link__glyph {
+    transform: translateX(0.18rem);
+  }
+
+  .arrow-link[data-arrow="external"]:hover .arrow-link__glyph {
+    transform: translate(0.12rem, -0.12rem);
+  }
+
+  .arrow-link[data-arrow="download"]:hover .arrow-link__glyph {
+    transform: translateY(0.12rem);
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+interface Item {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  items: readonly Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="dossier-meta">
+  {items.map(({ label, value }) => (
+    <div class="dossier-meta__row">
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .dossier-meta {
+    display: grid;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .dossier-meta__row {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 0.35fr) 1fr;
+    gap: 1rem;
+  }
+
+  dt {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text);
+  }
+</style>
