@@ -24,15 +24,30 @@ The site is organized around multi-audience routing (engineering hiring managers
 
 This project maintains a strict boundary between public presentation and factual career history:
 
-1. **LinkedIn is the Source of Truth**:
-   - Employment roles, companies, dates, education, and base project records originate on LinkedIn.
-   - Exported using [@c3n21/linkedin-to-jsonresume](https://github.com/c3n21/linkedin-to-jsonresume) browser extension into standardized JSON Resume format.
+1. **LinkedIn Archive is the Source of Truth**:
+   - Employment roles, companies, dates, education, and base project records originate from an official LinkedIn data archive.
+   - Workflow:
+     ```text
+     LinkedIn
+       ↓ official data export ZIP
+     pnpm cv:import <zip>
+       ↓
+     src/cv.json
+       ↓
+     Astro /resume
+       ↓
+     light PDF CV
+     ```
+   - A future approved Portability API source can implement the `ProfileSource` domain interface, but is intentionally not implemented yet.
 2. **`src/cv.json` is Git-Ignored**:
    - `src/cv.json` is a generated local file and is ignored by git to protect private contact details and prevent fork drift.
    - In GitHub Actions CI, `src/cv.json` is automatically injected from the `CV` repository secret on build.
-3. **Automated PDF Export**:
-   - Running with `CV=dark` env variable builds print-optimized pages (stripping navigation, footers, and web chrome).
-   - Puppeteer (`scripts/node/export-pdf.ts`) captures `/resume/` (`dist/resume/index.html`) using headless Chromium to generate `ZhifanChen.pdf`.
+3. **Automated Light Recruiter PDF Export**:
+   - Running with `CV=light` env variable builds print-optimized pages (stripping navigation, footers, theme toggle, and web chrome).
+   - Puppeteer (`scripts/node/export-pdf.ts` / `pnpm run cv:pdf`) captures `/resume/` (`dist/resume/index.html`) using headless Chromium in light print mode to generate `ZhifanChen.pdf`.
+
+### 📋 Post-Deployment Release Checklist
+- [ ] Update the LinkedIn *Personal Website & Automated CV* project description on LinkedIn to describe the official data export pipeline rather than the legacy browser extension architecture.
 
 ---
 
@@ -98,9 +113,12 @@ pnpm exec vitest run
 # Run production build and type checking
 pnpm run build
 
+# Import official LinkedIn export archive (optional local update)
+pnpm cv:import /path/to/Complete_LinkedInDataExport.zip
+
 # Test CV mode and export PDF
-CV=dark pnpm run build
-pnpm exec tsx scripts/node/export-pdf.ts /path/to/chromium
+CV=light pnpm run build
+pnpm run cv:pdf
 ```
 
 ---
