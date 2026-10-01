@@ -231,6 +231,9 @@ describe('Site output - Resume route', () => {
         expect(html).toContain('aria-label="Main navigation"')
         expect(html).toContain('<footer')
 
+        // Sidebar presence and desktop sticky structure
+        expect(html).toContain('resume-sidebar')
+
         // Experience & Education
         expect(html).toContain('HRM Group')
         expect(html).toContain('Università degli Studi di Milano')
@@ -241,10 +244,22 @@ describe('Site output - Resume route', () => {
         expect(html).toContain('Backend &amp; Systems')
         expect(html).toContain('Infrastructure &amp; Tooling')
 
-        // On-demand PDF link in web mode
-        const hasPdfLink =
-            html.includes('Download PDF CV') || html.includes('View resume')
-        expect(hasPdfLink).toBe(true)
+        // Languages & Interests
+        expect(html).toContain('Languages')
+        expect(html).toContain('Chinese')
+        expect(html).toContain('Italian')
+        expect(html).toContain('English')
+        expect(html).toContain('Interests')
+        expect(html).toContain('Open source')
+        expect(html).toContain('Self-hosting')
+        expect(html).toContain('Developer tooling')
+
+        // On-demand PDF / CV download link
+        expect(html).toContain('Download CV')
+
+        // Related work links
+        expect(html).toContain('Related work')
+        expect(html).toContain('href="/work/backend-authorization-service/"')
     })
 })
 

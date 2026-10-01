@@ -1,0 +1,111 @@
+---
+import cv from '@/cv.json'
+import { RESUME_PRESENTATION } from '@/data/resume-publication'
+
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const languages = cv.languages || []
+const interests = RESUME_PRESENTATION.interests || []
+---
+
+<section class:list={['additional-details', className]} aria-labelledby="additional-details-heading">
+  <h2 id="additional-details-heading" class="sr-only">
+    Languages & Interests
+  </h2>
+
+  <div class="additional-details__grid">
+    {languages.length > 0 && (
+      <div class="additional-details__block">
+        <h3 class="meta-text additional-details__title">Languages</h3>
+        <ul class="additional-details__list">
+          {languages.map((item) => (
+            <li class="additional-details__item">
+              <span class="additional-details__name">{item.language}</span>
+              {item.fluency && (
+                <span class="additional-details__meta"> — {item.fluency}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {interests.length > 0 && (
+      <div class="additional-details__block">
+        <h3 class="meta-text additional-details__title">Interests</h3>
+        <ul class="additional-details__tags">
+          {interests.map((interest) => (
+            <li class="additional-details__tag">{interest}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .additional-details {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .additional-details__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .additional-details__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .additional-details__title {
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .additional-details__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+  }
+
+  .additional-details__item {
+    color: var(--text);
+  }
+
+  .additional-details__name {
+    font-weight: 550;
+  }
+
+  .additional-details__meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .additional-details__tags {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .additional-details__tag {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+  }
+</style>

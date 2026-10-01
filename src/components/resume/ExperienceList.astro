@@ -1,12 +1,18 @@
 ---
 import cv from '@/cv.json'
 import { formatDateRange } from '@/lib/resume'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 interface Props {
     class?: string
 }
 
 const { class: className = '' } = Astro.props
+
+const RELATED_WORK: Record<string, string> = {
+    'HRM Group': '/work/backend-authorization-service/',
+    'Self-employed': '/work/open-source/',
+}
 ---
 
 <section class:list={['space-y-8', className]} aria-labelledby="experience-heading">
@@ -20,8 +26,9 @@ const { class: className = '' } = Astro.props
         {
             cv.work.map((job) => {
                 const dateRange = formatDateRange(job.startDate, job.endDate)
+                const relatedWorkHref = RELATED_WORK[job.name]
                 return (
-                    <article class="break-inside-avoid space-y-2">
+                    <article class="experience-item break-inside-avoid space-y-2">
                         <header class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                             <div>
                                 <h3 class="text-lg font-semibold text-foreground">
@@ -58,6 +65,14 @@ const { class: className = '' } = Astro.props
                                 {job.summary}
                             </p>
                         ) : null}
+
+                        {relatedWorkHref && (
+                            <div class="pt-1 print:hidden">
+                                <ArrowLink href={relatedWorkHref} class="text-xs text-primary font-mono">
+                                    Related work
+                                </ArrowLink>
+                            </div>
+                        )}
                     </article>
                 )
             })
