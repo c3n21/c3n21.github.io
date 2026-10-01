@@ -253,9 +253,11 @@ describe('Site output - Services and Contact routes', () => {
 
         const html = fs.readFileSync(DIST_SERVICES, 'utf-8')
 
-        // Title and availability banner
+        // Title and availability copy
         expect(html).toContain('Services &amp; Consulting')
-        expect(html).toContain('Available for selected part-time engagements')
+        expect(html).toContain(
+            'I occasionally take on selected part-time engagements alongside my main work.'
+        )
 
         // The 5 service families
         expect(html).toContain('Software Development &amp; Modernization')
@@ -271,6 +273,13 @@ describe('Site output - Services and Contact routes', () => {
         ).toBe(true)
         expect(html).toContain('Out of Scope')
         expect(html).toContain('href="/contact/"')
+
+        expect(html).toContain(
+            'I occasionally take on selected part-time engagements alongside my main work.'
+        )
+        expect(html.toLowerCase()).not.toContain('currently accepting')
+        expect(html).not.toContain('24/7')
+        expect(html.toLowerCase()).not.toContain('book a call')
     })
 
     it('dist/contact/index.html exists and renders contact channels without joke copy', () => {

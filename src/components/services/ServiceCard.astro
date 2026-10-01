@@ -1,63 +1,95 @@
 ---
 import type { Service } from '@/data/services'
-import Card from '@/components/Card.astro'
-import CardHeader from '@/components/CardHeader.astro'
-import CardTitle from '@/components/CardTitle.astro'
-import CardContent from '@/components/CardContent.astro'
 
 export interface Props {
     service: Service
-    index?: number | undefined
+    index: number
     class?: string | undefined
 }
 
 const { service, index, class: className = '' } = Astro.props
 ---
 
-<Card
-    class:list={[
-        'flex flex-col h-full bg-card hover:border-foreground/30 transition-colors',
-        className,
-    ]}
->
-    <CardHeader>
-        {
-            typeof index === 'number' && (
-                <span class="text-xs font-mono text-muted-foreground mb-1">
-                    0{index + 1}
-                </span>
-            )
-        }
-        <CardTitle class="text-xl">
-            {service.title}
-        </CardTitle>
-    </CardHeader>
-    <CardContent class="flex-1 flex flex-col justify-between space-y-6">
-        <div>
-            <h3 class="text-xs font-mono uppercase tracking-wider text-primary mb-2">
-                Problem addressed
-            </h3>
-            <p class="text-sm text-muted-foreground leading-relaxed">
-                {service.problem}
-            </p>
-        </div>
+<article class:list={['service-row', className]}>
+    <div class="service-row__index meta-text">
+        {String(index + 1).padStart(2, '0')}
+    </div>
+    <div class="service-row__body">
+        <h2 class="service-row__title">{service.title}</h2>
+        <p class="service-row__problem">{service.problem}</p>
+        <ul class="service-row__examples">
+            {
+                service.examples.map((example) => (
+                    <li>{example}</li>
+                ))
+            }
+        </ul>
+    </div>
+</article>
 
-        <div>
-            <h3 class="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Typical engagements
-            </h3>
-            <ul class="space-y-2 text-sm text-foreground/90">
-                {
-                    service.examples.map((example) => (
-                        <li class="flex items-start gap-2">
-                            <span class="text-primary select-none" aria-hidden="true">
-                                ›
-                            </span>
-                            <span>{example}</span>
-                        </li>
-                    ))
-                }
-            </ul>
-        </div>
-    </CardContent>
-</Card>
+<style>
+    .service-row {
+        padding-block: clamp(2rem, 3.5vw, 3rem);
+        border-top: 1px solid var(--border);
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .service-row:last-child {
+        border-bottom: 1px solid var(--border);
+    }
+
+    @media (min-width: 48rem) {
+        .service-row {
+            grid-template-columns: minmax(3.5rem, 5rem) 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+    }
+
+    .service-row__index {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        padding-top: 0.25rem;
+    }
+
+    .service-row__title {
+        font-size: clamp(1.3rem, 1.8vw, 1.65rem);
+        font-weight: 650;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.75rem;
+        color: var(--text);
+    }
+
+    .service-row__problem {
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-size: 0.98rem;
+        margin-bottom: 1.25rem;
+        max-width: 62ch;
+    }
+
+    .service-row__examples {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .service-row__examples li {
+        font-size: 0.9rem;
+        color: color-mix(in srgb, var(--text) 88%, transparent);
+        line-height: 1.5;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+    }
+
+    .service-row__examples li::before {
+        content: '—';
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+    }
+</style>
