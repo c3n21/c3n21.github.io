@@ -4,9 +4,11 @@ import type ComponentBaseProps from '@/components/astro/theme/types/ComponentBas
 
 interface Props
     extends ComponentBaseProps,
-        astroHTML.JSX.AnchorHTMLAttributes {}
+        astroHTML.JSX.AnchorHTMLAttributes {
+    fallbackToPrint?: boolean
+}
 
-const { href: _ignoredHref, ...rest } = Astro.props
+const { href: _ignoredHref, fallbackToPrint = false, ...rest } = Astro.props
 
 const cvLocation = import.meta.env.CV_LOCATION
 const hasCvLocation =
@@ -16,4 +18,19 @@ const href = hasCvLocation ? cvLocation.trim() : '/resume/'
 const defaultLabel = hasCvLocation ? 'Download CV' : 'View resume'
 ---
 
-<Anchor href={href} {...rest}><slot>{defaultLabel}</slot></Anchor>
+{
+    !hasCvLocation && fallbackToPrint ? (
+        <button
+            type="button"
+            onclick="window.print()"
+            class={`cursor-pointer ${rest.class ?? ''}`}
+        >
+            <slot>{defaultLabel}</slot>
+        </button>
+    ) : (
+        <Anchor href={href} {...rest} download={hasCvLocation ? '' : undefined}>
+            <slot>{defaultLabel}</slot>
+        </Anchor>
+    )
+}
+

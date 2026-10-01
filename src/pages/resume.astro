@@ -37,6 +37,7 @@ const verifiedProjects = cv.projects.filter(
             !isCV && (
                 <div class="print:hidden flex justify-end">
                     <CvDownloadLink
+                        fallbackToPrint={true}
                         class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-border rounded-md hover:bg-muted transition-colors text-foreground"
                     >
                         Download PDF CV

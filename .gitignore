@@ -23,6 +23,7 @@ pnpm-debug.log*
 
 # tooling / scratch
 .superpowers/
+.direnv/
 
 # generated resume data
 src/cv.json
