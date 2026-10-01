@@ -16,11 +16,25 @@ const isCvBuild =
             .readFileSync(DIST_RESUME, 'utf-8')
             .includes('aria-label="Main navigation"'))
 
+import { PDF_OPTIONS } from '../scripts/node/export-pdf'
+
 describe('CV export configuration', () => {
     it('scripts/node/export-pdf.ts targets dist/resume/index.html instead of dist/index.html', () => {
         const scriptContent = fs.readFileSync(EXPORT_PDF_SCRIPT, 'utf-8')
         expect(scriptContent).toContain('dist/resume/index.html')
         expect(scriptContent).not.toContain('dist/index.html')
+    })
+
+    it('exports PDF with print media, light color scheme, A4, and background graphics', () => {
+        expect(PDF_OPTIONS.format).toBe('A4')
+        expect(PDF_OPTIONS.printBackground).toBe(true)
+        expect(PDF_OPTIONS.displayHeaderFooter).toBe(false)
+        expect(PDF_OPTIONS.preferCSSPageSize).toBe(true)
+
+        const scriptContent = fs.readFileSync(EXPORT_PDF_SCRIPT, 'utf-8')
+        expect(scriptContent).toContain("emulateMediaType('print')")
+        expect(scriptContent).toContain('prefers-color-scheme')
+        expect(scriptContent).toContain('light')
     })
 })
 
