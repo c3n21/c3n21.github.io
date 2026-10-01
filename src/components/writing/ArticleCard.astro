@@ -1,10 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import Card from '@/components/Card.astro'
-import CardHeader from '@/components/CardHeader.astro'
-import CardTitle from '@/components/CardTitle.astro'
-import CardContent from '@/components/CardContent.astro'
-import Badge from '@/components/Badge.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 export interface Props {
     entry: CollectionEntry<'writing'>
@@ -25,45 +21,111 @@ function formatDate(d: Date | string): string {
 }
 ---
 
-<Card
-    class:list={[
-        'flex flex-col h-full bg-card hover:border-foreground/30 transition-colors',
-        className,
-    ]}
->
-    <CardHeader>
-        <div class="flex items-center justify-between gap-2 mb-2">
-            <time
-                datetime={new Date(publishDate).toISOString()}
-                class="text-xs font-mono text-muted-foreground"
-            >
-                {formatDate(publishDate)}
-                {updatedDate && ` (Updated ${formatDate(updatedDate)})`}
-            </time>
-        </div>
-        <CardTitle class="text-xl">
-            <a
-                href={`/writing/${entry.id}/`}
-                class="hover:text-primary transition-colors story-link"
-            >
+<article class:list={['article-row', className]}>
+    <div class="article-row__meta">
+        <time datetime={new Date(publishDate).toISOString()} class="meta-text">
+            {formatDate(publishDate)}
+            {updatedDate && ` (UPDATED ${formatDate(updatedDate)})`}
+        </time>
+    </div>
+
+    <div class="article-row__body">
+        <h2 class="article-row__title">
+            <a href={`/writing/${entry.id}/`} class="article-row__link">
                 {title}
             </a>
-        </CardTitle>
-    </CardHeader>
-    <CardContent class="flex-1 flex flex-col justify-between space-y-4">
-        <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+        </h2>
+        <p class="article-row__description">
             {description}
         </p>
-        {
-            tags && tags.length > 0 && (
-                <div class="flex flex-wrap gap-1.5 pt-2">
-                    {tags.map((tag) => (
-                        <Badge variant="outline" class="text-xs font-mono">
-                            {tag}
-                        </Badge>
-                    ))}
-                </div>
-            )
+
+        <div class="article-row__footer">
+            {
+                tags && tags.length > 0 && (
+                    <div class="article-row__tags" aria-label="Tags">
+                        {tags.map((tag) => (
+                            <span class="article-row__tag meta-text">{tag}</span>
+                        ))}
+                    </div>
+                )
+            }
+            <div class="article-row__arrow">
+                <ArrowLink href={`/writing/${entry.id}/`}>Read</ArrowLink>
+            </div>
+        </div>
+    </div>
+</article>
+
+<style>
+    .article-row {
+        padding-block: clamp(2rem, 3.5vw, 3rem);
+        border-top: 1px solid var(--border);
+        display: grid;
+        gap: 1rem;
+    }
+
+    .article-row:last-child {
+        border-bottom: 1px solid var(--border);
+    }
+
+    @media (min-width: 48rem) {
+        .article-row {
+            grid-template-columns: minmax(9rem, 11rem) 1fr;
+            gap: 2.5rem;
+            align-items: start;
         }
-    </CardContent>
-</Card>
+    }
+
+    .article-row__meta {
+        padding-top: 0.35rem;
+    }
+
+    .article-row__title {
+        font-size: clamp(1.3rem, 1.8vw, 1.65rem);
+        font-weight: 650;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.6rem;
+    }
+
+    .article-row__link {
+        color: var(--text);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    .article-row__link:hover {
+        color: var(--accent);
+    }
+
+    .article-row__description {
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 1.25rem;
+        max-width: 58ch;
+    }
+
+    .article-row__footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .article-row__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .article-row__tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 0.1rem 0.45rem;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background: var(--surface);
+    }
+</style>

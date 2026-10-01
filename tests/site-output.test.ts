@@ -315,6 +315,8 @@ describe('Site output - Writing and RSS routes', () => {
         expect(html).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
         expect(html).toContain('href="/writing/debugging-dynamic-linkers-on-nixos/"')
         expect(html).toContain('href="/writing/multi-host-nixos-and-attic-caching/"')
+        expect(html).toContain('article-row')
+        expect(html).toContain('data-arrow="internal"')
     })
 
     it('dist/writing/<id>/index.html routes exist and render complete article content', () => {
