@@ -77,8 +77,15 @@ describe('Site output - Homepage shell and route navigation', () => {
 
         expect(html).toContain('https://github.com/c3n21')
         expect(html).toContain('https://www.linkedin.com/in/zhifanchen00/')
+        expect(html).toContain('href="/rss.xml"')
         expect(html).toContain('href="/resume/"')
         expect(html).toContain('href="/contact/"')
+
+        // Contact CTA
+        expect(html).toContain('Have an interesting engineering problem?')
+        expect(html).toContain(
+            'I occasionally take on selected part-time projects.'
+        )
 
         // Must remove the generic Loveable/heart copy
         expect(html).not.toContain('Designed with ❤️')

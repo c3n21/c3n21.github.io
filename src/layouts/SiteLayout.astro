@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import SiteHeader from '@/components/SiteHeader.astro'
+import ContactCta from '@/components/ContactCta.astro'
 import SiteFooter from '@/components/SiteFooter.astro'
 import isCVMode from '@/lib/isCVMode'
 import { SITE } from '@/lib/site'
@@ -10,6 +11,7 @@ export interface Props {
     description?: string
     image?: string
     noindex?: boolean
+    hideCta?: boolean
 }
 
 const {
@@ -17,6 +19,7 @@ const {
     description = SITE.description,
     image,
     noindex = false,
+    hideCta = false,
 } = Astro.props
 
 const isCV = isCVMode()
@@ -124,6 +127,7 @@ const faviconSizes = [
         <div class="flex-1">
             <slot />
         </div>
+        {!isCV && !hideCta && <ContactCta />}
         {!isCV && <SiteFooter />}
     </body>
 </html>
