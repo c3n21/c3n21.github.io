@@ -30,3 +30,7 @@ src/cv.json
 
 # private career materials
 career-private/
+.cache/
+.envrc
+spec/
+tmp/
