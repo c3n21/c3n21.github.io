@@ -84,10 +84,13 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(html).not.toContain('Designed with ❤️')
     })
 
-    it('displays Software Engineer identity and key CTAs, and removes vanity counters', () => {
+    it('displays Software Engineer identity, assertive dossier copy, and key CTAs, and removes vanity counters', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 
         expect(html).toContain('Software Engineer')
+        expect(html).toContain(
+            'I build software across the stack, and go deeper when systems get difficult.'
+        )
         expect(html).toContain('See my work')
         expect(html).toContain('Work with me')
 
@@ -98,6 +101,13 @@ describe('Site output - Homepage shell and route navigation', () => {
         // Vanity counters must be absent
         expect(html).not.toContain('NeoVim LOC')
         expect(html).not.toContain('Portfolio Deployments')
+
+        // Hero must not contain a portrait image
+        const heroMatch = html.match(/<section[^>]*home-hero[\s\S]*?<\/section>/)
+        expect(heroMatch).not.toBeNull()
+        if (heroMatch) {
+            expect(heroMatch[0]).not.toContain('<img')
+        }
     })
 })
 

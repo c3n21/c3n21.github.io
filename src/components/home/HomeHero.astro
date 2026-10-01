@@ -2,48 +2,92 @@
 import SectionLabel from '@/components/ui/SectionLabel.astro'
 import ArrowLink from '@/components/ui/ArrowLink.astro'
 import CvDownloadLink from '@/components/CvDownloadLink.astro'
-
-const now = new Date()
-const start = new Date('2021-06-01')
-const isAnniversaryPassed = now.getMonth() >= start.getMonth()
-const years = isAnniversaryPassed
-    ? now.getFullYear() - start.getFullYear()
-    : now.getFullYear() - start.getFullYear() - 1
+import DossierMeta from '@/components/ui/DossierMeta.astro'
 ---
 
-<section class="py-16 md:py-20 flex flex-col justify-center">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="flex justify-center mb-3">
-            <SectionLabel label="Software Engineer / Milan, Italy" />
-        </div>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6">
-            Software Engineer
-        </h1>
-        <p class="text-xl sm:text-2xl text-foreground/90 font-medium max-w-2xl mx-auto mb-4 leading-relaxed">
-            I build web products and internal tools across frontend, backend, and infrastructure.
-        </p>
-        <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-            Strong debugging and problem-solving across abstraction boundaries, with particular depth in Linux/Nix, backend systems, developer tooling, reproducibility, automation, and infrastructure.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <ArrowLink href="/work/">See my work</ArrowLink>
-            <CvDownloadLink variant="outline" size="lg" class="w-full sm:w-auto" />
-        </div>
-
-        <div class="pt-8 border-t border-border/50 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <div>
-                <div class="text-2xl font-bold text-foreground">{years}+</div>
-                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Years experience</div>
-            </div>
-            <div>
-                <div class="text-2xl font-bold text-foreground">Backend & Platform</div>
-                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Full-stack production breadth</div>
-            </div>
-            <div>
-                <div class="text-2xl font-bold text-foreground">Linux & NixOS</div>
-                <div class="text-xs uppercase tracking-wider text-muted-foreground mt-1">Tooling, reproducibility & OSS</div>
-            </div>
-        </div>
+<section class="home-hero site-container">
+  <div class="editorial-grid">
+    <div class="home-hero__main">
+      <SectionLabel label="Software Engineer / Milan, Italy" />
+      <h1>I build software across the stack, and go deeper when systems get difficult.</h1>
+      <p class="home-hero__lede">
+        Software Engineer working across product development, backend systems,
+        infrastructure and developer tooling.
+      </p>
+      <div class="home-hero__actions">
+        <ArrowLink href="/work/">See my work</ArrowLink>
+        <CvDownloadLink />
+      </div>
     </div>
+
+    <aside class="home-hero__meta" aria-label="Engineering focus">
+      <DossierMeta
+        items={[
+          { label: "Focus", value: "Product / Backend / Platform" },
+          { label: "Systems", value: "Linux / Nix / CI" },
+          { label: "Mode", value: "End-to-end ownership" },
+        ]}
+      />
+    </aside>
+  </div>
 </section>
+
+<style>
+  .home-hero {
+    min-height: min(48rem, calc(100svh - 5rem));
+    display: grid;
+    align-items: center;
+    padding-block: clamp(5rem, 12vh, 9rem);
+  }
+
+  .home-hero__main {
+    grid-column: 1 / span 8;
+  }
+
+  .home-hero__meta {
+    grid-column: 10 / -1;
+    align-self: end;
+  }
+
+  .home-hero h1 {
+    max-width: 13ch;
+    margin: 1.25rem 0 1.5rem;
+    font-size: clamp(3rem, 7vw, 6.8rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    font-weight: 650;
+    color: var(--text);
+  }
+
+  .home-hero__lede {
+    max-width: 52ch;
+    color: var(--text-muted);
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 48rem) {
+    .home-hero {
+      min-height: auto;
+      padding-block: clamp(3rem, 8vh, 5rem);
+    }
+
+    .home-hero__main {
+      grid-column: 1 / -1;
+    }
+
+    .home-hero__meta {
+      grid-column: 1 / -1;
+      margin-top: 3rem;
+      align-self: start;
+    }
+  }
+</style>
