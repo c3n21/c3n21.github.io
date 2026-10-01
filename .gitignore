@@ -34,3 +34,8 @@ career-private/
 .envrc
 spec/
 tmp/
+
+# Raw LinkedIn data exports contain private account data.
+Complete_LinkedInDataExport*
+linkedin-export/
+.linkedin-export/
