@@ -37,5 +37,5 @@ tmp/
 
 # Raw LinkedIn data exports contain private account data.
 Complete_LinkedInDataExport*
-linkedin-export/
-.linkedin-export/
+/linkedin-export/
+/.linkedin-export/
