@@ -36,6 +36,22 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(html).toContain('root.dataset.themeMode = "manual"')
     })
 
+    it('contains header identity, route navigation, and mobile-accessible CV download', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        const headerMatch = html.match(/<header[\s\S]*?<\/header>/)
+        expect(headerMatch).not.toBeNull()
+        const header = headerMatch![0]
+
+        expect(header).toContain('Zhifan Chen')
+        expect(header).toContain('SOFTWARE ENGINEER')
+        expect(header).toContain('href="/work/"')
+        expect(header).toContain('data-arrow="download"')
+
+        const mobileMenuIndex = header.indexOf('aria-label="Mobile navigation"')
+        const cvLinkIndex = header.indexOf('data-arrow="download"')
+        expect(cvLinkIndex).toBeLessThan(mobileMenuIndex)
+    })
+
     it('contains route-based navigation links instead of hash links', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 
