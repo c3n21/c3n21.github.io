@@ -1,23 +1,61 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import WorkMeta from '@/components/work/WorkMeta.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
+import DossierMeta from '@/components/ui/DossierMeta.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 export interface Props {
     entry: CollectionEntry<'work'>
 }
 
 const { entry } = Astro.props
-const { title, summary } = entry.data
+const {
+    title,
+    summary,
+    kind,
+    date,
+    endDate,
+    technologies,
+    role,
+    employer,
+    status,
+    heroImage,
+    heroAlt,
+} = entry.data
+
+function formatDate(d: Date | string): string {
+    const parsed = new Date(d)
+    return parsed.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+    })
+}
+
+const periodStr = endDate
+    ? `${formatDate(date)} – ${formatDate(endDate)}`
+    : formatDate(date)
+
+const metaItems = [
+    { label: 'Type', value: kind.toUpperCase() },
+    ...(role ? [{ label: 'Role', value: role }] : []),
+    ...(employer ? [{ label: 'Context', value: employer }] : []),
+    { label: 'Period', value: periodStr },
+    ...(status ? [{ label: 'Status', value: status.toUpperCase() }] : []),
+    ...(technologies && technologies.length > 0
+        ? [{ label: 'Stack', value: technologies.join(', ') }]
+        : []),
+]
 ---
 
 <SiteLayout
     title={`${title} — Case Study — Zhifan Chen`}
     description={summary}
 >
-    <main id="main-content" class="py-12 md:py-16">
-        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
+    <main id="main-content" class="py-12 md:py-20">
+        <article class="site-container">
+            <div class="mb-10">
                 <a
                     href="/work/"
                     class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
@@ -31,128 +69,192 @@ const { title, summary } = entry.data
                 </a>
             </div>
 
-            <header class="mb-10">
-                <h1
-                    class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4"
-                >
+            <header class="mb-12">
+                <SectionLabel label="Technical Case Study" />
+                <h1 class="case-study__title">
                     {title}
                 </h1>
-                <p
-                    class="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed"
-                >
+                <p class="case-study__lede">
                     {summary}
                 </p>
 
-                <div class="p-6 rounded-lg bg-card border border-border">
-                    <WorkMeta entry={entry} />
+                <div class="case-study__meta-box">
+                    <DossierMeta items={metaItems} />
                 </div>
+
+                {
+                    heroImage && (
+                        <div class="case-study__hero-visual">
+                            <Image
+                                src={heroImage as any}
+                                alt={heroAlt || title}
+                                widths={[720, 1080, 1440]}
+                                sizes="(max-width: 800px) 100vw, 1100px"
+                            />
+                        </div>
+                    )
+                }
             </header>
 
-            <hr class="my-8 border-border/60" />
-
-            <div class="case-study-content">
+            <div class="case-study-content prose-column">
                 <slot />
             </div>
 
             <footer
-                class="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                class="mt-20 pt-8 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >
-                <a
-                    href="/work/"
-                    class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                    &larr; Back to all work
-                </a>
-                <a
-                    href="/contact/"
-                    class="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-4"
-                >
-                    Discuss an engagement &rarr;
-                </a>
+                <ArrowLink href="/work/">&larr; Back to all work</ArrowLink>
+                <ArrowLink href="/contact/">Discuss an engagement</ArrowLink>
             </footer>
         </article>
     </main>
 </SiteLayout>
 
 <style is:global>
-    .case-study-content h2 {
-        font-size: 1.5rem;
-        line-height: 2rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
-        color: hsl(var(--foreground));
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid hsl(var(--border) / 0.6);
+    .case-study__title {
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        font-weight: 650;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin: 1rem 0 1.25rem;
+        color: var(--text);
     }
+
+    .case-study__lede {
+        font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        max-width: var(--prose-max);
+    }
+
+    .case-study__meta-box {
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        margin-bottom: 2.5rem;
+        max-width: var(--prose-max);
+    }
+
+    .case-study__hero-visual {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        overflow: hidden;
+        margin-bottom: 2.5rem;
+    }
+
+    .case-study__hero-visual img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .case-study-content {
+        color: var(--text);
+        line-height: 1.75;
+        font-size: 1.05rem;
+    }
+
+    .case-study-content h2 {
+        font-size: clamp(1.4rem, 2vw, 1.8rem);
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+    }
+
     .case-study-content h3 {
         font-size: 1.25rem;
-        line-height: 1.75rem;
         font-weight: 600;
         margin-top: 2rem;
         margin-bottom: 0.75rem;
-        color: hsl(var(--foreground));
+        color: var(--text);
     }
+
     .case-study-content p {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        line-height: 1.75;
-        color: hsl(var(--foreground) / 0.9);
+        margin-block: 1.15rem;
+        color: color-mix(in srgb, var(--text) 92%, transparent);
     }
+
     .case-study-content ul {
         list-style-type: disc;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+        margin-block: 1.15rem;
         padding-left: 1.5rem;
     }
+
     .case-study-content ol {
         list-style-type: decimal;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+        margin-block: 1.15rem;
         padding-left: 1.5rem;
     }
+
     .case-study-content li {
-        margin-top: 0.375rem;
-        margin-bottom: 0.375rem;
-        line-height: 1.625;
-        color: hsl(var(--foreground) / 0.9);
+        margin-block: 0.4rem;
     }
+
     .case-study-content strong {
         font-weight: 600;
-        color: hsl(var(--foreground));
+        color: var(--text);
     }
-    .case-study-content code {
+
+    .case-study-content code:not(pre code) {
         font-family: var(--font-mono);
-        font-size: 0.875em;
-        background-color: hsl(var(--muted));
+        font-size: 0.88em;
+        background: var(--surface-raised);
+        border: 1px solid var(--border);
         padding: 0.15em 0.35em;
-        border-radius: 0.25rem;
-        color: hsl(var(--foreground));
+        border-radius: 2px;
+        color: var(--text);
     }
+
     .case-study-content pre {
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
+        margin-block: 1.75rem;
         padding: 1.25rem;
-        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
         overflow-x: auto;
         font-family: var(--font-mono);
         font-size: 0.875rem;
         line-height: 1.6;
-        background-color: hsl(var(--muted));
-        border: 1px solid hsl(var(--border));
     }
+
     .case-study-content pre code {
-        background-color: transparent;
+        background: transparent;
+        border: none;
         padding: 0;
-        border-radius: 0;
     }
+
     .case-study-content blockquote {
-        border-left: 3px solid hsl(var(--border));
-        padding-left: 1rem;
+        border-left: 3px solid var(--accent);
+        padding-left: 1.25rem;
         font-style: italic;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
-        color: hsl(var(--muted-foreground));
+        margin-block: 1.75rem;
+        color: var(--text-muted);
+    }
+
+    .case-study-content table {
+        width: 100%;
+        margin-block: 2rem;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    .case-study-content th {
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid var(--border);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+    }
+
+    .case-study-content td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
     }
 </style>

@@ -145,6 +145,7 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('Verification')
         expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
         expect(html).toContain('href="/work/"')
+        expect(html).toContain('dossier-meta')
     })
 
     it('dist/work/backend-authorization-service/index.html exists and contains case study sections', () => {
