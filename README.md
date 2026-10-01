@@ -105,7 +105,39 @@ pnpm exec tsx scripts/node/export-pdf.ts /path/to/chromium
 
 ---
 
-## ⚙️ GitHub Actions & CI/CD Pipeline
+## 🎨 Design System & Content Authoring Notes
 
-- **`build-web`**: Injects `CV` secret, runs `astro check` and `astro build`, and deploys static artifacts to GitHub Pages.
-- **`generate-pdf`**: Runs CV-mode build and Puppeteer export to attach `ZhifanChen.pdf` to versioned releases.
+The site follows a **Technical Dossier** design aesthetic: dense, typography-led, high-contrast, and restrained.
+
+### 1. Design Tokens & Palette (`src/styles/tokens.css`)
+- **Tokens**: Semantic CSS variables (`--bg`, `--surface`, `--surface-raised`, `--text`, `--text-muted`, `--border`, `--accent`, `--font-sans`, `--font-mono`).
+- **Layout primitives**: `.site-container`, `.editorial-grid`, `.prose-column`, `.meta-text`, `.rule`.
+
+### 2. Arrow Semantics (`ArrowLink.astro`)
+- `internal` (`→`): Site navigation to pages or internal case studies.
+- `external` (`↗`): External links (GitHub repos, external articles, LinkedIn).
+- `download` (`↓`): File downloads (e.g. `ZhifanChen.pdf`).
+
+### 3. Typography & Monospace Rules
+- Monospace font (`JetBrains Mono Variable`) is reserved for metadata, dates, technical tags, status pills, and code.
+- Headings and body prose use clean sans-serif (`Inter`).
+- Headings use `text-wrap: balance` and paragraphs use `text-wrap: pretty`.
+
+### 4. Technical Visuals & Figures
+- Use `TechnicalFigure.astro` for diagrams and system visualizations.
+- Only real engineering artifacts: architecture diagrams, benchmark graphs, profiler flamegraphs, and genuine terminal output.
+- No generic AI stock illustrations or fake rounded browser mockups.
+
+### 5. Portrait Treatment
+- The photographic portrait is located at `src/assets/images/me.jpg` and is used exclusively on the `/about/` page with an editorial 4:5 aspect ratio and subtle border.
+- The homepage hero remains purely assertive and technical without portrait images.
+
+### 6. System-First Theme Handling
+- Initial page loads default to the user's OS color scheme (`prefers-color-scheme`).
+- Clicking the theme toggle switches between explicit `dark` and `light` modes.
+- `Use system theme` clears manual overrides and returns to reactive system sync.
+
+### 7. Case-Study Confidentiality Rules
+- Anonymize internal client codebases and confidential metrics.
+- Focus on architectural decisions, trade-offs, engineering constraints, and technical verification.
+

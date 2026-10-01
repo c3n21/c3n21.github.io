@@ -404,6 +404,7 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
         'dist/writing/multi-host-nixos-and-attic-caching/index.html',
         'dist/about/index.html',
         'dist/contact/index.html',
+        'dist/404.html',
     ]
 
     it('every major page exists, has exactly one <h1>, a non-empty meta description, canonical link, and skip/main structure', () => {
@@ -472,6 +473,15 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
             expect(heroMatch[0]).not.toContain('about-portrait')
             expect(heroMatch[0]).not.toContain('Zhifan Chen')
         }
+    })
+
+    it('dist/404.html exists and renders restrained not-found dossier', () => {
+        const filePath = path.resolve(process.cwd(), 'dist/404.html')
+        expect(fs.existsSync(filePath), 'Expected dist/404.html to exist').toBe(true)
+        const html = fs.readFileSync(filePath, 'utf-8')
+        expect(html).toContain('404')
+        expect(html).toContain("The page you're looking for isn't here.")
+        expect(html).toContain('Back home')
     })
 })
 

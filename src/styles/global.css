@@ -262,3 +262,23 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+a {
+    text-underline-offset: 4px;
+}
+
+h1,
+h2,
+h3 {
+    text-wrap: balance;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
