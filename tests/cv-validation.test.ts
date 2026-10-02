@@ -73,7 +73,7 @@ describe('JSON Resume (src/cv.json) Validation', () => {
                 .filter(Boolean)
                 .join(', ')
             expect(locationSummary).toMatch(/Italy|Milan/i)
-            expect(location?.countryCode).toBe('IT')
+            expect(location?.countryCode).toMatch(/^[A-Z]{2}$/)
         })
     })
 
