@@ -16,7 +16,13 @@ export async function exportPdf(chromePathOverride?: string): Promise<string> {
         chromePathOverride ||
         process.argv[2] ||
         process.env.PUPPETEER_EXECUTABLE_PATH ||
-        (fs.existsSync('/etc/profiles/per-user/zhifan/bin/chromium')
+        (fs.existsSync('/usr/bin/google-chrome')
+            ? '/usr/bin/google-chrome'
+            : fs.existsSync('/usr/bin/chromium-browser')
+            ? '/usr/bin/chromium-browser'
+            : fs.existsSync('/usr/bin/chromium')
+            ? '/usr/bin/chromium'
+            : fs.existsSync('/etc/profiles/per-user/zhifan/bin/chromium')
             ? '/etc/profiles/per-user/zhifan/bin/chromium'
             : undefined)
 
