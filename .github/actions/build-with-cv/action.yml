@@ -60,8 +60,3 @@ runs:
     - name: Run pnpm build
       shell: bash
       run: pnpm build
-
-    - name: Cleanup src/cv.json
-      shell: bash
-      if: always()
-      run: rm -f src/cv.json

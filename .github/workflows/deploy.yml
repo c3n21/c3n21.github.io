@@ -46,6 +46,10 @@ jobs:
         with:
           path: ./dist/
 
+      - name: Cleanup src/cv.json
+        if: always()
+        run: rm -f src/cv.json
+
   build-cv:
     needs: build-web
     runs-on: ubuntu-latest
@@ -67,6 +71,10 @@ jobs:
         with:
           name: ${{ env.PDF_NAME }}
           path: ${{ env.PDF_NAME }}
+
+      - name: Cleanup src/cv.json
+        if: always()
+        run: rm -f src/cv.json
 
   deploy-cv:
     needs: build-cv
