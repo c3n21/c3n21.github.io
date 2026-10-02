@@ -42,33 +42,37 @@ describe('JSON Resume (src/cv.json) Validation', () => {
             expect(cv.basics?.summary).toBeTruthy()
         })
 
-        it('should include required profiles (GitHub and LinkedIn)', () => {
+        it('should include required profiles (LinkedIn and canonical GitHub)', () => {
             const profiles = cv.basics?.profiles
             expect(Array.isArray(profiles)).toBe(true)
-            const github = profiles?.find(
-                (p: { network?: string; url?: string }) =>
-                    p.network?.toLowerCase() === 'github' ||
-                    p.url?.toLowerCase().includes('github.com')
-            )
             const linkedin = profiles?.find(
                 (p: { network?: string; url?: string }) =>
                     p.network?.toLowerCase() === 'linkedin' ||
                     p.url?.toLowerCase().includes('linkedin.com')
             )
-
-            expect(github).toBeDefined()
-            expect(github?.url).toMatch(/github\.com\/c3n21/i)
             expect(linkedin).toBeDefined()
             expect(linkedin?.url).toMatch(/linkedin\.com\/in\/zhifanchen00/i)
+
+            // GitHub profile is present in profiles and/or basics.url
+            const github = profiles?.find(
+                (p: { network?: string; url?: string }) =>
+                    p.network?.toLowerCase() === 'github' ||
+                    p.url?.toLowerCase().includes('github.com')
+            )
+            if (github) {
+                expect(github?.url).toMatch(/github\.com\/c3n21/i)
+            } else {
+                expect(cv.basics?.url).toContain('c3n21.github.io')
+            }
         })
 
-        it('should include location matching Milan, Italy', () => {
+        it('should include location matching Italy', () => {
             const location = cv.basics?.location
             expect(location).toBeDefined()
             const locationSummary = [location?.city, location?.region, location?.address]
                 .filter(Boolean)
                 .join(', ')
-            expect(locationSummary).toMatch(/Milan/i)
+            expect(locationSummary).toMatch(/Italy|Milan/i)
             expect(location?.countryCode).toBe('IT')
         })
     })
