@@ -1,8 +1,3 @@
-# 🧠 Thought process:
-# This workflow builds and deploys the website and CV.
-# - On push to main: build only, no deploy
-# - On release tag: build (if artifact is not present) and deploy both
-# - Using composite action to avoid code duplication
 name: Build and Deploy
 
 env:
@@ -12,14 +7,13 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
-# Cancel any previous workflow.
-# This can happen when we merge a PR that triggers a new release.
-# The concurrency group uses the workflow name and the sha of the commit, so that
-# we don't need to care whether it's a release or not.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.sha }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -30,24 +24,8 @@ permissions:
 jobs:
   build-web:
     runs-on: ubuntu-latest
-    outputs:
-      neovim-lines: ${{ steps.lines.outputs.count }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Checkout NeoVim config
-        uses: actions/checkout@v4
-        with:
-          repository: 'c3n21/nvim-configuration'
-          path: './neovim_config'
-
-      - id: lines
-        name: Calculate total lines in NeoVim config
-        run: |
-          COUNT=$(find . -path './.git*' -prune -o -type f -exec wc -l {} \; | awk '{sum+=$1} END {print sum}')
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
-          echo "NEOVIM_CONFIG_LINES=$COUNT" >> "$GITHUB_ENV"
-        working-directory: './neovim_config'
 
       - name: Set CV_LOCATION environment variable
         run: |
@@ -59,39 +37,34 @@ jobs:
         with:
           cv: ${{ secrets.CV }}
 
+      - name: Run test suite
+        run: pnpm exec vitest run
+
       - name: Upload Pages Artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist/
 
+      - name: Cleanup src/cv.json
+        if: always()
+        run: rm -f src/cv.json
+
   build-cv:
-    needs: build-web # leverage pnpm cache reuse
+    needs: build-web
     runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.build-web.outputs.neovim-lines }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store/v3
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-
 
       - uses: ./.github/actions/build-with-cv
         with:
           cv: ${{ secrets.CV }}
         env:
-          CV: dark
-
-      - name: Install chrome for Puppeteer
-        run: |
-          sudo npx puppeteer browsers install chrome --install-deps
+          CV: light
 
       - name: Generate PDF from built site
         run: |
-          pnpm run export-pdf
+          pnpm run cv:pdf
 
       - name: Upload CV Artifact
         uses: actions/upload-artifact@v4
@@ -99,12 +72,14 @@ jobs:
           name: ${{ env.PDF_NAME }}
           path: ${{ env.PDF_NAME }}
 
+      - name: Cleanup src/cv.json
+        if: always()
+        run: rm -f src/cv.json
+
   deploy-cv:
     needs: build-cv
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      NEOVIM_CONFIG_LINES: ${{ needs.build-web.outputs.neovim-lines }}
     steps:
       - name: Download CV Artifact
         uses: actions/download-artifact@v4
@@ -122,7 +97,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-web:
-    needs: build-web
+    needs: [build-web, deploy-cv]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

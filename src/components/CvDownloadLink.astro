@@ -1,19 +1,40 @@
 ---
-import Anchor from '@/components/astro/Anchor.astro'
-import type ComponentBaseProps from '@/components/astro/theme/types/ComponentBaseProps'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
-interface Props
-    extends ComponentBaseProps,
-        astroHTML.JSX.AnchorHTMLAttributes {}
+interface Props {
+    class?: string
+    fallbackToPrint?: boolean
+    variant?: string
+    size?: string
+}
 
-const { href: _ignoredHref, ...rest } = Astro.props
+const { class: className = '', fallbackToPrint = false } = Astro.props
 
 const cvLocation = import.meta.env.CV_LOCATION
 const hasCvLocation =
     typeof cvLocation === 'string' && cvLocation.trim().length > 0
 
-const href = hasCvLocation ? cvLocation.trim() : '/resume/'
-const defaultLabel = hasCvLocation ? 'Download CV' : 'View resume'
+const href = hasCvLocation ? cvLocation.trim() : '/ZhifanChen.pdf'
 ---
 
-<Anchor href={href} {...rest}><slot>{defaultLabel}</slot></Anchor>
+{
+    !hasCvLocation && fallbackToPrint ? (
+        <button
+            type="button"
+            onclick="window.print()"
+            class={`cursor-pointer inline-flex items-center gap-1.5 ${className}`}
+        >
+            <slot>Download PDF CV</slot>
+            <span aria-hidden="true">↓</span>
+        </button>
+    ) : (
+        <ArrowLink
+            href={href}
+            kind="download"
+            class={className}
+            download={true}
+        >
+            <slot>Download CV</slot>
+        </ArrowLink>
+    )
+}

@@ -1,9 +1,12 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro'
 import WorkCard from '@/components/work/WorkCard.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
 import { getPublishedWork } from '@/lib/content/work'
 
 const workEntries = await getPublishedWork()
+const featuredEntries = workEntries.filter((e) => e.data.featured)
+const otherEntries = workEntries.filter((e) => !e.data.featured)
 ---
 
 <SiteLayout
@@ -11,10 +14,11 @@ const workEntries = await getPublishedWork()
     description="Production systems, infrastructure, and engineering case studies detailing problem context, technical decisions, and verifiable results."
 >
     <main id="main-content" class="py-16 md:py-24">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mb-12">
+        <div class="site-container">
+            <header class="max-w-3xl mb-16">
+                <SectionLabel label="Selected Case Studies & Systems" />
                 <h1
-                    class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
+                    class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl mt-3"
                 >
                     Engineering Work & Case Studies
                 </h1>
@@ -23,20 +27,43 @@ const workEntries = await getPublishedWork()
                     Each case study details the core problem, engineering constraints,
                     trade-offs evaluated, and verifiable outcomes.
                 </p>
-            </div>
+            </header>
 
             {
                 workEntries.length === 0 ? (
-                    <div class="rounded-lg border border-dashed border-border p-12 text-center">
+                    <div class="border border-dashed border-border p-12 text-center">
                         <p class="text-muted-foreground">
                             No case studies are currently published. Check back soon for new engineering write-ups.
                         </p>
                     </div>
                 ) : (
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {workEntries.map((entry) => (
-                            <WorkCard entry={entry} />
-                        ))}
+                    <div class="space-y-16">
+                        {featuredEntries.length > 0 && (
+                            <section aria-label="Featured engineering projects">
+                                <div class="work-list">
+                                    {featuredEntries.map((entry, i) => (
+                                        <WorkCard entry={entry} index={i + 1} />
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {otherEntries.length > 0 && (
+                            <section aria-label="Additional engineering projects">
+                                <div class="mb-6">
+                                    <SectionLabel label="Additional Systems & Projects" />
+                                </div>
+                                <div class="work-list">
+                                    {otherEntries.map((entry, i) => (
+                                        <WorkCard
+                                            entry={entry}
+                                            compact={true}
+                                            index={featuredEntries.length + i + 1}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+                        )}
                     </div>
                 )
             }

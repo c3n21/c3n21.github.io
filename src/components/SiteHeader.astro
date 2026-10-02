@@ -1,8 +1,8 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
+import CvDownloadLink from './CvDownloadLink.astro'
 import Menu from '@lucide/astro/icons/menu'
 import X from '@lucide/astro/icons/x'
-import { SITE } from '@/lib/site'
 
 const navItems = [
     { href: '/work/', label: 'Work' },
@@ -19,83 +19,64 @@ const normalizedPath = currentPath.endsWith('/')
     : `${currentPath}/`
 ---
 
-<header
-    class="sticky top-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border z-50"
->
+<header data-site-header>
+    <div class="site-container header-grid">
+        <a href="/" class="site-identity" aria-label="Zhifan Chen — home">
+            <span class="site-identity__name">Zhifan Chen</span>
+            <span class="site-identity__role">SOFTWARE ENGINEER</span>
+        </a>
+
+        <nav aria-label="Main navigation" class="desktop-nav">
+            {
+                navItems.map((item) => {
+                    const isActive =
+                        normalizedPath === item.href ||
+                        (item.href !== '/' &&
+                            normalizedPath.startsWith(item.href))
+                    return (
+                        <a
+                            href={item.href}
+                            aria-current={isActive ? 'page' : undefined}
+                            class:list={[
+                                'nav-link',
+                                { 'nav-link--active': isActive },
+                            ]}
+                        >
+                            {item.label}
+                        </a>
+                    )
+                })
+            }
+        </nav>
+
+        <div class="header-controls">
+            <CvDownloadLink class="header-cv-link">CV</CvDownloadLink>
+            <ThemeToggle />
+            <label
+                for="menu"
+                class="mobile-menu-trigger md:hidden cursor-pointer p-1.5 inline-flex items-center justify-center text-muted-foreground hover:text-foreground"
+                aria-label="Toggle menu"
+            >
+                <Menu class="in-has-checked:hidden w-5 h-5" />
+                <X class="hidden in-has-checked:inline w-5 h-5" />
+            </label>
+        </div>
+    </div>
+
     <input
         id="menu"
         class="peer md:hidden sr-only"
         type="checkbox"
         aria-label="Toggle navigation menu"
     />
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div class="flex-shrink-0">
-                <a
-                    href="/"
-                    class="text-xl font-bold tracking-tight text-foreground hover:opacity-90 transition-opacity"
-                >
-                    {SITE.name}
-                </a>
-            </div>
-
-            <div class="md:block">
-                <div
-                    class="ml-10 flex flex-row-reverse items-center space-x-2 md:flex-row md:space-x-8"
-                >
-                    <label
-                        for="menu"
-                        class="md:hidden cursor-pointer p-2 inline-flex items-center justify-center"
-                        aria-label="Toggle menu"
-                    >
-                        <Menu class="in-has-checked:hidden w-6 h-6" />
-                        <X class="hidden in-has-checked:inline w-6 h-6" />
-                    </label>
-
-                    <nav
-                        aria-label="Main navigation"
-                        class="hidden md:flex items-center space-x-2 md:space-x-6"
-                    >
-                        {
-                            navItems.map((item) => {
-                                const isActive =
-                                    normalizedPath === item.href ||
-                                    (item.href !== '/' &&
-                                        normalizedPath.startsWith(item.href))
-                                return (
-                                    <a
-                                        href={item.href}
-                                        aria-current={
-                                            isActive ? 'page' : undefined
-                                        }
-                                        class:list={[
-                                            'text-sm transition-colors story-link py-1',
-                                            isActive
-                                                ? 'text-foreground font-medium'
-                                                : 'text-muted-foreground hover:text-foreground',
-                                        ]}
-                                    >
-                                        {item.label}
-                                    </a>
-                                )
-                            })
-                        }
-                    </nav>
-
-                    <ThemeToggle />
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Mobile menu dropdown -->
     <div
-        class="hidden items-center space-x-2 border-t border-border in-has-checked:not-md:flex"
+        class="hidden items-center border-t border-border in-has-checked:not-md:flex bg-background/95"
     >
         <nav
             aria-label="Mobile navigation"
-            class="px-2 pt-2 pb-3 space-y-1 w-full"
+            class="px-4 pt-2 pb-4 space-y-1 w-full site-container"
         >
             {
                 navItems.map((item) => {
@@ -122,3 +103,82 @@ const normalizedPath = currentPath.endsWith('/')
         </nav>
     </div>
 </header>
+
+<style>
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(12px);
+    }
+
+    .header-grid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 4rem;
+    }
+
+    .site-identity {
+        display: grid;
+        gap: 0.08rem;
+        text-decoration: none;
+        color: var(--text);
+    }
+
+    .site-identity__name {
+        font-weight: 650;
+        letter-spacing: -0.02em;
+    }
+
+    .site-identity__role {
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        font-size: 0.64rem;
+        letter-spacing: 0.1em;
+    }
+
+    .desktop-nav {
+        display: none;
+        align-items: center;
+        gap: 1.75rem;
+    }
+
+    @media (min-width: 48rem) {
+        .desktop-nav {
+            display: flex;
+        }
+    }
+
+    .nav-link {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--ease-standard);
+        padding-block: 0.25rem;
+    }
+
+    .nav-link:hover {
+        color: var(--text);
+    }
+
+    .nav-link--active {
+        color: var(--text);
+        font-weight: 550;
+    }
+
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .header-cv-link {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        letter-spacing: 0.05em;
+        color: var(--text);
+    }
+</style>

@@ -1,0 +1,120 @@
+---
+import cv from '@/cv.json'
+import { SITE } from '@/lib/site'
+import CvDownloadLink from '@/components/CvDownloadLink.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
+
+interface Props {
+    class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<aside class:list={['resume-sidebar', className]}>
+    <div class="resume-sidebar__identity">
+        <h2 class="resume-sidebar__name">{cv.basics.name || SITE.name}</h2>
+        <p class="resume-sidebar__role meta-text">SOFTWARE ENGINEER</p>
+        <p class="resume-sidebar__location meta-text">Milan, Italy</p>
+    </div>
+
+    <div class="resume-sidebar__contact">
+        {
+            cv.basics.email && (
+                <div class="resume-sidebar__item">
+                    <span class="meta-text resume-sidebar__label">Email</span>
+                    <a
+                        href={`mailto:${cv.basics.email}`}
+                        class="resume-sidebar__val"
+                    >
+                        {cv.basics.email}
+                    </a>
+                </div>
+            )
+        }
+        <div class="resume-sidebar__item">
+            <span class="meta-text resume-sidebar__label">GitHub</span>
+            <ArrowLink href={SITE.githubUrl} kind="external">
+                github.com/c3n21
+            </ArrowLink>
+        </div>
+        <div class="resume-sidebar__item">
+            <span class="meta-text resume-sidebar__label">LinkedIn</span>
+            <ArrowLink href={SITE.linkedinUrl} kind="external">
+                linkedin.com/in/zhifanchen00
+            </ArrowLink>
+        </div>
+    </div>
+
+    <div class="resume-sidebar__download print:hidden">
+        <CvDownloadLink fallbackToPrint={true}>
+            Download CV
+        </CvDownloadLink>
+    </div>
+</aside>
+
+<style>
+    .resume-sidebar {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 64rem) {
+        .resume-sidebar {
+            position: sticky;
+            top: 7rem;
+            align-self: start;
+        }
+    }
+
+    .resume-sidebar__name {
+        font-size: 1.5rem;
+        font-weight: 650;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.25rem;
+        color: var(--text);
+    }
+
+    .resume-sidebar__role {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        margin: 0;
+    }
+
+    .resume-sidebar__location {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        margin: 0.15rem 0 0;
+    }
+
+    .resume-sidebar__contact {
+        display: grid;
+        gap: 0.85rem;
+        font-size: 0.85rem;
+    }
+
+    .resume-sidebar__item {
+        display: grid;
+        gap: 0.2rem;
+    }
+
+    .resume-sidebar__label {
+        font-size: 0.65rem;
+    }
+
+    .resume-sidebar__val {
+        color: var(--text);
+        text-decoration: none;
+        word-break: break-all;
+        transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    .resume-sidebar__val:hover {
+        color: var(--accent);
+    }
+
+    .resume-sidebar__download {
+        padding-top: 0.5rem;
+    }
+</style>

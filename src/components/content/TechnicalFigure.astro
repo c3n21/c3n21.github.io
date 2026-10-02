@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+    src: ImageMetadata
+    alt: string
+    caption?: string
+    wide?: boolean
+}
+
+const { src, alt, caption, wide = true } = Astro.props
+---
+
+<figure class:list={['technical-figure', { 'technical-figure--wide': wide }]}>
+    <div class="technical-figure__frame">
+        <Image
+            src={src}
+            alt={alt}
+            widths={[720, 1080, 1440]}
+            sizes="(max-width: 800px) 100vw, 1100px"
+        />
+    </div>
+    {
+        caption && (
+            <figcaption class="technical-figure__caption">
+                {caption}
+            </figcaption>
+        )
+    }
+</figure>
+
+<style>
+    .technical-figure {
+        margin-block: 2.5rem;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .technical-figure--wide {
+        width: 100%;
+    }
+
+    .technical-figure__frame {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        overflow: hidden;
+    }
+
+    .technical-figure__frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .technical-figure__caption {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        text-align: left;
+    }
+</style>

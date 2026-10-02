@@ -22,6 +22,36 @@ describe('Site output - Homepage shell and route navigation', () => {
         expect(fs.existsSync(DIST_INDEX), `Expected ${DIST_INDEX} to exist`).toBe(true)
     })
 
+    it('contains dossier layout primitives and system theme mode attribute', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        expect(html).toContain('data-section-label')
+        expect(html).toContain('data-arrow="internal"')
+        expect(html).toContain('data-theme-mode="system"')
+    })
+
+    it('contains system-first theme bootstrap script in head', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        expect(html).toContain('portfolio-theme')
+        expect(html).toContain('root.dataset.themeMode = "system"')
+        expect(html).toContain('root.dataset.themeMode = "manual"')
+    })
+
+    it('contains header identity, route navigation, and mobile-accessible CV download', () => {
+        const html = fs.readFileSync(DIST_INDEX, 'utf-8')
+        const headerMatch = html.match(/<header[\s\S]*?<\/header>/)
+        expect(headerMatch).not.toBeNull()
+        const header = headerMatch![0]
+
+        expect(header).toContain('Zhifan Chen')
+        expect(header).toContain('SOFTWARE ENGINEER')
+        expect(header).toContain('href="/work/"')
+        expect(header).toContain('data-arrow="download"')
+
+        const mobileMenuIndex = header.indexOf('aria-label="Mobile navigation"')
+        const cvLinkIndex = header.indexOf('data-arrow="download"')
+        expect(cvLinkIndex).toBeLessThan(mobileMenuIndex)
+    })
+
     it('contains route-based navigation links instead of hash links', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 
@@ -47,17 +77,27 @@ describe('Site output - Homepage shell and route navigation', () => {
 
         expect(html).toContain('https://github.com/c3n21')
         expect(html).toContain('https://www.linkedin.com/in/zhifanchen00/')
+        expect(html).toContain('href="/rss.xml"')
         expect(html).toContain('href="/resume/"')
         expect(html).toContain('href="/contact/"')
+
+        // Contact CTA
+        expect(html).toContain('Have an interesting engineering problem?')
+        expect(html).toContain(
+            'I occasionally take on selected part-time projects.'
+        )
 
         // Must remove the generic Loveable/heart copy
         expect(html).not.toContain('Designed with ❤️')
     })
 
-    it('displays Software Engineer identity and key CTAs, and removes vanity counters', () => {
+    it('displays Software Engineer identity, assertive dossier copy, and key CTAs, and removes vanity counters', () => {
         const html = fs.readFileSync(DIST_INDEX, 'utf-8')
 
         expect(html).toContain('Software Engineer')
+        expect(html).toContain(
+            'I build software across the stack, and go deeper when systems get difficult.'
+        )
         expect(html).toContain('See my work')
         expect(html).toContain('Work with me')
 
@@ -68,6 +108,13 @@ describe('Site output - Homepage shell and route navigation', () => {
         // Vanity counters must be absent
         expect(html).not.toContain('NeoVim LOC')
         expect(html).not.toContain('Portfolio Deployments')
+
+        // Hero must not contain a portrait image
+        const heroMatch = html.match(/<section[^>]*home-hero[\s\S]*?<\/section>/)
+        expect(heroMatch).not.toBeNull()
+        if (heroMatch) {
+            expect(heroMatch[0]).not.toContain('<img')
+        }
     })
 })
 
@@ -85,6 +132,7 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('href="/work/backend-authorization-service/"')
         expect(html).toContain('Open-Source Contributions')
         expect(html).toContain('href="/work/open-source/"')
+        expect(html).toContain('work-row')
     })
 
     it('dist/work/nixos-infrastructure/index.html exists and contains case study sections and back link', () => {
@@ -104,6 +152,7 @@ describe('Site output - Work index and case-study routes', () => {
         expect(html).toContain('Verification')
         expect(html.includes('Retrospective &amp; Lessons') || html.includes('Retrospective')).toBe(true)
         expect(html).toContain('href="/work/"')
+        expect(html).toContain('dossier-meta')
     })
 
     it('dist/work/backend-authorization-service/index.html exists and contains case study sections', () => {
@@ -182,6 +231,9 @@ describe('Site output - Resume route', () => {
         expect(html).toContain('aria-label="Main navigation"')
         expect(html).toContain('<footer')
 
+        // Sidebar presence and desktop sticky structure
+        expect(html).toContain('resume-sidebar')
+
         // Experience & Education
         expect(html).toContain('HRM Group')
         expect(html).toContain('Università degli Studi di Milano')
@@ -192,10 +244,22 @@ describe('Site output - Resume route', () => {
         expect(html).toContain('Backend &amp; Systems')
         expect(html).toContain('Infrastructure &amp; Tooling')
 
-        // On-demand PDF link in web mode
-        const hasPdfLink =
-            html.includes('Download PDF CV') || html.includes('View resume')
-        expect(hasPdfLink).toBe(true)
+        // Languages & Interests
+        expect(html).toContain('Languages')
+        expect(html).toContain('Chinese')
+        expect(html).toContain('Italian')
+        expect(html).toContain('English')
+        expect(html).toContain('Interests')
+        expect(html).toContain('Open source')
+        expect(html).toContain('Self-hosting')
+        expect(html).toContain('Developer tooling')
+
+        // On-demand PDF / CV download link
+        expect(html).toContain('Download CV')
+
+        // Related work links
+        expect(html).toContain('Related work')
+        expect(html).toContain('href="/work/backend-authorization-service/"')
     })
 })
 
@@ -211,9 +275,11 @@ describe('Site output - Services and Contact routes', () => {
 
         const html = fs.readFileSync(DIST_SERVICES, 'utf-8')
 
-        // Title and availability banner
+        // Title and availability copy
         expect(html).toContain('Services &amp; Consulting')
-        expect(html).toContain('Available for selected part-time engagements')
+        expect(html).toContain(
+            'I occasionally take on selected part-time engagements alongside my main work.'
+        )
 
         // The 5 service families
         expect(html).toContain('Software Development &amp; Modernization')
@@ -229,6 +295,13 @@ describe('Site output - Services and Contact routes', () => {
         ).toBe(true)
         expect(html).toContain('Out of Scope')
         expect(html).toContain('href="/contact/"')
+
+        expect(html).toContain(
+            'I occasionally take on selected part-time engagements alongside my main work.'
+        )
+        expect(html.toLowerCase()).not.toContain('currently accepting')
+        expect(html).not.toContain('24/7')
+        expect(html.toLowerCase()).not.toContain('book a call')
     })
 
     it('dist/contact/index.html exists and renders contact channels without joke copy', () => {
@@ -273,6 +346,8 @@ describe('Site output - Writing and RSS routes', () => {
         expect(html).toContain('Practical Multi-Host NixOS and Binary Caching with Attic')
         expect(html).toContain('href="/writing/debugging-dynamic-linkers-on-nixos/"')
         expect(html).toContain('href="/writing/multi-host-nixos-and-attic-caching/"')
+        expect(html).toContain('article-row')
+        expect(html).toContain('data-arrow="internal"')
     })
 
     it('dist/writing/<id>/index.html routes exist and render complete article content', () => {
@@ -344,6 +419,7 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
         'dist/writing/multi-host-nixos-and-attic-caching/index.html',
         'dist/about/index.html',
         'dist/contact/index.html',
+        'dist/404.html',
     ]
 
     it('every major page exists, has exactly one <h1>, a non-empty meta description, canonical link, and skip/main structure', () => {
@@ -392,5 +468,36 @@ describe('Site output - Structural, SEO, and Accessibility requirements', () => 
             expect(html, `Expected main landmark with id="main-content" in ${relativePath}`).toContain('id="main-content"')
         }
     })
+
+    it('dist/about/index.html contains editorial portrait with Zhifan Chen alt text, absent from homepage hero', () => {
+        const aboutHtml = fs.readFileSync(
+            path.resolve(process.cwd(), 'dist/about/index.html'),
+            'utf-8'
+        )
+        const indexHtml = fs.readFileSync(
+            path.resolve(process.cwd(), 'dist/index.html'),
+            'utf-8'
+        )
+
+        expect(aboutHtml).toContain('about-portrait')
+        expect(aboutHtml).toMatch(/<img[^>]+alt="[^"]*Zhifan Chen[^"]*"/)
+
+        const heroMatch = indexHtml.match(/<section[^>]*home-hero[\s\S]*?<\/section>/)
+        expect(heroMatch).not.toBeNull()
+        if (heroMatch) {
+            expect(heroMatch[0]).not.toContain('about-portrait')
+            expect(heroMatch[0]).not.toContain('Zhifan Chen')
+        }
+    })
+
+    it('dist/404.html exists and renders restrained not-found dossier', () => {
+        const filePath = path.resolve(process.cwd(), 'dist/404.html')
+        expect(fs.existsSync(filePath), 'Expected dist/404.html to exist').toBe(true)
+        const html = fs.readFileSync(filePath, 'utf-8')
+        expect(html).toContain('404')
+        expect(html).toContain("The page you're looking for isn't here.")
+        expect(html).toContain('Back home')
+    })
 })
+
 

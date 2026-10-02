@@ -1,8 +1,9 @@
 ---
+import { Image } from 'astro:assets'
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import Anchor from '@/components/astro/Anchor.astro'
-import Card from '@/components/Card.astro'
-import CardContent from '@/components/CardContent.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
+import me from '@/assets/images/me.jpg'
 
 const title = 'About — Zhifan Chen'
 const description =
@@ -11,118 +12,99 @@ const description =
 
 <SiteLayout title={title} description={description}>
     <main id="main-content" class="py-12 md:py-20">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <!-- Header section -->
-            <header class="space-y-4">
-                <p class="text-xs font-mono uppercase tracking-wider text-primary">
-                    Background & Focus
-                </p>
-                <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-                    About Me
+        <div class="site-container">
+            <header class="mb-12 max-w-3xl">
+                <SectionLabel label="Background & Focus" />
+                <h1
+                    class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl mt-3 mb-4"
+                >
+                    About
                 </h1>
                 <p class="text-lg text-muted-foreground leading-relaxed">
-                    I am a software engineer focused on backend systems, platform engineering, and developer infrastructure.
+                    Software engineer working across product development, backend systems, infrastructure, and developer tooling.
                 </p>
             </header>
 
-            <!-- Engineering Philosophy & Background -->
-            <section class="space-y-6 text-foreground/90 leading-relaxed text-base">
-                <p>
-                    Over several years of building production applications, I have worked across the entire delivery lifecycle—from React and TypeScript client applications to .NET microservices, database schemas, and Linux deployment environments. That full-stack perspective shaped how I write code: with strong attention to maintainability, testability, and operational simplicity.
-                </p>
-
-                <p>
-                    My deepest technical focus centers on <strong>systems, developer tooling, and reproducibility</strong>. I believe developer friction and environment discrepancies are primary drivers of software defects. By engineering declarative, reproducible workstations and CI pipelines with <strong>Nix and Linux</strong>, teams can eliminate whole classes of "works on my machine" failures and deploy with confidence.
-                </p>
-
-                <p>
-                    When software breaks, I enjoy diving beneath high-level abstractions to identify root causes. Whether analyzing database lock contention, diagnosing memory allocation pressure, or submitting upstream patches to open-source development tools and Nix packages, I look for enduring fixes rather than temporary workarounds.
-                </p>
-            </section>
-
-            <!-- Core Areas Grid -->
-            <section aria-labelledby="core-areas-heading" class="space-y-4 pt-4">
-                <h2 id="core-areas-heading" class="text-xl font-bold tracking-tight text-foreground">
-                    Core Interests & Capabilities
-                </h2>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Card class="bg-card">
-                        <CardContent class="p-5 space-y-2">
-                            <h3 class="text-sm font-semibold text-foreground">
-                                Backend & Platform Engineering
-                            </h3>
-                            <p class="text-xs text-muted-foreground leading-relaxed">
-                                Resilient REST and gRPC services, authentication/authorization workflows, database modeling, and scalable async architectures.
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card class="bg-card">
-                        <CardContent class="p-5 space-y-2">
-                            <h3 class="text-sm font-semibold text-foreground">
-                                Declarative Systems & NixOS
-                            </h3>
-                            <p class="text-xs text-muted-foreground leading-relaxed">
-                                Reproducible developer environments, hermetic build pipelines, self-hosted binary caching, and automated infrastructure flakes.
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card class="bg-card">
-                        <CardContent class="p-5 space-y-2">
-                            <h3 class="text-sm font-semibold text-foreground">
-                                Tooling & Automation
-                            </h3>
-                            <p class="text-xs text-muted-foreground leading-relaxed">
-                                Continuous integration tuning, custom developer CLIs, Neovim ecosystem tooling, and automated code validation workflows.
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card class="bg-card">
-                        <CardContent class="p-5 space-y-2">
-                            <h3 class="text-sm font-semibold text-foreground">
-                                Root-Cause Debugging
-                            </h3>
-                            <p class="text-xs text-muted-foreground leading-relaxed">
-                                Investigating subtle concurrency bugs, profiling runtime bottlenecks, and fixing upstream dependencies in open source.
-                            </p>
-                        </CardContent>
-                    </Card>
+            <div class="about-grid">
+                <div class="about-grid__media">
+                    <figure class="about-portrait">
+                        <Image
+                            src={me}
+                            alt="Portrait of Zhifan Chen"
+                            widths={[480, 720, 960]}
+                            sizes="(max-width: 768px) 100vw, 42vw"
+                        />
+                    </figure>
                 </div>
-            </section>
 
-            <!-- Education & Languages -->
-            <section class="space-y-4 pt-4 border-t border-border/60">
-                <h2 class="text-xl font-bold tracking-tight text-foreground">
-                    Education & Languages
-                </h2>
-                <div class="space-y-3 text-sm text-muted-foreground leading-relaxed">
-                    <p>
-                        <strong class="text-foreground">Education:</strong> Bachelor of Science in Computer Science (ongoing, part-time) at Università degli Studi di Milano, pursuing foundational computer science theory concurrently with full-time professional engineering practice.
-                    </p>
-                    <p>
-                        <strong class="text-foreground">Languages:</strong> Fluent in English and Italian (professional working proficiency), native Chinese.
-                    </p>
+                <div class="about-grid__prose prose-column space-y-6">
+                    <section class="space-y-4">
+                        <h2 class="text-xl font-bold tracking-tight text-foreground">
+                            Engineering Philosophy
+                        </h2>
+                        <p class="text-muted-foreground leading-relaxed">
+                            Over several years of building production applications, I have worked across the delivery lifecycle—from React and TypeScript client applications to backend services, database schemas, and Linux deployment environments. That broad exposure shaped how I approach software: prioritizing maintainability, testability, and operational simplicity over cleverness.
+                        </p>
+                        <p class="text-muted-foreground leading-relaxed">
+                            My deepest technical curiosity centers on <strong>systems, developer tooling, and reproducibility</strong>. I believe environment discrepancies and developer friction are among the biggest drains on engineering velocity. By engineering declarative, reproducible workstations and continuous integration workflows with <strong>Nix and Linux</strong>, teams eliminate whole classes of "works on my machine" failures.
+                        </p>
+                    </section>
+
+                    <section class="space-y-4 pt-4 border-t border-border">
+                        <h2 class="text-xl font-bold tracking-tight text-foreground">
+                            Debugging & Systems Investigation
+                        </h2>
+                        <p class="text-muted-foreground leading-relaxed">
+                            When systems break, I go beneath high-level abstractions to find root causes. Whether diagnosing dynamic linker failures, memory leaks, transaction contention, or submitting upstream fixes to open-source tools, I look for enduring solutions that prevent recurrence.
+                        </p>
+                    </section>
+
+                    <section class="space-y-4 pt-4 border-t border-border">
+                        <h2 class="text-xl font-bold tracking-tight text-foreground">
+                            Education & International Context
+                        </h2>
+                        <p class="text-muted-foreground leading-relaxed">
+                            I am based in Milan, Italy, pursuing a BSc in Computer Science at Università degli Studi di Milano concurrently with professional practice. Fluent in English and Italian, with native Chinese, I am comfortable collaborating across distributed international teams and technical cultures.
+                        </p>
+                    </section>
+
+                    <div class="pt-6 border-t border-border flex flex-wrap gap-6 items-center">
+                        <ArrowLink href="/work/">See my work</ArrowLink>
+                        <ArrowLink href="/resume/">View resume</ArrowLink>
+                        <ArrowLink href="/contact/">Get in touch</ArrowLink>
+                    </div>
                 </div>
-            </section>
-
-            <!-- Next steps CTAs -->
-            <section class="pt-6 border-t border-border/60 flex flex-wrap items-center gap-4">
-                <Anchor href="/work/" variant="default">
-                    See my work &rarr;
-                </Anchor>
-                <Anchor href="/resume/" variant="outline">
-                    View full resume
-                </Anchor>
-                <Anchor href="/services/" variant="outline">
-                    Services & consulting
-                </Anchor>
-                <Anchor href="/contact/" variant="outline">
-                    Get in touch &rarr;
-                </Anchor>
-            </section>
+            </div>
         </div>
     </main>
 </SiteLayout>
+
+<style>
+    .about-grid {
+        display: grid;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    @media (min-width: 56rem) {
+        .about-grid {
+            grid-template-columns: minmax(18rem, 24rem) 1fr;
+            gap: 4rem;
+        }
+    }
+
+    .about-portrait {
+        margin: 0;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        overflow: hidden;
+    }
+
+    .about-portrait img {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+    }
+</style>

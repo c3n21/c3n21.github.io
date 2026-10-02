@@ -1,0 +1,10 @@
+packages:
+  - '.'
+
+allowBuilds:
+  '@biomejs/biome': true
+  '@tailwindcss/oxide': true
+  core-js: true
+  esbuild: true
+  puppeteer: true
+  sharp: true

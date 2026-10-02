@@ -5,5 +5,6 @@ export default getViteConfig({
     test: {
         // Vitest configuration options
         globals: true,
+        exclude: ['**/node_modules/**', '**/.direnv/**', '**/dist/**'],
     },
 })

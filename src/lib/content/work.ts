@@ -24,6 +24,59 @@ export interface WorkFrontmatter {
     technologies: string[]
     links?: WorkLink[]
     draft?: boolean
+    heroImage?: unknown
+    heroAlt?: string
+    status?: 'active' | 'shipped' | 'maintained'
+    role?: string
+    employer?: string
+}
+
+export function createWorkSchema(
+    z: any,
+    imageHelper: () => any = () => z.any()
+) {
+    return z
+        .object({
+            title: z.string(),
+            summary: z.string(),
+            kind: z.enum([
+                'professional',
+                'open-source',
+                'personal',
+                'university',
+                'hackathon',
+            ]),
+            featured: z.boolean().default(false),
+            date: z.coerce.date(),
+            endDate: z.coerce.date().optional(),
+            technologies: z.array(z.string()),
+            links: z
+                .array(
+                    z.object({
+                        label: z.string(),
+                        url: z.string(),
+                    })
+                )
+                .optional(),
+            draft: z.boolean().default(false),
+            heroImage: imageHelper().optional(),
+            heroAlt: z.string().min(1).optional(),
+            status: z.enum(['active', 'shipped', 'maintained']).optional(),
+            role: z.string().min(1).optional(),
+            employer: z.string().min(1).optional(),
+        })
+        .refine(
+            (data: any) => {
+                if (data.heroImage && !data.heroAlt) {
+                    return false
+                }
+                return true
+            },
+            {
+                message: 'heroAlt is required when heroImage is provided',
+                path: ['heroAlt'],
+            }
+        )
 }
 
 export interface WorkEntryLike {

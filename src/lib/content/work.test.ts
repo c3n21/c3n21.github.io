@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterAndSortWork, type WorkEntryLike } from './work'
+import { filterAndSortWork, createWorkSchema, type WorkEntryLike } from './work'
 
 describe('filterAndSortWork', () => {
     it('returns empty array when given an empty array', () => {
@@ -203,3 +203,53 @@ describe('filterAndSortWork', () => {
         expect(result.map((e) => e.id)).toEqual(['project-a', 'project-b'])
     })
 })
+
+import { z } from 'zod'
+
+describe('createWorkSchema', () => {
+    it('accepts valid work data with optional presentation fields', () => {
+        const schema = createWorkSchema(z)
+        const parsed = schema.safeParse({
+            title: 'Sample Project',
+            summary: 'A project summary',
+            kind: 'professional',
+            date: '2026-01-01',
+            technologies: ['TypeScript', 'Nix'],
+            heroImage: { src: '/img.png', width: 800, height: 600, format: 'png' },
+            heroAlt: 'Architecture overview diagram',
+            status: 'shipped',
+            role: 'Lead Engineer',
+            employer: 'Tech Corp',
+        })
+        expect(parsed.success).toBe(true)
+    })
+
+    it('fails when heroImage is present but heroAlt is missing', () => {
+        const schema = createWorkSchema(z)
+        const parsed = schema.safeParse({
+            title: 'Sample Project',
+            summary: 'A project summary',
+            kind: 'professional',
+            date: '2026-01-01',
+            technologies: ['TypeScript'],
+            heroImage: { src: '/img.png', width: 800, height: 600, format: 'png' },
+        })
+        expect(parsed.success).toBe(false)
+        if (!parsed.success) {
+            expect(parsed.error.issues[0]?.path).toContain('heroAlt')
+        }
+    })
+
+    it('accepts work data when both heroImage and heroAlt are omitted', () => {
+        const schema = createWorkSchema(z)
+        const parsed = schema.safeParse({
+            title: 'Sample Project',
+            summary: 'A project summary',
+            kind: 'professional',
+            date: '2026-01-01',
+            technologies: ['TypeScript'],
+        })
+        expect(parsed.success).toBe(true)
+    })
+})
+

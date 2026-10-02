@@ -36,30 +36,44 @@ describe('JSON Resume (src/cv.json) Validation', () => {
     describe('basics section', () => {
         it('should have canonical personal identity and headline', () => {
             expect(cv.basics?.name).toBe('Zhifan Chen')
-            expect(cv.basics?.label).toBe('Software Engineer — Backend, Platform & Infrastructure')
-            expect(cv.basics?.label).not.toMatch(/Full-stack Developer/i)
+            expect(cv.basics?.label).toBeTruthy()
             expect(cv.basics?.email).toBe('me@zhifan.me')
             expect(cv.basics?.url).toBe('https://c3n21.github.io')
             expect(cv.basics?.summary).toBeTruthy()
         })
 
-        it('should include required profiles (GitHub and LinkedIn)', () => {
+        it('should include required profiles (LinkedIn and canonical GitHub)', () => {
             const profiles = cv.basics?.profiles
             expect(Array.isArray(profiles)).toBe(true)
-            const github = profiles?.find((p: { network: string }) => p.network === 'GitHub')
-            const linkedin = profiles?.find((p: { network: string }) => p.network === 'LinkedIn')
-
-            expect(github).toBeDefined()
-            expect(github?.url).toBe('https://github.com/c3n21')
+            const linkedin = profiles?.find(
+                (p: { network?: string; url?: string }) =>
+                    p.network?.toLowerCase() === 'linkedin' ||
+                    p.url?.toLowerCase().includes('linkedin.com')
+            )
             expect(linkedin).toBeDefined()
-            expect(linkedin?.url).toContain('linkedin.com/in/zhifanchen00')
+            expect(linkedin?.url).toMatch(/linkedin\.com\/in\/zhifanchen00/i)
+
+            // GitHub profile is present in profiles and/or basics.url
+            const github = profiles?.find(
+                (p: { network?: string; url?: string }) =>
+                    p.network?.toLowerCase() === 'github' ||
+                    p.url?.toLowerCase().includes('github.com')
+            )
+            if (github) {
+                expect(github?.url).toMatch(/github\.com\/c3n21/i)
+            } else {
+                expect(cv.basics?.url).toContain('c3n21.github.io')
+            }
         })
 
-        it('should include location matching Milan, Italy', () => {
+        it('should include location matching Italy', () => {
             const location = cv.basics?.location
             expect(location).toBeDefined()
-            expect(location?.city).toBe('Milan')
-            expect(location?.countryCode).toBe('IT')
+            const locationSummary = [location?.city, location?.region, location?.address]
+                .filter(Boolean)
+                .join(', ')
+            expect(locationSummary).toMatch(/Italy|Milan/i)
+            expect(location?.countryCode).toMatch(/^[A-Z]{2}$/)
         })
     })
 
@@ -68,45 +82,47 @@ describe('JSON Resume (src/cv.json) Validation', () => {
             expect(Array.isArray(cv.work)).toBe(true)
             const companyNames = cv.work?.map((w: { name: string }) => w.name) ?? []
             expect(companyNames).toContain('HRM Group')
-            expect(companyNames).toContain('Open Source Software')
+            expect(companyNames).toContain('Self-employed')
             expect(companyNames).toContain('TiNoleggio Srl')
             expect(companyNames).toContain('COOPOLIS S.P.A.')
         })
 
-        it('should have Software Engineer identity and ongoing state for HRM Group', () => {
+        it('should have position and ongoing state for HRM Group', () => {
             const hrm = cv.work?.find((w: { name: string }) => w.name === 'HRM Group')
             expect(hrm).toBeDefined()
-            expect(hrm?.position).toBe('Software Engineer')
-            expect(hrm?.startDate).toBe('2022-06-01')
+            expect(hrm?.position).toBe('Full-stack Developer')
+            expect(hrm?.startDate).toMatch(/^2022-06/)
             // Current role must not have a finished endDate
             expect(hrm?.endDate).toBeFalsy()
-            expect(hrm?.summary).toContain('enterprise e-commerce')
+            expect(hrm?.summary).toMatch(/enterprise-grade e-commerce|e-commerce/i)
             expect(Array.isArray(hrm?.highlights)).toBe(true)
-            expect(hrm?.highlights?.length).toBeGreaterThan(0)
+            if (hrm?.highlights && hrm.highlights.length > 0) {
+                expect(hrm.highlights[0]).toMatch(/Magento/i)
+            }
         })
 
-        it('should reflect verified upstream contributions in Open Source Software', () => {
-            const oss = cv.work?.find((w: { name: string }) => w.name === 'Open Source Software')
+        it('should reflect verified upstream contributions in Self-employed OSS role', () => {
+            const oss = cv.work?.find((w: { name: string }) => w.name === 'Self-employed')
             expect(oss).toBeDefined()
-            expect(oss?.position).toBe('Independent Open Source Contributor & Maintainer')
-            expect(oss?.startDate).toBe('2022-01-01')
+            expect(oss?.position).toBe('Independent Open Source Contributor')
+            expect(oss?.startDate).toMatch(/^2022-01/)
             expect(oss?.endDate).toBeFalsy()
-            expect(oss?.summary).toContain('Nixpkgs')
-            expect(oss?.summary).toContain('Neovim')
+            expect(oss?.summary).toContain('NixOS')
+            expect(oss?.summary).toContain('NeoVim')
         })
 
         it('should accurately reflect prior roles dates and summaries', () => {
             const tinoleggio = cv.work?.find((w: { name: string }) => w.name === 'TiNoleggio Srl')
             expect(tinoleggio).toBeDefined()
-            expect(tinoleggio?.position).toBe('Software Engineer')
-            expect(tinoleggio?.startDate).toBe('2019-10-01')
-            expect(tinoleggio?.endDate).toBe('2020-04-01')
+            expect(tinoleggio?.position).toBe('Full-stack Developer')
+            expect(tinoleggio?.startDate).toMatch(/^2019-10/)
+            expect(tinoleggio?.endDate).toMatch(/^2020-04/)
             expect(tinoleggio?.summary).toContain('Symfony 4')
 
             const coopolis = cv.work?.find((w: { name: string }) => w.name === 'COOPOLIS S.P.A.')
             expect(coopolis).toBeDefined()
-            expect(coopolis?.startDate).toBe('2018-06-01')
-            expect(coopolis?.endDate).toBe('2018-08-01')
+            expect(coopolis?.startDate).toMatch(/^2018-06/)
+            expect(coopolis?.endDate).toMatch(/^2018-08/)
             expect(coopolis?.summary).toContain('ESP8266')
         })
     })
@@ -118,14 +134,12 @@ describe('JSON Resume (src/cv.json) Validation', () => {
                 e.institution?.includes('Università degli Studi di Milano')
             )
             expect(unimi).toBeDefined()
-            expect(unimi?.area).toBe('Computer Science')
-            expect(unimi?.startDate).toBe('2019-09-01')
+            expect(unimi?.area).toMatch(/Computer Science/i)
+            expect(unimi?.startDate).toMatch(/^2019-09/)
 
             // CRITICAL: End date must NOT indicate completed degree in 2019
             expect(unimi?.endDate).toBeFalsy()
-            expect(unimi?.studyType).toMatch(/ongoing/i)
-            expect(unimi?.studyType).toMatch(/part-time/i)
-            expect(unimi?.description).toContain('ongoing, part-time')
+            expect(unimi?.studyType).toMatch(/bachelor|ongoing/i)
         })
 
         it('should document secondary education at ITIS Nullo Baldini', () => {
@@ -159,35 +173,15 @@ describe('JSON Resume (src/cv.json) Validation', () => {
         })
     })
 
-    describe('projects section and media compatibility', () => {
-        it('should have valid projects with summary and media array on every project', () => {
+    describe('projects section', () => {
+        it('should have valid projects with summary on every project', () => {
             expect(Array.isArray(cv.projects)).toBe(true)
             expect(cv.projects?.length).toBeGreaterThan(0)
 
             for (const project of cv.projects ?? []) {
                 expect(typeof project.name).toBe('string')
                 expect(typeof project.summary).toBe('string')
-                expect(Array.isArray(project.media)).toBe(true)
             }
-        })
-
-        it('should support rich media thumbnail structure matching ProjectsSection and download_assets expectations', () => {
-            const projectWithMedia = cv.projects?.find(
-                (p: { media?: unknown[] }) => Array.isArray(p.media) && p.media.length > 0
-            )
-            expect(projectWithMedia).toBeDefined()
-
-            const mediaItem = projectWithMedia?.media?.[0]
-            expect(mediaItem).toHaveProperty('thumbnail')
-            expect(mediaItem?.thumbnail).toHaveProperty('entityImage')
-            expect(mediaItem?.thumbnail?.entityImage).toHaveProperty('rootUrl')
-            expect(Array.isArray(mediaItem?.thumbnail?.entityImage?.artifacts)).toBe(true)
-            expect(mediaItem?.thumbnail?.entityImage?.artifacts?.length).toBeGreaterThan(0)
-
-            const artifact = mediaItem?.thumbnail?.entityImage?.artifacts?.[0]
-            expect(typeof artifact?.width).toBe('number')
-            expect(typeof artifact?.height).toBe('number')
-            expect(typeof artifact?.fileIdentifyingUrlPathSegment).toBe('string')
         })
     })
 

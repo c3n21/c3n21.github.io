@@ -1,7 +1,8 @@
-import cv from '@/cv.json' assert { type: 'json' }
-
-type Artifact =
-    (typeof cv)['projects'][number]['media'][number]['thumbnail']['entityImage']['artifacts'][number]
+export type Artifact = {
+    width: number
+    height: number
+    fileIdentifyingUrlPathSegment: string
+}
 
 type Options = {
     ProjectId: number

@@ -20,21 +20,62 @@ import Button from './Button.astro'
 </Button>
 
 <script>
-    ;(() => {
-        const togglers = document.querySelectorAll('#theme-toggle')
-        if (!togglers.length) {
-            return
-        }
+    const KEY = "portfolio-theme";
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-        function toggle() {
-            const isDark = document.documentElement.classList.toggle('dark')
-            if (typeof localStorage !== 'undefined') {
-                localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    function effectiveTheme() {
+        const explicit = document.documentElement.dataset.theme;
+        return explicit === "light" || explicit === "dark"
+            ? explicit
+            : media.matches ? "dark" : "light";
+    }
+
+    function setTheme(theme: string) {
+        localStorage.setItem(KEY, theme);
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themeMode = "manual";
+        if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    }
+
+    function useSystemTheme() {
+        localStorage.removeItem(KEY);
+        delete document.documentElement.dataset.theme;
+        document.documentElement.dataset.themeMode = "system";
+        if (media.matches) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    }
+
+    (window as unknown as { useSystemTheme: () => void }).useSystemTheme = useSystemTheme;
+
+    function toggleTheme() {
+        const current = effectiveTheme();
+        const next = current === "dark" ? "light" : "dark";
+        setTheme(next);
+    }
+
+    media.addEventListener("change", () => {
+        if (document.documentElement.dataset.themeMode === "system") {
+            if (media.matches) {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
             }
+            document.dispatchEvent(
+                new CustomEvent("portfolio-theme-change", {
+                    detail: { theme: effectiveTheme() },
+                }),
+            );
         }
+    });
 
-        togglers.forEach((toggler) => {
-            toggler.addEventListener('click', toggle)
-        })
-    })()
+    document.querySelectorAll('#theme-toggle').forEach((toggler) => {
+        toggler.addEventListener('click', toggleTheme);
+    });
 </script>

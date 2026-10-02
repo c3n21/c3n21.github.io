@@ -2,11 +2,8 @@
 import SiteLayout from '@/layouts/SiteLayout.astro'
 import { SERVICES } from '@/data/services'
 import ServiceCard from '@/components/services/ServiceCard.astro'
-import Anchor from '@/components/astro/Anchor.astro'
-import Card from '@/components/Card.astro'
-import CardHeader from '@/components/CardHeader.astro'
-import CardTitle from '@/components/CardTitle.astro'
-import CardContent from '@/components/CardContent.astro'
+import SectionLabel from '@/components/ui/SectionLabel.astro'
+import ArrowLink from '@/components/ui/ArrowLink.astro'
 
 const title = 'Services & Consulting'
 const description =
@@ -15,27 +12,29 @@ const description =
 
 <SiteLayout title={title} description={description}>
     <main id="main-content" class="py-12 md:py-20">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        <div class="site-container space-y-16">
             <!-- Header section -->
-            <header class="max-w-3xl space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono">
-                    <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true"></span>
-                    Available for selected part-time engagements
-                </div>
-                <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            <header class="max-w-3xl">
+                <SectionLabel label="Engineering Engagements" />
+                <h1
+                    class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl mt-3 mb-4"
+                >
                     Services & Consulting
                 </h1>
-                <p class="text-lg text-muted-foreground leading-relaxed">
+                <p class="text-lg text-muted-foreground leading-relaxed mb-4">
+                    I occasionally take on selected part-time engagements alongside my main work.
+                </p>
+                <p class="text-base text-muted-foreground leading-relaxed">
                     I partner with engineering teams, startups, and organizations that need senior software engineering depth, architecture modernization, and developer tooling improvements.
                 </p>
             </header>
 
-            <!-- Service families grid -->
-            <section aria-labelledby="services-list-heading" class="space-y-8">
+            <!-- Service families list -->
+            <section aria-labelledby="services-list-heading">
                 <h2 id="services-list-heading" class="sr-only">
                     Consulting Services
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="services-list">
                     {
                         SERVICES.map((service, index) => (
                             <ServiceCard service={service} index={index} />
@@ -45,13 +44,17 @@ const description =
             </section>
 
             <!-- Engagement Fit Section -->
-            <section aria-labelledby="engagement-fit-heading" class="pt-8 border-t border-border/60">
-                <div class="max-w-3xl space-y-6">
+            <section
+                aria-labelledby="engagement-fit-heading"
+                class="pt-12 border-t border-border"
+            >
+                <div class="max-w-3xl space-y-8">
                     <div>
-                        <p class="text-xs font-mono uppercase tracking-wider text-primary mb-1">
-                            Working Model
-                        </p>
-                        <h2 id="engagement-fit-heading" class="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                        <SectionLabel label="Working Model" />
+                        <h2
+                            id="engagement-fit-heading"
+                            class="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mt-3"
+                        >
                             Engagement Fit & Availability
                         </h2>
                     </div>
@@ -60,49 +63,46 @@ const description =
                         To maintain engineering quality and deliver high-impact results, I accept a limited number of concurrent engagements that align with my technical focus:
                     </p>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <Card class="bg-card">
-                            <CardHeader class="pb-2">
-                                <CardTitle class="text-base text-foreground font-semibold flex items-center gap-2">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    Strong Fit
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <ul class="space-y-2 text-sm text-muted-foreground">
-                                    <li>• Asynchronous, written-first collaboration</li>
-                                    <li>• Technically deep problem solving and debugging</li>
-                                    <li>• Architecture, API design, and code modernization</li>
-                                    <li>• Developer tooling, Nix environments, and CI pipelines</li>
-                                    <li>• Bounded projects or advisory retainers (5–15 hrs/week)</li>
-                                </ul>
-                            </CardContent>
-                        </Card>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                        <div class="p-6 border border-border bg-surface">
+                            <h3 class="text-base text-foreground font-semibold flex items-center gap-2 mb-4">
+                                <span class="text-accent font-bold">✓</span>
+                                Strong Fit
+                            </h3>
+                            <ul class="space-y-2 text-sm text-muted-foreground">
+                                <li>• Asynchronous, written-first collaboration</li>
+                                <li>• Technically deep problem solving and debugging</li>
+                                <li>• Architecture, API design, and code modernization</li>
+                                <li>• Developer tooling, Nix environments, and CI pipelines</li>
+                                <li>• Bounded projects or advisory retainers (5–15 hrs/week)</li>
+                            </ul>
+                        </div>
 
-                        <Card class="bg-card">
-                            <CardHeader class="pb-2">
-                                <CardTitle class="text-base text-foreground font-semibold flex items-center gap-2">
-                                    <span class="text-amber-500 font-bold">✕</span>
-                                    Out of Scope
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <ul class="space-y-2 text-sm text-muted-foreground">
-                                    <li>• 24/7 on-call operational coverage or immediate incident SLA</li>
-                                    <li>• Synchronous full-day meeting schedules</li>
-                                    <li>• Unbounded open-ended staff augmentation without clear scope</li>
-                                </ul>
-                            </CardContent>
-                        </Card>
+                        <div class="p-6 border border-border bg-surface">
+                            <h3 class="text-base text-foreground font-semibold flex items-center gap-2 mb-4">
+                                <span class="text-muted-foreground font-bold">✕</span>
+                                Out of Scope
+                            </h3>
+                            <ul class="space-y-2 text-sm text-muted-foreground">
+                                <li>• Round-the-clock on-call operational coverage or immediate incident SLA</li>
+                                <li>• Synchronous full-day meeting schedules</li>
+                                <li>• Unbounded open-ended staff augmentation without clear scope</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="pt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                        <Anchor href="/contact/" variant="default">
-                            Discuss an engagement &rarr;
-                        </Anchor>
-                        <span class="text-sm text-muted-foreground">
-                            Usually respond within 24–48 hours.
-                        </span>
+                    <div class="pt-8 border-t border-border space-y-4">
+                        <h3 class="text-xl font-bold tracking-tight text-foreground">
+                            Have an interesting engineering problem?
+                        </h3>
+                        <p class="text-muted-foreground">
+                            I occasionally take on selected part-time projects.
+                        </p>
+                        <div class="pt-2">
+                            <ArrowLink href="/contact/">
+                                Discuss an engagement
+                            </ArrowLink>
+                        </div>
                     </div>
                 </div>
             </section>

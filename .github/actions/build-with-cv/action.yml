@@ -3,50 +3,60 @@ description: |
   Writes src/cv.json from input cv,
   runs pnpm build,
   caches pnpm store,
-  uploads dist/ as artifact,
   cleans up src/cv.json after.
 
 inputs:
   cv:
-    description: "CV secret content (required)"
-    required: true
+    description: "CV secret content"
+    required: false
+    default: ""
 
 runs:
   using: composite
   steps:
-    - name: Write src/cv.json from input
-      shell: bash
-      run: |
-        cat <<EOF > src/cv.json
-        ${{ inputs.cv }}
-        EOF
-
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
       with:
         version: 9
 
-    - uses: actions/setup-node@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'pnpm'
 
-    - name: Cache pnpm store
-      uses: actions/cache@v4
-      with:
-        path: ~/.local/share/pnpm/store/v3
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: ${{ runner.os }}-pnpm-
-
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
+
+    - name: Write src/cv.json
+      shell: bash
+      env:
+        CV_CONTENT: ${{ inputs.cv }}
+      run: |
+        if [ -n "$CV_CONTENT" ]; then
+          printf '%s\n' "$CV_CONTENT" > src/cv.json
+        elif [ ! -f src/cv.json ]; then
+          echo "Warning: No CV secret provided and src/cv.json does not exist. Generating fallback from test fixtures."
+          node -e '
+            const JSZip = require("jszip");
+            const fs = require("node:fs");
+            const path = require("node:path");
+            async function main() {
+              const zip = new JSZip();
+              const dir = path.resolve("tests/fixtures/linkedin-export");
+              for (const f of fs.readdirSync(dir)) {
+                zip.file(f, fs.readFileSync(path.join(dir, f), "utf-8"));
+              }
+              const buf = await zip.generateAsync({ type: "nodebuffer" });
+              fs.writeFileSync("tmp-fixture.zip", buf);
+            }
+            main();
+          '
+          pnpm exec tsx scripts/cv/cli.ts tmp-fixture.zip src/cv.json
+          rm -f tmp-fixture.zip
+        fi
 
     - name: Run pnpm build
       shell: bash
       run: pnpm build
-
-    - name: Cleanup src/cv.json
-      shell: bash
-      if: always()
-      run: rm -f src/cv.json

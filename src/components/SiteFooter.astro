@@ -4,55 +4,107 @@ import { SITE } from '@/lib/site'
 const currentYear = new Date().getFullYear()
 ---
 
-<footer class="bg-background border-t border-border py-8 mt-auto">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-            class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"
-        >
-            <div>
-                <p class="font-medium text-foreground">{SITE.name}</p>
-                <p class="text-xs">
-                    Software Engineer — Backend, Platform & Infrastructure
-                </p>
-            </div>
+<footer class="site-footer" data-site-footer>
+    <div class="site-container site-footer__container">
+        <div class="site-footer__identity">
+            <p class="site-footer__name">{SITE.name}</p>
+            <p class="site-footer__role meta-text">
+                Software Engineer
+            </p>
+        </div>
 
-            <nav
-                aria-label="Footer links"
-                class="flex flex-wrap items-center gap-6"
+        <nav aria-label="Footer links" class="site-footer__nav">
+            <a
+                href={SITE.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="site-footer__link"
             >
-                <a
-                    href={SITE.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="hover:text-foreground transition-colors story-link"
-                >
-                    GitHub
-                </a>
-                <a
-                    href={SITE.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="hover:text-foreground transition-colors story-link"
-                >
-                    LinkedIn
-                </a>
-                <a
-                    href="/resume/"
-                    class="hover:text-foreground transition-colors story-link"
-                >
-                    Resume
-                </a>
-                <a
-                    href="/contact/"
-                    class="hover:text-foreground transition-colors story-link"
-                >
-                    Contact
-                </a>
-            </nav>
+                GitHub
+            </a>
+            <a
+                href={SITE.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="site-footer__link"
+            >
+                LinkedIn
+            </a>
+            <a
+                href="/rss.xml"
+                class="site-footer__link"
+            >
+                RSS
+            </a>
+        </nav>
 
-            <div class="text-xs">
-                © {currentYear} {SITE.name}. All rights reserved.
-            </div>
+        <div class="site-footer__copy meta-text">
+            © {currentYear} {SITE.name}
         </div>
     </div>
 </footer>
+
+<style>
+    .site-footer {
+        border-top: 1px solid var(--border);
+        background: var(--bg);
+        padding-block: 2.5rem;
+        margin-top: auto;
+    }
+
+    .site-footer__container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    @media (min-width: 48rem) {
+        .site-footer__container {
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+
+    .site-footer__identity {
+        display: grid;
+        gap: 0.15rem;
+    }
+
+    .site-footer__name {
+        font-weight: 650;
+        font-size: 0.95rem;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .site-footer__role {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    .site-footer__nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .site-footer__link {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    .site-footer__link:hover {
+        color: var(--text);
+    }
+
+    .site-footer__copy {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+</style>

@@ -23,9 +23,19 @@ pnpm-debug.log*
 
 # tooling / scratch
 .superpowers/
+.direnv/
 
 # generated resume data
 src/cv.json
 
 # private career materials
 career-private/
+.cache/
+.envrc
+spec/
+tmp/
+
+# Raw LinkedIn data exports contain private account data.
+Complete_LinkedInDataExport*
+/linkedin-export/
+/.linkedin-export/

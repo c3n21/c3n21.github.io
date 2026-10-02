@@ -11,7 +11,9 @@
         "test": "vitest",
         "postinstall": "pnpm run download-assets",
         "download-assets": "tsx scripts/node/download_assets.ts",
-        "export-pdf": "tsx scripts/node/export-pdf.ts"
+        "export-pdf": "tsx scripts/node/export-pdf.ts",
+        "cv:pdf": "tsx scripts/node/export-pdf.ts",
+        "cv:import": "tsx scripts/cv/cli.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -22,10 +24,13 @@
         "@qwikdev/astro": "^0.8.0",
         "@tailwindcss/vite": "^4.1.8",
         "astro": "^5.9.2",
+        "csv-parse": "^7.0.3",
+        "jszip": "^3.10.2",
         "tailwind": "^4.0.0",
         "tailwindcss": "^4.1.8",
         "tailwindcss-animate": "^1.0.7",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "zod": "^4.6.5"
     },
     "devDependencies": {
         "@astrojs/ts-plugin": "^1.10.4",

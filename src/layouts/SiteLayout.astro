@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import SiteHeader from '@/components/SiteHeader.astro'
+import ContactCta from '@/components/ContactCta.astro'
 import SiteFooter from '@/components/SiteFooter.astro'
 import isCVMode from '@/lib/isCVMode'
 import { SITE } from '@/lib/site'
@@ -10,6 +11,7 @@ export interface Props {
     description?: string
     image?: string
     noindex?: boolean
+    hideCta?: boolean
 }
 
 const {
@@ -17,10 +19,11 @@ const {
     description = SITE.description,
     image,
     noindex = false,
+    hideCta = false,
 } = Astro.props
 
 const isCV = isCVMode()
-const htmlClassList = import.meta.env.CV === 'dark' ? ['dark'] : []
+const htmlClassList = !isCV && import.meta.env.CV === 'dark' ? ['dark'] : []
 
 const ogImage =
     image ??
@@ -40,7 +43,12 @@ const faviconSizes = [
 ---
 
 <!doctype html>
-<html lang="en" class:list={htmlClassList}>
+<html
+    lang="en"
+    class:list={htmlClassList}
+    data-theme-mode={isCV ? undefined : 'system'}
+    data-cv-theme={isCV ? 'light' : undefined}
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -87,20 +95,26 @@ const faviconSizes = [
             !isCV && (
                 <script is:inline>
                     ;(() => {
-                        const storedTheme =
-                            typeof localStorage !== 'undefined'
-                                ? localStorage.getItem('theme')
-                                : null
-                        const systemPrefersDark = window.matchMedia(
-                            '(prefers-color-scheme: dark)'
-                        ).matches
-                        if (
-                            storedTheme === 'dark' ||
-                            (!storedTheme && systemPrefersDark)
-                        ) {
-                            document.documentElement.classList.add('dark')
+                        const key = "portfolio-theme";
+                        const saved = localStorage.getItem(key);
+                        const root = document.documentElement;
+
+                        if (saved === "light" || saved === "dark") {
+                            root.dataset.theme = saved;
+                            root.dataset.themeMode = "manual";
+                            if (saved === "dark") {
+                                root.classList.add("dark");
+                            } else {
+                                root.classList.remove("dark");
+                            }
                         } else {
-                            document.documentElement.classList.remove('dark')
+                            delete root.dataset.theme;
+                            root.dataset.themeMode = "system";
+                            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                                root.classList.add("dark");
+                            } else {
+                                root.classList.remove("dark");
+                            }
                         }
                     })()
                 </script>
@@ -122,6 +136,7 @@ const faviconSizes = [
         <div class="flex-1">
             <slot />
         </div>
+        {!isCV && !hideCta && <ContactCta />}
         {!isCV && <SiteFooter />}
     </body>
 </html>

@@ -134,18 +134,33 @@ export function normalizeDescription(description?: string | null): string {
     return description.trim()
 }
 
+export const SKILL_ALIASES: Record<string, string> = {
+    'React 18': 'React',
+    'React.js': 'React',
+    NextJS: 'Next.js',
+    'TanStack Query': 'TanStack Query',
+    'React Query': 'TanStack Query',
+    'Redux Toolkit': 'Redux',
+}
+
+export function canonicalSkillName(name: string): string {
+    return SKILL_ALIASES[name] ?? name
+}
+
 export function groupSkills(skills: SkillItem[]): SkillGroup[] {
     const categoryMap = new Map<string, string[]>()
 
     for (const skill of skills) {
+        const canonicalName = canonicalSkillName(skill.name)
         const category =
             skill.category?.trim() ||
+            DEFAULT_SKILL_CATEGORIES[canonicalName] ||
             DEFAULT_SKILL_CATEGORIES[skill.name] ||
             'Other'
 
         const existing = categoryMap.get(category) ?? []
-        if (!existing.includes(skill.name)) {
-            existing.push(skill.name)
+        if (!existing.includes(canonicalName)) {
+            existing.push(canonicalName)
         }
         categoryMap.set(category, existing)
     }

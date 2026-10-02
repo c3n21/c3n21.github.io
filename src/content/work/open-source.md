@@ -61,10 +61,10 @@ Prioritized contributing directly to upstream repositories over maintaining priv
 - **Change**: Authored upstream PR #213 in `jmbuhr/otter.nvim` to properly parse embedded language tags and attach correct LSP clients.
 - **Outcome**: Merged into upstream `main`; restored seamless multi-language autocompletion in mixed-syntax documents.
 
-### 4. LinkedIn to JSON Resume Browser Extension Maintenance
-- **Problem**: Standard resume extraction tools omitted project rich media (diagrams, architecture screenshots) and misclassified ongoing education records.
-- **Change**: Maintained a custom fork (`c3n21/linkedin-to-jsonresume`) supporting media extraction, clean date normalization, and lossless JSON Resume schema export.
-- **Outcome**: Powers the automated CI/CD resume pipeline for this personal engineering platform.
+### 4. LinkedIn Export & JSON Resume Pipeline (Historical)
+- **Problem**: Standard resume extraction tools omitted project details and misclassified ongoing education records.
+- **Change**: Historically maintained a fork (`c3n21/linkedin-to-jsonresume`) supporting media extraction and schema normalization before transitioning to the hermetic official archive pipeline.
+- **Outcome**: Established automated resume pipeline with clean date normalization and lossless JSON Resume schema export.
 
 ## Verification
 
