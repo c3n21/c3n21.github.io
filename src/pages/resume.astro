@@ -6,8 +6,9 @@ import ResumeSidebar from '@/components/resume/ResumeSidebar.astro'
 import AdditionalDetails from '@/components/resume/AdditionalDetails.astro'
 import isCVMode from '@/lib/isCVMode'
 import { formatDateRange } from '@/lib/resume'
-import cv from '@/cv.json'
+import rawCv from '@/cv.json'
 
+const cv = rawCv as any
 const isCV = isCVMode()
 
 const headline = 'Software Engineer — Backend, Platform & Infrastructure'
@@ -18,11 +19,19 @@ const summaryText =
     'Software engineer with several years of experience building enterprise applications with React, TypeScript and .NET, alongside hands-on work in Linux infrastructure, Nix/NixOS, containers, CI/CD and open source. Strong focus on debugging, reproducibility, developer tooling and understanding systems end-to-end.'
 
 // Filter out duplicate employment roles that appear in projects from LinkedIn export
-const verifiedProjects = cv.projects.filter(
-    (p) =>
+const verifiedProjects = (cv.projects || []).filter(
+    (p: any) =>
         p.name !== 'Full Stack Developer — E-commerce platform' &&
         p.name !== 'Magento 2 & Next.js Integration'
 )
+
+const locationParts = cv.basics.location
+    ? [
+          cv.basics.location.city || cv.basics.location.address,
+          cv.basics.location.region,
+      ].filter(Boolean)
+    : []
+const locationString = locationParts.length > 0 ? locationParts.join(', ') : 'Milan, Italy'
 ---
 
 <SiteLayout
@@ -57,9 +66,9 @@ const verifiedProjects = cv.projects.filter(
                         </a>
                     )}
                     <span>·</span>
-                    {cv.basics.location && (
+                    {locationString && (
                         <span>
-                            {cv.basics.location.city}, {cv.basics.location.region}
+                            {locationString}
                         </span>
                     )}
                     <span>·</span>
@@ -107,7 +116,7 @@ const verifiedProjects = cv.projects.filter(
                             Open Source & Projects
                         </h2>
                         <div class="space-y-6">
-                            {verifiedProjects.map((project) => (
+                            {verifiedProjects.map((project: any) => (
                                 <article class="break-inside-avoid space-y-1">
                                     <header class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                                         <h3 class="text-base font-semibold text-foreground">
@@ -155,7 +164,7 @@ const verifiedProjects = cv.projects.filter(
                 </h2>
                 <div class="space-y-6">
                     {
-                        cv.education.map((edu) => {
+                        (cv.education || []).map((edu: any) => {
                             const dateRange = formatDateRange(
                                 edu.startDate,
                                 edu.endDate
